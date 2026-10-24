@@ -1,33 +1,58 @@
 /**
- * Pravaah Pure Planning Engine
+ * Pravaah Pure Planning Engine — Public API
  *
  * Rules:
  * - Pure TypeScript only (no React, no DOM, no network, no Date.now()).
  * - "Today" is Day 0. Time is measured in integer days [start, end).
- * - Data is passed in as arguments.
+ * - All data is passed in as arguments.
  */
 
-export const ENGINE_VERSION = '0.1.0' as const;
+export const ENGINE_VERSION = '0.2.0' as const;
 
-export interface EngineTask {
-  readonly id: string;
-  readonly title: string;
-  readonly durationDays: number;
-  readonly startDay: number;
-  readonly endDay: number;
-  readonly dependencyIds: readonly string[];
-}
+// Domain Types
+export type {
+  EngineTask,
+  TaskLane,
+  RuleBasis,
+  SourceKind,
+  SourceEntry,
+  FeeTag,
+  FeeItem,
+  LicenceStagesConfig,
+  RulePack,
+  LinkType,
+  Link,
+  Task,
+  TaskStatus,
+  ScheduledTask,
+  AbsenceWindow,
+  SlotAlternative,
+  VehicleMove,
+  Scenario,
+  Form35Decision,
+  LicenceRouteDecision,
+  Decisions,
+  PlanningEvent,
+  CheckResult,
+  FeeSummary,
+  BindingConstraint,
+  PlanResult,
+  PlanInput,
+  OptionComparison,
+  DiffItem,
+  Diff,
+  LicenceStageRow,
+} from './model/types';
 
-export interface EnginePlan {
-  readonly version: string;
-  readonly tasks: readonly EngineTask[];
-  readonly totalDays: number;
-}
+// Core Planning & Relations
+export { planScenario } from './planner';
+export { buildTasks } from './model/buildTasks';
+export { buildLinks, taskRelations, type TaskRelations } from './graph/links';
+export { schedulePlan, computeBeta } from './schedule/scheduler';
+export { runChecks, licenceStages } from './checks/complianceChecks';
+export { calculateFees } from './fees/feeCalculator';
 
-export function createPlanStub(): EnginePlan {
-  return {
-    version: ENGINE_VERSION,
-    tasks: [],
-    totalDays: 0,
-  };
-}
+// Options, Events, and Diff
+export { compareOptions } from './options/optionComparator';
+export { applyEvent } from './options/events';
+export { diffPlans } from './options/diff';

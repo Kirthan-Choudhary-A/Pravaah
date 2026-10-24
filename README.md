@@ -27,13 +27,17 @@ npm run dev
 # 3. Build for production
 npm run build
 
-# 4. Run tests
+# 4. Run tests (unit, invariant, gold)
 npm run test
 
-# 5. Run typecheck, lint, and tests
+# 5. Run terminal preview plan runner
+npm run plan -- --scenario A
+npm run plan -- --scenario A --compare
+
+# 6. Run typecheck, lint, and tests
 npm run check
 
-# 6. Run end-to-end browser tests
+# 7. Run end-to-end browser tests
 npm run test:e2e
 ```
 
@@ -69,4 +73,4 @@ pravaah/
 
 ## Status
 
-**Project status: Step 1 of 14 complete.**
+**Project status: Step 2 of 6 complete.**

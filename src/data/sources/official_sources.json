@@ -1,0 +1,152 @@
+[
+  {
+    "id": "mva-1988-s14",
+    "title": "Motor Vehicles Act 1988 — Section 14 (Currency of licences to drive motor vehicles)",
+    "url": "https://www.indiacode.nic.in/handle/123456789/1798?view_type=browse&sam_handle=123456789/1362#TODO_VERIFY",
+    "publisher": "Legislative Department, Ministry of Law and Justice",
+    "kind": "statute",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Defines licence validity duration, renewal eligibility windows, and validity conditions."
+  },
+  {
+    "id": "mva-1988-s15",
+    "title": "Motor Vehicles Act 1988 — Section 15 (Renewal of driving licences)",
+    "url": "https://www.indiacode.nic.in/handle/123456789/1798?view_type=browse&sam_handle=123456789/1362#TODO_VERIFY",
+    "publisher": "Legislative Department, Ministry of Law and Justice",
+    "kind": "statute",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Prescribes application timing (within one year before or after expiry), grace periods, and re-test requirements after one year."
+  },
+  {
+    "id": "mva-1988-s47",
+    "title": "Motor Vehicles Act 1988 — Section 47 (Assignment of new registration mark on removal to another State)",
+    "url": "https://www.indiacode.nic.in/handle/123456789/1798?view_type=browse&sam_handle=123456789/1362#TODO_VERIFY",
+    "publisher": "Legislative Department, Ministry of Law and Justice",
+    "kind": "statute",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Requires applying for a new registration mark (Form 27) when a motor vehicle is kept in another state for a period exceeding 12 months."
+  },
+  {
+    "id": "mva-1988-s48",
+    "title": "Motor Vehicles Act 1988 — Section 48 (No objection certificate)",
+    "url": "https://www.indiacode.nic.in/handle/123456789/1798?view_type=browse&sam_handle=123456789/1362#TODO_VERIFY",
+    "publisher": "Legislative Department, Ministry of Law and Justice",
+    "kind": "statute",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Governs issuance of No Objection Certificate (Form 28) from the parent registering authority."
+  },
+  {
+    "id": "mva-1988-s49",
+    "title": "Motor Vehicles Act 1988 — Section 49 (Change of residence or place of business)",
+    "url": "https://www.indiacode.nic.in/handle/123456789/1798?view_type=browse&sam_handle=123456789/1362#TODO_VERIFY",
+    "publisher": "Legislative Department, Ministry of Law and Justice",
+    "kind": "statute",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Requires intimation of change of residence within 30 days to the registering authority in whose jurisdiction the owner now resides."
+  },
+  {
+    "id": "cmvr-1989-r81",
+    "title": "Central Motor Vehicles Rules 1989 — Rule 81 (Fees Schedule)",
+    "url": "https://morth.nic.in/central-motor-vehicles-rules-1989-1#TODO_VERIFY",
+    "publisher": "Ministry of Road Transport and Highways (MoRTH)",
+    "kind": "notification",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Table of statutory fees for driving licence renewal, smart card issuance, Form 27 assignment, Form 28 NOC, and hypothecation endorsement/cancellation."
+  },
+  {
+    "id": "cmvr-bh-series-2021",
+    "title": "MoRTH Notification G.S.R. 594(E) — Bharat (BH) Series Registration",
+    "url": "https://egazette.gov.in#TODO_VERIFY",
+    "publisher": "Ministry of Road Transport and Highways (MoRTH)",
+    "kind": "notification",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Governs BH series vehicles which do not require transfer of registration or NOC on relocation across states."
+  },
+  {
+    "id": "portal-parivahan",
+    "title": "Parivahan Sewa Portal (National Transport Services)",
+    "url": "https://parivahan.gov.in/parivahan/#TODO_VERIFY",
+    "publisher": "Ministry of Road Transport and Highways / NIC",
+    "kind": "official-portal",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "National portal for unified Vahan and Sarathi services, citizen grievance lodging, and national e-challan clearing."
+  },
+  {
+    "id": "portal-sarathi",
+    "title": "Sarathi Driving Licence Services Portal",
+    "url": "https://sarathi.parivahan.gov.in/sarathiservice/#TODO_VERIFY",
+    "publisher": "National Informatics Centre (NIC)",
+    "kind": "official-portal",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Aadhaar contactless online DL renewal, address change, slot booking, and DL smart card status."
+  },
+  {
+    "id": "portal-vahan",
+    "title": "Vahan Vehicle Services Portal",
+    "url": "https://vahan.parivahan.gov.in/vahaneservice/#TODO_VERIFY",
+    "publisher": "National Informatics Centre (NIC)",
+    "kind": "official-portal",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Online NOC (Form 28) application, RC address intimation (Form 33), and Form 35 hypothecation termination."
+  },
+  {
+    "id": "state-portal-ts",
+    "title": "Telangana Transport Department Portal",
+    "url": "https://transport.telangana.gov.in#TODO_VERIFY",
+    "publisher": "Transport Department, Government of Telangana",
+    "kind": "state-portal",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Citizen services, online challan clearance, and local RTO jurisdiction in Telangana."
+  },
+  {
+    "id": "state-portal-ka",
+    "title": "Karnataka Transport Department Portal",
+    "url": "https://transport.karnataka.gov.in#TODO_VERIFY",
+    "publisher": "Transport Department, Government of Karnataka",
+    "kind": "state-portal",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "RTO appointment slot scheduling, lifetime road tax schedules, and Form 27 re-registration procedures in Karnataka."
+  },
+  {
+    "id": "state-portal-mh",
+    "title": "Maharashtra Motor Vehicles Department Portal",
+    "url": "https://transport.maharashtra.gov.in#TODO_VERIFY",
+    "publisher": "Motor Vehicles Department, Government of Maharashtra",
+    "kind": "state-portal",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Maharashtra RTO citizen services, address transfer, and tax compliance."
+  },
+  {
+    "id": "state-portal-tn",
+    "title": "Tamil Nadu Transport and Road Safety Department Portal",
+    "url": "https://tnsta.gov.in#TODO_VERIFY",
+    "publisher": "Transport and Road Safety Department, Government of Tamil Nadu",
+    "kind": "state-portal",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Tamil Nadu vehicle and licence services, slot scheduling, and fee structures."
+  },
+  {
+    "id": "state-portal-dl",
+    "title": "Delhi Transport Department Portal",
+    "url": "https://transport.delhi.gov.in#TODO_VERIFY",
+    "publisher": "Transport Department, Government of NCT of Delhi",
+    "kind": "state-portal",
+    "lastChecked": "2026-10-24",
+    "verified": false,
+    "note": "Faceless services portal for NCT of Delhi, contactless licence and RC modifications."
+  }
+]

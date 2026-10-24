@@ -1,0 +1,16 @@
+{
+  "stateCode": "TN",
+  "version": "v2026.1",
+  "fees": [
+    {
+      "id": "fee-tn-service-charge",
+      "label": "Tamil Nadu e-Governance Service Fee",
+      "amount": null,
+      "tag": "Estimate",
+      "sourceIds": ["state-portal-tn"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "State transport portal transaction fee."
+    }
+  ]
+}

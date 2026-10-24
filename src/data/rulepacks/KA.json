@@ -1,0 +1,16 @@
+{
+  "stateCode": "KA",
+  "version": "v2026.1",
+  "fees": [
+    {
+      "id": "fee-ka-user-charge",
+      "label": "Karnataka Transport Department Service Charge",
+      "amount": null,
+      "tag": "Estimate",
+      "sourceIds": ["state-portal-ka"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "Bengaluru One / Karnataka RTO counter processing and facilitation charges."
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "form35": {
+    "wait": {
+      "expected": 21,
+      "slow": 35,
+      "label": "assumed",
+      "note": "Standard administrative turnaround for unilateral Form 35 loan hypothecation clearance."
+    },
+    "resolve": {
+      "expected": 9,
+      "slow": 15,
+      "label": "assumed",
+      "note": "Citizen grievance escalation turnaround to resolve open Form 35 record."
+    },
+    "rejected": {
+      "expected": 5,
+      "label": "assumed",
+      "note": "Turnaround time when Form 35 hypothecation termination is formally rejected by RTO."
+    },
+    "withdraw": {
+      "expected": 2,
+      "label": "assumed",
+      "note": "Turnaround time to withdraw pending Form 35 application at parent RTO."
+    }
+  },
+  "licence": {
+    "onlineRenewal": {
+      "expected": 5,
+      "label": "assumed",
+      "note": "Processing and digital approval for Aadhaar-authenticated contactless licence renewal."
+    },
+    "rtoRenewal": {
+      "expected": 3,
+      "label": "assumed",
+      "note": "Processing delay after in-person biometric/signature verification at RTO counter."
+    },
+    "onlineAddressChange": {
+      "expected": 5,
+      "label": "assumed",
+      "note": "Processing time for online driving licence address update using updated Aadhaar."
+    }
+  },
+  "vehicle": {
+    "reRegistrationProcessing": {
+      "expected": 4,
+      "label": "assumed",
+      "note": "Processing time at destination RTO after in-person Form 27 inspection."
+    },
+    "aadhaarUpdate": {
+      "expected": 7,
+      "label": "assumed",
+      "note": "UIDAI demographic update processing and portal propagation."
+    },
+    "reFilingLoanClosureOnNewRC": {
+      "expected": 10,
+      "label": "assumed",
+      "note": "Re-filing loan termination on newly assigned registration certificate in new state."
+    },
+    "payEChallan": {
+      "expected": 1,
+      "label": "assumed",
+      "note": "Turnaround for payment reconciliation on national e-challan gateway."
+    },
+    "registeredRentalAgreement": {
+      "expected": 3,
+      "label": "assumed",
+      "note": "Execution and sub-registrar registration of residential rental agreement."
+    },
+    "rcAddressIntimation": {
+      "expected": 3,
+      "label": "assumed",
+      "note": "Turnaround for Section 49 address intimation application submission."
+    },
+    "nocReworkInvalidated": {
+      "expected": 7,
+      "label": "assumed",
+      "note": "Administrative rework penalty when NOC becomes invalidated due to address mismatch."
+    },
+    "nocProcessing": {
+      "expected": 10,
+      "label": "assumed",
+      "note": "Parent RTO administrative processing for Form 28 No Objection Certificate."
+    },
+    "bankConsentForm28": {
+      "expected": 7,
+      "label": "assumed",
+      "note": "Financier review and endorsement on Form 28 when loan is active."
+    }
+  },
+  "buffers": {
+    "onlineBufferDays": 2,
+    "betaMinDays": 2,
+    "betaQueueMultiplier": 0.3
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "stateCode": "MH",
+  "version": "v2026.1",
+  "fees": [
+    {
+      "id": "fee-mh-postal-charge",
+      "label": "Maharashtra Postal Delivery Fee",
+      "amount": null,
+      "tag": "Estimate",
+      "sourceIds": ["state-portal-mh"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "Postal dispatch tracking charge for RC / DL smart cards."
+    }
+  ]
+}

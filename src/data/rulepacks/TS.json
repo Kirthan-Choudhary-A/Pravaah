@@ -1,0 +1,16 @@
+{
+  "stateCode": "TS",
+  "version": "v2026.1",
+  "fees": [
+    {
+      "id": "fee-ts-user-charge",
+      "label": "Telangana Transport Department User Charge",
+      "amount": null,
+      "tag": "Estimate",
+      "sourceIds": ["state-portal-ts"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "Local e-Seva / online service transaction facilitation charges."
+    }
+  ]
+}

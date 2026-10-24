@@ -1,0 +1,16 @@
+{
+  "stateCode": "DL",
+  "version": "v2026.1",
+  "fees": [
+    {
+      "id": "fee-dl-faceless-charge",
+      "label": "Delhi Faceless Services Facilitation Fee",
+      "amount": null,
+      "tag": "Estimate",
+      "sourceIds": ["state-portal-dl"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "Administrative charge for faceless online processing in NCT of Delhi."
+    }
+  ]
+}

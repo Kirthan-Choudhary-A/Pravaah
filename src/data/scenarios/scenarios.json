@@ -1,0 +1,101 @@
+{
+  "A": {
+    "id": "scenario-a",
+    "name": "Scenario A: Hyderabad TS-09 to Bengaluru KA-03 (Two-Wheeler)",
+    "move": {
+      "fromState": "TS",
+      "fromRTO": "TS-09",
+      "toState": "KA",
+      "toRTO": "KA-03",
+      "vehicleType": "two-wheeler",
+      "isBHSeries": false,
+      "movedOnDay": 0
+    },
+    "licenceExpiryDay": 21,
+    "primarySlotQueue": 18,
+    "alternativeSlots": [
+      {
+        "rtoCode": "KA-01",
+        "queueDays": 9,
+        "simulated": true
+      },
+      {
+        "rtoCode": "KA-05",
+        "queueDays": 6,
+        "simulated": true
+      }
+    ],
+    "absence": {
+      "start": 12,
+      "end": 25
+    },
+    "blockers": {
+      "form35Open": true,
+      "unpaidChallansCount": 1,
+      "unpaidChallansAmount": 1000
+    },
+    "timings": {
+      "nocProcessingDays": 10,
+      "bankConsentForm28Days": 7
+    },
+    "addressProofType": "registered-rental-agreement"
+  },
+  "B": {
+    "id": "scenario-b",
+    "name": "Scenario B: Pune MH-12 to Chennai TN-07 (BH-Series Car)",
+    "move": {
+      "fromState": "MH",
+      "fromRTO": "MH-12",
+      "toState": "TN",
+      "toRTO": "TN-07",
+      "vehicleType": "car",
+      "isBHSeries": true,
+      "movedOnDay": 0
+    },
+    "licenceExpiryDay": 40,
+    "primarySlotQueue": 12,
+    "absence": {
+      "start": 6,
+      "end": 10
+    },
+    "blockers": {
+      "form35Open": false,
+      "unpaidChallansCount": 0,
+      "unpaidChallansAmount": 0
+    },
+    "timings": {
+      "nocProcessingDays": 10,
+      "bankConsentForm28Days": 7
+    },
+    "addressProofType": "registered-rental-agreement"
+  },
+  "C": {
+    "id": "scenario-c",
+    "name": "Scenario C: Delhi DL-3S to Gangtok SK-01 (Unknown Destination State)",
+    "move": {
+      "fromState": "DL",
+      "fromRTO": "DL-3S",
+      "toState": "SK",
+      "toRTO": "SK-01",
+      "vehicleType": "two-wheeler",
+      "isBHSeries": false,
+      "movedOnDay": 0
+    },
+    "licenceExpiryDay": 35,
+    "primarySlotQueue": 10,
+    "absence": {
+      "start": 15,
+      "end": 20
+    },
+    "blockers": {
+      "form35Open": false,
+      "unpaidChallansCount": 1,
+      "unpaidChallansAmount": 1000
+    },
+    "timings": {
+      "nocProcessingDays": 10,
+      "bankConsentForm28Days": 7
+    },
+    "addressProofType": "registered-rental-agreement"
+  }
+}

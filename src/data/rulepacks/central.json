@@ -1,0 +1,195 @@
+{
+  "stateCode": "IN",
+  "version": "v2026.1",
+  "isCentral": true,
+  "licenceStages": {
+    "renewalWindowDays": 365,
+    "graceDays": 30,
+    "drivingAllowedDuringGrace": true,
+    "lateFee": {
+      "base": 300,
+      "perYear": 1000
+    },
+    "testAfterDays": 365,
+    "verified": false,
+    "basis": "statute",
+    "sourceIds": ["mva-1988-s14", "mva-1988-s15", "cmvr-1989-r81"],
+    "note": "Section 14 & 15 MV Act: renewal allowed within 1 yr before or after expiry; test after 1 yr; driving allowed within 30 days grace."
+  },
+  "reRegistrationLimitDays": {
+    "value": 365,
+    "basis": "statute",
+    "sourceIds": ["mva-1988-s47"],
+    "verified": false,
+    "note": "Section 47 MV Act: 12 months statutory limit before assignment of new registration mark in another state."
+  },
+  "rcAddressIntimationDays": {
+    "value": 30,
+    "basis": "statute",
+    "sourceIds": ["mva-1988-s49"],
+    "verified": false,
+    "note": "Section 49 MV Act: intimation of change of residence within 30 days to the registering authority."
+  },
+  "servicesOnline": {
+    "licenceRenewal": true,
+    "licenceAddressChange": true,
+    "otherServices": ["e-challan", "noc-application", "rc-address-intimation"],
+    "basis": "notification",
+    "sourceIds": ["portal-sarathi", "portal-vahan"],
+    "verified": false,
+    "note": "Aadhaar contactless online faceless services available via Sarathi and Vahan."
+  },
+  "licenceRenewalAtAnyRTO": {
+    "value": true,
+    "basis": "statute",
+    "sourceIds": ["mva-1988-s15"],
+    "verified": false,
+    "note": "Section 15 MV Act: renewal can be granted by any licensing authority or online."
+  },
+  "nocBlockedBy": ["unpaid-challan", "form35-open", "pending-taxes"],
+  "nocAddressMustMatchRC": {
+    "value": true,
+    "basis": "modelled",
+    "note": "modelled rule (assumed): parent state RTO verifies owner identity against existing registration records before issuing NOC."
+  },
+  "classLetters": {
+    "S": "Motor Cycle",
+    "C": "Light Motor Vehicle"
+  },
+  "bhSeries": {
+    "exemptFromNOC": true,
+    "exemptFromReRegistration": true
+  },
+  "fees": [
+    {
+      "id": "fee-licence-renewal",
+      "label": "Driving Licence Renewal",
+      "amount": 200,
+      "tag": "Official",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "CMVR Rule 81 Item 9: statutory renewal application fee."
+    },
+    {
+      "id": "fee-smart-card",
+      "label": "Form 7 Smart Card Fee (per transaction)",
+      "amount": 200,
+      "tag": "Official",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "CMVR Rule 81 Item 11: smart card driving licence specification fee; applies per card issuance."
+    },
+    {
+      "id": "fee-late-renewal",
+      "label": "Late Licence Renewal Penalty",
+      "amount": 300,
+      "tag": "Official",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "CMVR Rule 81: ₹300 late fee plus ₹1,000 for each additional year."
+    },
+    {
+      "id": "fee-licence-address-change",
+      "label": "Driving Licence Address Change",
+      "amount": 200,
+      "tag": "Official",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "CMVR Rule 81: amendment of licence record."
+    },
+    {
+      "id": "fee-noc-form28",
+      "label": "No Objection Certificate (Form 28)",
+      "amount": 0,
+      "tag": "Official",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "Form 28 statutory fee is nil under CMVR Rule 81."
+    },
+    {
+      "id": "fee-new-reg-mark-motorcycle",
+      "label": "New Registration Mark — Motor Cycle (Form 27)",
+      "amount": 300,
+      "tag": "Official",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "CMVR Rule 81 Item 4(a): assignment of new registration mark for motorcycle."
+    },
+    {
+      "id": "fee-new-reg-mark-car",
+      "label": "New Registration Mark — Light Motor Vehicle (Form 27)",
+      "amount": 600,
+      "tag": "Official",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "CMVR Rule 81 Item 4(b): assignment of new registration mark for light motor vehicle."
+    },
+    {
+      "id": "fee-hypothecation-endorsement",
+      "label": "Hypothecation Endorsement",
+      "amount": 500,
+      "tag": "Official",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "CMVR Rule 81 Item 12: endorsement of hire purchase / lease / hypothecation."
+    },
+    {
+      "id": "fee-hypothecation-termination",
+      "label": "Hypothecation Termination (Form 35)",
+      "amount": null,
+      "tag": "Official",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "check CMVR Rule 81 table"
+    },
+    {
+      "id": "fee-estimate-road-tax",
+      "label": "Destination State Lifetime Road Tax",
+      "amount": null,
+      "tag": "Estimate",
+      "sourceIds": ["cmvr-1989-r81"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "Calculated by destination state RTO based on original vehicle invoice value and age."
+    },
+    {
+      "id": "fee-estimate-postal-charges",
+      "label": "Postal & Dispatch Charges",
+      "amount": null,
+      "tag": "Estimate",
+      "sourceIds": ["portal-parivahan"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "Departmental speed post handling fees for smart card dispatch."
+    },
+    {
+      "id": "fee-estimate-bank-noc",
+      "label": "Financier / Bank NOC Processing Fee",
+      "amount": null,
+      "tag": "Estimate",
+      "sourceIds": ["portal-parivahan"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "Commercial bank documentation charges for issuing Form 28 loan consent."
+    },
+    {
+      "id": "fee-estimate-aadhaar-update",
+      "label": "UIDAI Aadhaar Address Update",
+      "amount": null,
+      "tag": "Estimate",
+      "sourceIds": ["portal-parivahan"],
+      "lastChecked": "2026-10-24",
+      "verified": false,
+      "note": "UIDAI demographic update fee (administered by UIDAI, not transport department)."
+    }
+  ]
+}
