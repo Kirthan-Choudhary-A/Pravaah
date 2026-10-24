@@ -471,7 +471,7 @@ export const MetricsPage: React.FC = () => {
                   y1="160"
                   x2="570"
                   y2="160"
-                  stroke="#b7b0a3"
+                  stroke="var(--stone)"
                   strokeWidth="1"
                 />
                 <line
@@ -479,7 +479,7 @@ export const MetricsPage: React.FC = () => {
                   y1="90"
                   x2="570"
                   y2="90"
-                  stroke="#eae7dd"
+                  stroke="var(--paper-warm)"
                   strokeWidth="1"
                   strokeDasharray="4"
                 />
@@ -488,19 +488,19 @@ export const MetricsPage: React.FC = () => {
                   y1="20"
                   x2="570"
                   y2="20"
-                  stroke="#eae7dd"
+                  stroke="var(--paper-warm)"
                   strokeWidth="1"
                   strokeDasharray="4"
                 />
 
                 {/* Y Axis labels */}
-                <text x="35" y="164" fontSize="10" fill="#52544e" textAnchor="end">
+                <text x="35" y="164" fontSize="10" fill="var(--iron)" textAnchor="end">
                   0%
                 </text>
-                <text x="35" y="94" fontSize="10" fill="#52544e" textAnchor="end">
+                <text x="35" y="94" fontSize="10" fill="var(--iron)" textAnchor="end">
                   50%
                 </text>
-                <text x="35" y="24" fontSize="10" fill="#52544e" textAnchor="end">
+                <text x="35" y="24" fontSize="10" fill="var(--iron)" textAnchor="end">
                   100%
                 </text>
 
@@ -519,14 +519,14 @@ export const MetricsPage: React.FC = () => {
                         y={160 - pHeight}
                         width="36"
                         height={pHeight}
-                        fill="#242522"
+                        fill="var(--graphite)"
                         rx="2"
                       />
                       <text
                         x={xGroup + 18}
                         y={152 - pHeight}
                         fontSize="9"
-                        fill="#242522"
+                        fill="var(--graphite)"
                         textAnchor="middle"
                         fontWeight="bold"
                       >
@@ -539,14 +539,14 @@ export const MetricsPage: React.FC = () => {
                         y={160 - nHeight}
                         width="36"
                         height={nHeight}
-                        fill="#b7b0a3"
+                        fill="var(--stone)"
                         rx="2"
                       />
                       <text
                         x={xGroup + 60}
                         y={152 - nHeight}
                         fontSize="9"
-                        fill="#52544e"
+                        fill="var(--iron)"
                         textAnchor="middle"
                       >
                         {d.naiveVal}%
@@ -557,7 +557,7 @@ export const MetricsPage: React.FC = () => {
                         x={xGroup + 39}
                         y="180"
                         fontSize="10"
-                        fill="#242522"
+                        fill="var(--graphite)"
                         textAnchor="middle"
                         fontWeight="500"
                       >
@@ -567,7 +567,7 @@ export const MetricsPage: React.FC = () => {
                         x={xGroup + 39}
                         y="194"
                         fontSize="9"
-                        fill="#88857d"
+                        fill="var(--olive)"
                         textAnchor="middle"
                       >
                         {d.label.split(' ')[1] ?? ''}
@@ -581,14 +581,14 @@ export const MetricsPage: React.FC = () => {
                 <div className={styles.legendItem}>
                   <div
                     className={styles.legendSwatch}
-                    style={{ backgroundColor: '#242522' }}
+                    style={{ backgroundColor: 'var(--graphite)' }}
                   />
                   <span>Pravaah Route-Aware Planning</span>
                 </div>
                 <div className={styles.legendItem}>
                   <div
                     className={styles.legendSwatch}
-                    style={{ backgroundColor: '#b7b0a3' }}
+                    style={{ backgroundColor: 'var(--stone)' }}
                   />
                   <span>Naive Baseline (First RTO Slot)</span>
                 </div>

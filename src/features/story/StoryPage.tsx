@@ -320,7 +320,7 @@ export const StoryPage: React.FC = () => {
             style={{
               padding: '8px 16px',
               backgroundColor: 'var(--accent-yellow)',
-              color: '#000',
+              color: 'var(--graphite)',
               fontWeight: 800,
               border: '2px solid #000',
               borderRadius: '4px',
@@ -335,8 +335,8 @@ export const StoryPage: React.FC = () => {
             to="/simulate"
             style={{
               padding: '8px 16px',
-              backgroundColor: '#fff',
-              color: '#000',
+              backgroundColor: 'var(--offwhite)',
+              color: 'var(--graphite)',
               fontWeight: 800,
               border: '2px solid #000',
               borderRadius: '4px',

@@ -13,6 +13,7 @@ const paths = [
   { path: '/sources', label: 'sources' },
   { path: '/household', label: 'household' },
   { path: '/voice', label: 'voice' },
+  { path: '/metrics', label: 'metrics' },
 ];
 
 for (const vp of viewports) {
@@ -112,4 +113,26 @@ test('voice and plate parsing: sample selection and multilingual read-back', asy
   const confirmBtn = page.getByRole('button', { name: /Yes, Confirm & Save/i });
   await confirmBtn.click();
   await expect(page.getByText(/successfully registered in household!/i)).toBeVisible();
+});
+
+test('privacy and voice fixes hold in the browser', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+
+  // A revealed field stays visible well past the first second (it was ~60 ms before).
+  await page.goto('/household');
+  await page.getByRole('button', { name: /^reveal$/i }).first().click();
+  await page.getByRole('button', { name: /reveal for 60s/i }).click();
+  await page.waitForTimeout(3000);
+  await expect(page.getByRole('button', { name: /^hide$/i })).toBeVisible();
+
+  // The family member's Aadhaar, licence and challans are not shown, not even masked.
+  await expect(page.getByText(/not shared with delegates/i)).toHaveCount(3);
+  await expect(page.getByText(/XXXX-XXXX-/)).toHaveCount(0);
+
+  // Voice: honest speech notice, and saving is blocked on an unresolved class mismatch.
+  await page.goto('/voice');
+  await expect(page.getByText(/receives the audio/i)).toBeVisible();
+  await expect(page.getByText(/transcribed locally/i)).toHaveCount(0);
+  await page.getByRole('button', { name: /Sample 4/i }).click();
+  await expect(page.getByRole('button', { name: /Yes, Confirm/i })).toBeDisabled();
 });

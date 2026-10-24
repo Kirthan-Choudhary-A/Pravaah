@@ -90,3 +90,10 @@ Reviewed against the project document and the state-department fee page (`aptran
 | Modelled rules                                                 | Pending request or unpaid challan blocks the NOC; early Aadhaar update breaks the old RTO's address check.                                                                  | Keep `basis: modelled`, say so in the reason shown to the user.                                                         |
 | Series letters                                                 | Delhi S (two-wheeler) and C (car) have no cited source.                                                                                                                     | Cite a Delhi source or ask the user on mismatch.                                                                        |
 | BH series                                                      | Eligibility conditions are not modelled.                                                                                                                                    | Add an eligibility check before skipping the NOC.                                                                       |
+
+### Update (after the review fixes)
+
+- `fee-noc-form28` and `drivingAllowedDuringGrace` changes above are in place and covered by tests.
+- Smart-card fee count: the engine charges two (renewal and address change), giving an official total of ₹1,100; the project document says ₹900. Unresolved, see `docs/roadmap.md` open item 4.
+- `classLetters` now lives in `src/data/rulepacks/DL.json` with `basis: modelled`, `verified: false` and source `state-portal-dl`; it is no longer in the central pack.
+- Gold-plan citations to "CMVR Rule 58" and "GSR 594(E)" were removed from the specs; the BH notification stays an unverified target in the registry.

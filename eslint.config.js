@@ -406,6 +406,40 @@ export default tseslint.config(
       ],
     },
   },
+  // Engine purity: no wall clock, no randomness. "Today" is Day 0; randomness is passed in seeded.
+  {
+    files: ['src/engine/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
+          message: 'engine/ must be deterministic: no Date.now(). Pass the time in as an argument.',
+        },
+        {
+          selector: "NewExpression[callee.name='Date']",
+          message: 'engine/ must be deterministic: no new Date(). Pass the time in as an argument.',
+        },
+        {
+          selector: "CallExpression[callee.object.name='Math'][callee.property.name='random']",
+          message: 'engine/ must be deterministic: no Math.random(). Pass a seeded generator in.',
+        },
+      ],
+    },
+  },
+  // Design tokens only in UI code (three/ needs literal colours for WebGL and is excluded).
+  {
+    files: ['src/components/**/*.{ts,tsx}', 'src/features/**/*.{ts,tsx}', 'src/state/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/^#[0-9a-fA-F]{3,8}$/]',
+          message: 'Use a design token such as var(--graphite) instead of a colour literal.',
+        },
+      ],
+    },
+  },
   {
     ignores: ['dist', 'node_modules', '*.config.js', '*.config.ts', 'scripts/**'],
   }
