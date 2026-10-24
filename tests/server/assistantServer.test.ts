@@ -125,6 +125,34 @@ describe('Groq failover keeps the flow going', () => {
     expect((await groqChat(new KeyPool(['k1', 'k2']), ['m'], payload, deps)).ok).toBe(true);
   });
 
+  it('skips a retired model without trying every key on it, and uses the next model', async () => {
+    const { deps, calls } = fakeDeps((_k, model) => (model === 'gone' ? status(404) : ok({ ok: 1 })));
+    const r = await groqChat(new KeyPool(['k1', 'k2', 'k3']), ['gone', 'alive'], payload, deps);
+    expect(r.ok && r.model).toBe('alive');
+    expect(calls.filter((c) => c.model === 'gone')).toHaveLength(1);
+  });
+
+  it('says so when no configured model exists', async () => {
+    const { deps } = fakeDeps(() => status(404));
+    const r = await groqChat(new KeyPool(['k1']), ['a', 'b'], payload, deps);
+    expect(!r.ok && r.error).toMatch(/no usable model/i);
+  });
+
+  it('keeps reasoning short only for reasoning models', async () => {
+    const bodies: Record<string, unknown>[] = [];
+    const spy: UpstreamDeps = {
+      fetch: (async (_u: unknown, init?: RequestInit) => {
+        bodies.push(JSON.parse(String(init?.body)));
+        return ok({ ok: 1 });
+      }) as typeof fetch,
+      sleep: async () => undefined,
+    };
+    await groqChat(new KeyPool(['k']), ['openai/gpt-oss-120b'], payload, spy);
+    await groqChat(new KeyPool(['k']), ['qwen/qwen3.8-27b'], payload, spy);
+    expect(bodies[0]!.reasoning_effort).toBe('low');
+    expect(bodies[1]!.reasoning_effort).toBeUndefined();
+  });
+
   it('does not burn every key on a bad request', async () => {
     const { deps, calls } = fakeDeps(() => status(400));
     const r = await groqChat(new KeyPool(['k1', 'k2', 'k3']), ['m'], payload, deps);

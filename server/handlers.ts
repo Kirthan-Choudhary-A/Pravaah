@@ -21,7 +21,7 @@ let cached: { readonly signature: string; readonly pools: Pools } | null = null;
 
 function poolsFor(env: Env): Pools {
   const config = readConfig(env);
-  const signature = JSON.stringify([config.groqKeys, config.sarvamKeys, config.groqModel, config.groqFallbackModel]);
+  const signature = JSON.stringify([config.groqKeys, config.sarvamKeys, config.groqModels]);
   if (cached?.signature !== signature) {
     cached = {
       signature,
@@ -98,12 +98,13 @@ export async function handleApi(
     const tools = Array.isArray(body?.tools) ? body.tools.slice(0, 12) : undefined;
     const result = await groqChat(
       pools.groq,
-      [pools.config.groqModel, pools.config.groqFallbackModel],
+      pools.config.groqModels,
       {
         messages,
         ...(tools ? { tools, tool_choice: 'auto' } : {}),
         temperature: 0.3,
-        max_tokens: 700,
+        // Reasoning models spend tokens thinking before they answer; leave room for both.
+        max_tokens: 1500,
       },
       deps
     );

@@ -2,8 +2,8 @@
 export interface ServerConfig {
   readonly groqKeys: readonly string[];
   readonly sarvamKeys: readonly string[];
-  readonly groqModel: string;
-  readonly groqFallbackModel: string;
+  /** Chat models in order of preference; later ones are fallbacks. */
+  readonly groqModels: readonly string[];
 }
 
 type Env = Readonly<Record<string, string | undefined>>;
@@ -21,11 +21,14 @@ export function readKeys(env: Env, base: string): string[] {
   return [...new Set(out)];
 }
 
+// Groq retires models over time; these are the ones chat-capable keys offered when this was written.
+const DEFAULT_MODELS = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3.8-27b'];
+
 export function readConfig(env: Env): ServerConfig {
+  const listed = split(env.GROQ_MODELS);
   return {
     groqKeys: readKeys(env, 'GROQ_API'),
     sarvamKeys: readKeys(env, 'SARVAM_API'),
-    groqModel: env.GROQ_MODEL?.trim() || 'llama-3.3-70b-versatile',
-    groqFallbackModel: env.GROQ_FALLBACK_MODEL?.trim() || 'llama-3.1-8b-instant',
+    groqModels: listed.length ? listed : DEFAULT_MODELS,
   };
 }

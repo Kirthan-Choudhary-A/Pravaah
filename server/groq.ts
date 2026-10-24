@@ -26,6 +26,7 @@ const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const DEFAULT_COOLDOWN_MS = 20_000;
 const BENCH_MS = 10 * 60_000;
 const BUSY = 'The assistant is busy right now. Please try again in a moment.';
+const NO_MODEL = 'The assistant has no usable model: none of the configured models is available to its API keys.';
 const REJECTED = 'The assistant could not sign in: its API key was rejected. Check the key set on the server.';
 
 function retryAfterMs(res: Response): number {
@@ -55,6 +56,7 @@ export async function groqChat(
 
   let sawAuthFailure = false;
   let sawRateLimit = false;
+  let missingModels = 0;
   for (let round = 0; round < 2; round++) {
     for (const model of models) {
       for (let attempt = 0; attempt < pool.size; attempt++) {
@@ -65,7 +67,12 @@ export async function groqChat(
           res = await deps.fetch(GROQ_URL, {
             method: 'POST',
             headers: { 'content-type': 'application/json', authorization: `Bearer ${picked.key}` },
-            body: JSON.stringify({ ...payload, model }),
+            body: JSON.stringify({
+              ...payload,
+              model,
+              // Keep hidden reasoning short so the visible answer is not starved.
+              ...(model.startsWith('openai/gpt-oss') ? { reasoning_effort: 'low' } : {}),
+            }),
           });
         } catch {
           continue; // network error: try the next key
@@ -83,10 +90,17 @@ export async function groqChat(
           continue;
         }
         if (res.status >= 500) continue;
+        if (res.status === 404) {
+          // This model is gone or not on this account; no other key will have it. Try the next model.
+          missingModels++;
+          break;
+        }
         // Other 4xx are about the request itself; another key will not fix them.
         return { ok: false, status: 400, error: 'The assistant could not read that request.' };
       }
     }
+
+    if (missingModels >= models.length) return { ok: false, status: 503, error: NO_MODEL };
 
     // Every key was refused as invalid (none merely busy): say so instead of "busy".
     if (sawAuthFailure && !sawRateLimit && pool.next(models[0] ?? '') === null) {
