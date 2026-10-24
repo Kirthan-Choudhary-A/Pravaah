@@ -53,5 +53,5 @@
       "@utils/*": ["src/utils/*"]
     }
   },
-  "include": ["src", "tests", "vite.config.ts", "vitest.config.ts", "playwright.config.ts"]
+  "include": ["src", "tests", "server", "api", "vite.config.ts", "vitest.config.ts", "playwright.config.ts"]
 }
