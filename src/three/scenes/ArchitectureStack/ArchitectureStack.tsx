@@ -10,13 +10,13 @@ const ARCHITECTURE_LAYERS: readonly ArchitectureLayerInfo[] = [
     id: 'screens',
     name: 'Screens & Interaction',
     description:
-      'Accessible, WCAG AA interfaces across Story (/), Planner (/plan), Simulator (/simulate), Household (/household), and Voice (/voice). All plans display statutory notices and word-based statuses.',
+      'Accessible, WCAG AA interfaces across Story (/), Planner (/plan), Simulator (/simulate), Household (/household), and Voice (/voice). All plans display simulated-data notices and word-based statuses.',
   },
   {
     id: 'state',
     name: 'App State & Privacy Reducer',
     description:
-      'URL-synced state with immutable consent management, local delegation persistence, time-limited field reveals, and live-region announcements for screen readers.',
+      'URL-synced state with consent management, browser-local delegation persistence (simulated), time-limited field reveals, and live-region announcements for screen readers.',
   },
   {
     id: 'engine',
@@ -26,9 +26,9 @@ const ARCHITECTURE_LAYERS: readonly ArchitectureLayerInfo[] = [
   },
   {
     id: 'data',
-    name: 'Statutory Data & Rule Packs',
+    name: 'Rule Data & Rule Packs',
     description:
-      'Validated by Zod at load time. Layered rule packs combining Central Motor Vehicles Rules (CMVR) with state-level overrides (TS, KA, MH, TN, DL), citing official sections and gazette sources.',
+      'Validated by Zod at load time. Layered rule packs combining Central Motor Vehicles Rules (CMVR) with state-level overrides (TS, KA, MH, TN, DL), listing the official sources to check. All entries are unverified.',
   },
 ];
 

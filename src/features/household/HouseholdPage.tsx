@@ -653,10 +653,10 @@ export const HouseholdPage: React.FC = () => {
           <div className={styles.auditHeaderRow}>
             <div>
               <h2 id="audit-log-title" style={{ fontSize: 'var(--font-size-xl)' }}>
-                Immutable Privacy & Access Audit Log
+                Privacy & Access Audit Log (simulated)
               </h2>
               <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--iron)', margin: 0 }}>
-                Every consent grant, decline, revocation, and field reveal is recorded here with purpose justifications.
+                Every consent grant, decline, revocation, and field reveal is recorded here with purpose justifications. This is a simulated log kept in your browser; it is not tamper-evident.
               </p>
             </div>
             <div className={styles.auditActionsGroup}>

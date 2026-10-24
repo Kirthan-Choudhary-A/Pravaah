@@ -102,6 +102,9 @@ export function loadMergedRulePack(stateCode: string): RulePack {
     stateCode: code,
     isCentral: false,
     fees: mergedFees,
+    ...(stateOverride.classLetters
+      ? { classLetters: { ...stateOverride.classLetters, verified: false } }
+      : {}),
     reRegistrationLimitDays: stateOverride.reRegistrationLimitDays
       ? {
           value:

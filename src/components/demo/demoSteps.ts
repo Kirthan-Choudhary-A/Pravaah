@@ -1,6 +1,13 @@
 /**
- * 11-Step Interactive Guided Demo Walkthrough for Judges
+ * 11-Step Interactive Guided Demo Walkthrough for Judges.
+ * Every number comes from the engine and the simulated scenario, so the guide cannot drift
+ * from what the app shows. Metric results are not repeated here: /metrics shows them with
+ * their method and assumptions.
  */
+
+import { loadScenario, loadMergedRulePack } from '@data';
+import { compareOptions, planScenario } from '@engine';
+import type { Decisions, PlanResult, PlanningEvent } from '@engine';
 
 export interface DemoStep {
   readonly stepNumber: number;
@@ -10,93 +17,118 @@ export interface DemoStep {
   readonly keyTakeaway: string;
 }
 
-export const DEMO_STEPS: readonly DemoStep[] = [
-  {
-    stepNumber: 1,
-    title: 'The Problem in One Line',
-    path: '/',
-    narration:
-      'Transport compliance in India is fragmented across isolated portals (Sarathi, Vahan, State RTOs). Pravaah unifies driving licences, personal vehicles, and family fleets into one ordered schedule.',
-    keyTakeaway: 'One unified timeline with zero guesswork.',
-  },
-  {
-    stepNumber: 2,
-    title: 'Master Plan (Scenario A)',
-    path: '/plan?scenario=A',
-    narration:
-      'For a relocation from Telangana to Karnataka, Pravaah schedules 13 tasks finishing on Day 31 with licence renewal Safe on Day 5. Inspect the NOC task: every single dependency is backed by an explicit statutory section.',
-    keyTakeaway: 'Every dependency is grounded in CMVR and MV Act rules.',
-  },
-  {
-    stepNumber: 3,
-    title: 'Latest Safe Date (LSD)',
-    path: '/plan?scenario=A&compare=1',
-    narration:
-      'Working backwards from licence expiry on Day 16, an in-person RTO visit is computed as Missed due to slot wait times, while online Aadhaar e-KYC renewal is Safe with 11 days of buffer.',
-    keyTakeaway: 'Causal backward pass calculates latest safe date without guessing.',
-  },
-  {
-    stepNumber: 4,
-    title: 'Disruption: Form 35 Rejected',
-    path: '/simulate?scenario=A&formRejected=1',
-    narration:
-      'Simulate an unexpected bank loan hypothecation rejection. The before/after diff immediately identifies two newly required tasks (Bank Consent Form 28 and New RC Loan Closure), adjusting the finish to Day 39.',
-    keyTakeaway: 'Instant graph recalculation with clear task diffs.',
-  },
-  {
-    stepNumber: 5,
-    title: 'Disruption: Slots Collapse to 28 Days',
-    path: '/simulate?scenario=A&slotCollapse=28',
-    narration:
-      'When appointment queues collapse under sudden seasonal surge, the in-person route LSD drops to Day -19 and Pravaah automatically switches its top recommendation to online renewal.',
-    keyTakeaway: 'Dynamic option comparison under scarce capacity.',
-  },
-  {
-    stepNumber: 6,
-    title: 'The Address-Proof Trap',
-    path: '/simulate?scenario=A&aadhaarEarly=1',
-    narration:
-      'Updating your Aadhaar address prior to obtaining NOC triggers Section 49 invalidation: the invalidates link fires, the compliance check fails, and the schedule adds 9 days of rework delay.',
-    keyTakeaway: 'Protects citizens against silent cascading invalidations.',
-  },
-  {
-    stepNumber: 7,
-    title: 'Degraded Mode in Unknown Jurisdictions',
-    path: '/simulate?scenario=C',
-    narration:
-      'For moves to unmodelled states like Sikkim, Pravaah enters degraded mode. Known central steps are scheduled normally, while state rules remain Unknown with zero invented fees.',
-    keyTakeaway: 'Strict epistemic honesty: never invents unknown state fees.',
-  },
-  {
-    stepNumber: 8,
-    title: 'Phonetic Voice Plate Entry',
-    path: '/voice?sample=dl-class',
-    narration:
-      'Transcribing noisy input "dee el one see..." detects Delhi Car series letter ("C") on a two-wheeler, returning an interactive clarification question rather than silently auto-mutating citizen records.',
-    keyTakeaway: 'Positional look-alike fixes with zero silent guesses.',
-  },
-  {
-    stepNumber: 9,
-    title: 'Privacy-by-Design Household Sharing',
-    path: '/household',
-    narration:
-      'Family records stay masked by default. Granting time-bounded "view" consent adds the vehicle to your timeline while keeping owner identity documents strictly private. Every single reveal is permanently audited.',
-    keyTakeaway: 'Zero-knowledge family delegation with immutable audit trails.',
-  },
-  {
-    stepNumber: 10,
-    title: 'Challenge Metrics Evaluation',
-    path: '/metrics',
-    narration:
-      'Inspect reproducible benchmarks: 100% dependency correctness on gold plans, 95.4% voice plate capture accuracy after read-back, and 96.1% renewals completed before LSD across 1,000 randomized cases.',
-    keyTakeaway: 'Every metric provides reproducible method, seed, and data table.',
-  },
-  {
-    stepNumber: 11,
-    title: 'Open Statutory Citations',
-    path: '/sources',
-    narration:
-      'Review official legal citations from India Code, CMVR notifications, and state transport departments. Unverified state rule overrides are prominently flagged awaiting manual review.',
-    keyTakeaway: 'Every rule is traceable to official gazettes.',
-  },
-];
+function buildDemoSteps(): readonly DemoStep[] {
+  const scenarioA = loadScenario('A');
+  const packKA = loadMergedRulePack('KA');
+  const online: Decisions = { form35: 'resolve', licenceRoute: 'online' };
+  const inPerson: Decisions = { form35: 'resolve', licenceRoute: 'rto-visit' };
+
+  const plan = (decisions: Decisions, events: PlanningEvent[] = []): PlanResult =>
+    planScenario({ scenario: scenarioA, mergedPack: packKA, decisions, events });
+  const renewal = (p: PlanResult) => p.tasks.find((t) => t.id === 'task-licence-renewal')!;
+
+  const base = plan(online);
+  const baseRenewal = renewal(base);
+  const visitRenewal = renewal(plan(inPerson));
+  const rejected = plan(online, [{ type: 'formRejected', day: 5 }]);
+  const baseIds = new Set(base.tasks.map((t) => t.id));
+  const addedByRejection = rejected.tasks.filter((t) => !baseIds.has(t.id)).length;
+  const slotEvent: PlanningEvent[] = [{ type: 'slotCollapse', queueDays: 28 }];
+  const collapsedVisit = renewal(plan(inPerson, slotEvent));
+  const collapsedBest = compareOptions({
+    scenario: scenarioA,
+    mergedPack: packKA,
+    decisions: online,
+    events: slotEvent,
+  })[0]!;
+  const early = plan(online, [{ type: 'aadhaarEarly', day: 0 }]);
+  const expiry = scenarioA.licenceExpiryDay;
+
+  return [
+    {
+      stepNumber: 1,
+      title: 'The Problem in One Line',
+      path: '/',
+      narration:
+        'Vehicle and licence services are split across Sarathi, Vahan and each state RTO. Pravaah puts a licence, vehicles and household vehicles into one ordered schedule, using simulated data.',
+      keyTakeaway: 'One unified timeline; unknowns are labelled, not guessed.',
+    },
+    {
+      stepNumber: 2,
+      title: 'Master Plan (Scenario A)',
+      path: '/plan?scenario=A',
+      narration: `For the simulated move from Telangana to Karnataka, Pravaah schedules ${base.tasks.length} tasks finishing on Day ${base.finish}, with the licence renewal ending on Day ${baseRenewal.end} (${baseRenewal.status}). Open any task to see each dependency's reason, basis and sources. Every one is marked unverified.`,
+      keyTakeaway: 'Every dependency has a stated reason and basis.',
+    },
+    {
+      stepNumber: 3,
+      title: 'Latest Safe Date (LSD)',
+      path: '/plan?scenario=A&compare=1',
+      narration: `Working backwards from licence expiry on Day ${expiry}, renewing at the RTO is ${visitRenewal.status} (it ends on Day ${visitRenewal.end}) because of the slot queue and the owner's trip, while online Aadhaar renewal is ${baseRenewal.status} with a latest safe start of Day ${baseRenewal.lsd}. Processing times are assumed.`,
+      keyTakeaway: 'A backward pass gives each task its latest safe date.',
+    },
+    {
+      stepNumber: 4,
+      title: 'Disruption: Form 35 Rejected',
+      path: '/simulate?scenario=A&formRejected=1',
+      narration: `Simulate a rejected Form 35. The before and after comparison shows ${addedByRejection} newly required tasks (bank consent on Form 28 and loan closure on the new RC) and moves the finish from Day ${base.finish} to Day ${rejected.finish}.`,
+      keyTakeaway: 'Instant graph recalculation with clear task differences.',
+    },
+    {
+      stepNumber: 5,
+      title: 'Disruption: Slots Collapse to 28 Days',
+      path: '/simulate?scenario=A&slotCollapse=28',
+      narration: `When the appointment queue grows to 28 days, the latest safe date of the in-person route falls to Day ${collapsedVisit.lsd} and the top-ranked option becomes the ${collapsedBest.decisions.licenceRoute} route, which keeps the licence from lapsing. Online renewal is assumed to be available.`,
+      keyTakeaway: 'Option ranking puts a lapsing licence last.',
+    },
+    {
+      stepNumber: 6,
+      title: 'The Address-Proof Trap',
+      path: '/simulate?scenario=A&aadhaarEarly=1',
+      narration: `In the modelled rules, updating Aadhaar before the NOC is issued invalidates the NOC. The invalidates link fires, the check fails, and the finish moves from Day ${base.finish} to Day ${early.finish}. This is an assumed rule, not confirmed law.`,
+      keyTakeaway: 'A modelled trap is shown with its cost, and labelled as modelled.',
+    },
+    {
+      stepNumber: 7,
+      title: 'Degraded Mode in Unknown Jurisdictions',
+      path: '/simulate?scenario=C',
+      narration:
+        'For a move to a state with no rule pack, such as Sikkim, Pravaah enters degraded mode. Steps that depend on that state are marked unknown, their fees are hidden, and official links are shown.',
+      keyTakeaway: 'Unknown rules are shown as unknown; no fees or dates are invented.',
+    },
+    {
+      stepNumber: 8,
+      title: 'Phonetic Voice Plate Entry',
+      path: '/voice?sample=dl-class',
+      narration:
+        'The transcript "dee el one see…" gives a Delhi plate with class letter C on a vehicle chosen as a two-wheeler. Pravaah asks which is right instead of changing the record, and blocks saving until you answer. Other possible readings are offered when a plate is ambiguous.',
+      keyTakeaway: 'Look-alike fixes are shown, and a class mismatch is asked, not auto-corrected.',
+    },
+    {
+      stepNumber: 9,
+      title: 'Privacy-by-Design Household Sharing',
+      path: '/household',
+      narration:
+        'Family records stay masked by default. A consent with a scope and an end date adds the family vehicle to your timeline, while the owner\'s Aadhaar, licence and challans are never shown to you. Each reveal needs a stated purpose and is logged in a simulated, browser-only audit log.',
+      keyTakeaway: 'Consent is per vehicle with an end date; reveals are purposeful and logged.',
+    },
+    {
+      stepNumber: 10,
+      title: 'Challenge Metrics Evaluation',
+      path: '/metrics',
+      narration:
+        'The metrics page shows the three measures from the brief with their method, seed and assumptions. Read the notes on each: the gold plans are a regression check, the plate set is typed text, and the scarcity run assumes online renewal is available.',
+      keyTakeaway: 'Each number comes with its method and its limits.',
+    },
+    {
+      stepNumber: 11,
+      title: 'Sources and Verification Status',
+      path: '/sources',
+      narration:
+        'The registry lists the official places to read each rule and fee. Every entry is currently marked unverified, because nobody has yet read the official text.',
+      keyTakeaway: 'Rules are traceable to a named source, and none is verified yet.',
+    },
+  ];
+}
+
+export const DEMO_STEPS: readonly DemoStep[] = buildDemoSteps();

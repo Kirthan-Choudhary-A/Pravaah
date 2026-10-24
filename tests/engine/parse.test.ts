@@ -67,7 +67,7 @@ describe('Plate & Voice Engine: Parser and Read-Back', () => {
     licenceRenewalAtAnyRTO: { value: true, basis: 'statute', sourceIds: [], verified: false, note: '' },
     nocBlockedBy: [],
     nocAddressMustMatchRC: { value: true, basis: 'modelled', note: '' },
-    classLetters: { S: 'S', C: 'C' },
+    classLetters: { S: 'Two-Wheeler', C: 'Car', basis: 'modelled', verified: false, sourceIds: [], note: '' },
     bhSeries: { exemptFromNOC: true, exemptFromReRegistration: true },
     fees: [],
   };
@@ -132,6 +132,36 @@ describe('Plate & Voice Engine: Parser and Read-Back', () => {
       expect(check.question).toBeDefined();
       expect(check.question).toContain("class letter 'C' (Car)");
       expect(check.question).toContain('Two-Wheeler');
+    });
+  });
+
+  describe('Class check uses the pack of the plate own state', () => {
+    it('accepts the chosen type when the pack records no class letters', () => {
+      const ka = parsePlate('KA03MJ4578', dict).candidates[0]!;
+      const { classLetters, ...rest } = dummyDLPack;
+      void classLetters;
+      const kaPack: RulePack = { ...rest, stateCode: 'KA' };
+      expect(checkPlateClass(ka, 'two-wheeler', kaPack).status).toBe('unsupported');
+    });
+
+    it('does not check a plate against a different state pack', () => {
+      const ka = parsePlate('KA03MJ4578', dict).candidates[0]!;
+      expect(checkPlateClass(ka, 'two-wheeler', dummyDLPack).status).toBe('unknown_pack');
+    });
+
+    it('accepts a Delhi two-wheeler plate for a two-wheeler, however the type is spelled', () => {
+      const dl = parsePlate('DL1SAB1234', dict).candidates[0]!;
+      for (const type of ['two-wheeler', 'Two-Wheeler', 'Two Wheeler']) {
+        expect(checkPlateClass(dl, type, dummyDLPack).status).toBe('match');
+      }
+    });
+  });
+
+  describe('Read-back spells series letters with NATO words when given', () => {
+    it('says M for Mike, J for Juliett', () => {
+      const plate = parsePlate('KA03MJ4578', dict).candidates[0]!;
+      const rb = buildReadBack(plate, 'en', { ...readBackDict, natoAlphabet: NATO_ALPHABET });
+      expect(rb.fullSpeech).toContain('M for Mike, J for Juliett');
     });
   });
 

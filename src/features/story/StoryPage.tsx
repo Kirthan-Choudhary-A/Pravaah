@@ -5,7 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { HeroPlateFallback } from '@three/scenes/HeroPlate/HeroPlateFallback';
 import { MagneticButton } from '@components/ui/MagneticButton';
-import { loadScenario, loadSources } from '@data';
+import { loadScenario, loadSources, loadMergedRulePack } from '@data';
+import { compareOptions } from '@engine';
 import type { SourceEntry } from '@engine';
 import { useDeviceCapabilities } from '@hooks/useDeviceCapabilities';
 import styles from './StoryPage.module.css';
@@ -36,7 +37,7 @@ const buildSimplifiedSteps = (daysRemaining: number): readonly WalkthroughStep[]
   {
     num: '01',
     title: 'Instant Plate & Voice Search',
-    body: 'Type or speak your vehicle number in English, Hindi, Telugu, or Kannada. We auto-correct common mistakes (like O instead of 0) and verify the format.',
+    body: 'Type or speak your vehicle number in English, Hindi, Telugu, or Kannada. Common mix-ups like O for 0 are corrected by position, and the number is read back for you to confirm.',
     ruleTag: 'Voice & Smart Parser',
   },
   {
@@ -50,21 +51,21 @@ const buildSimplifiedSteps = (daysRemaining: number): readonly WalkthroughStep[]
   {
     num: '03',
     title: 'Automatic Step-by-Step Order',
-    body: 'Government portals don’t explain what to do first. Pravaah sequences your tasks in the exact legal order so no step blocks another.',
+    body: 'Government portals don’t explain what to do first. Pravaah orders your tasks by their dependencies and gives a reason on every link, so no step blocks another.',
     ruleTag: 'Order Calculation',
   },
   {
     num: '04',
     title: 'Latest Safe Date (LSD) Calculator',
-    body: 'Tells you the exact last day you can submit each application without missing RTO deadlines or paying expensive late fines.',
-    ruleTag: 'No-Late-Fee Engine',
+    body: 'Works out the last day each task can start and still finish before its deadline, using assumed processing times and appointment queues.',
+    ruleTag: 'Latest Safe Dates',
   },
   {
     num: '05',
     title: 'Moving Trap Warning (Aadhaar vs NOC)',
-    body: 'Important alert: If you update your Aadhaar address before getting your vehicle NOC, your application gets rejected! We guide you in the correct sequence.',
-    ruleTag: 'RTO Rejection Alert',
-    badgeText: 'Do NOT change Aadhaar before NOC',
+    body: 'In the modelled rules, updating your Aadhaar address before the NOC is issued gets the NOC rejected. Pravaah sequences the NOC first and warns on the link.',
+    ruleTag: 'Modelled rule, unverified',
+    badgeText: 'Aadhaar after the NOC',
     badgeVariant: 'missed',
   },
   {
@@ -81,9 +82,9 @@ const buildSimplifiedSteps = (daysRemaining: number): readonly WalkthroughStep[]
   },
   {
     num: '08',
-    title: 'Transparent Official Rules & Fees',
-    body: 'Every single deadline, fee amount, and rule is backed by official Motor Vehicle Acts and Parivahan notices with direct links.',
-    ruleTag: 'Verified Legal Rules',
+    title: 'Basis and Sources on Every Rule',
+    body: 'Each rule, fee and link shows its basis and cited sources. Every one is currently marked unverified until someone reads the official text.',
+    ruleTag: 'Open Citations',
   },
 ];
 
@@ -96,41 +97,65 @@ export const StoryPage: React.FC = () => {
   const [activeScenarioKey, setActiveScenarioKey] = useState<'A' | 'B' | 'C'>('A');
 
   const scenarioDetails = useMemo(() => {
-    switch (activeScenarioKey) {
-      case 'A':
-        return {
-          title: 'Scenario A: Moving Hyderabad → Bengaluru',
-          move: 'Telangana (TS09) to Karnataka (KA03)',
-          vehicle: 'Car (Form 35 Loan Hypothecation Open)',
-          licenceExpiry: 'Day 26 (Urgent)',
-          recommendation: 'Clear Form 35 with bank, get TS NOC, then renew DL in Bengaluru.',
-          totalDays: '28 Days',
-          statusBadge: 'Urgent Action Required',
-          statusVariant: 'risk',
-        };
-      case 'B':
-        return {
-          title: 'Scenario B: Pune → Chennai (BH-Series Plate)',
-          move: 'Maharashtra (MH12) to Tamil Nadu (TN07)',
-          vehicle: 'BH-Series Car (Nationwide Mobility)',
-          licenceExpiry: 'Day 45 (Safe Window)',
-          recommendation: 'BH plate requires no state road tax transfer! Just update DL address online via Aadhaar.',
-          totalDays: '12 Days',
-          statusBadge: 'Fast Track Available',
-          statusVariant: 'safe',
-        };
-      case 'C':
-        return {
-          title: 'Scenario C: Delhi → Gangtok (Sikkim Rules)',
-          move: 'Delhi (DL01) to Sikkim (SK01)',
-          vehicle: 'Commercial Pickup / Tourist Permit',
-          licenceExpiry: 'Day 60 (Normal)',
-          recommendation: 'State rules unconfirmed. Central rules apply with automatic degraded-mode safety buffer.',
-          totalDays: '35 Days',
-          statusBadge: 'Degraded Mode Safety',
-          statusVariant: 'missed',
-        };
+    const scenario = loadScenario(activeScenarioKey);
+    const pack = loadMergedRulePack(scenario.move.toState);
+    const options = compareOptions({
+      scenario,
+      mergedPack: pack,
+      decisions: { form35: 'resolve', licenceRoute: 'online' },
+    });
+    const best = options[0];
+    const plan = best?.expectedPlan;
+    const degraded = plan?.degradedMode ?? false;
+
+    const steps: string[] = [];
+    if (degraded) {
+      steps.push(
+        `Rules are unknown for ${scenario.move.toRTO}, so its steps are marked "confirm with the RTO" and no dates or fees are guessed. Known steps are still planned.`
+      );
+    } else if (best) {
+      const route = best.decisions.licenceRoute;
+      steps.push(
+        route === 'online'
+          ? 'Renew the licence online first'
+          : route === 'another-rto'
+            ? 'Renew the licence at another RTO'
+            : 'Renew the licence at the RTO'
+      );
+      if (scenario.blockers.form35Open && !scenario.move.isBHSeries) {
+        steps.push(
+          best.decisions.form35 === 'resolve'
+            ? 'resolve the open Form 35 by grievance'
+            : best.decisions.form35 === 'withdraw'
+              ? 'withdraw Form 35 (the bank must then sign Form 28)'
+              : 'wait for Form 35 to clear'
+        );
+      }
+      steps.push(
+        scenario.move.isBHSeries
+          ? 'the modelled BH-series rule skips the NOC and re-registration (unverified)'
+          : 'get the NOC, then update Aadhaar'
+      );
     }
+
+    const lapses = (best?.licenceLapseDays ?? 0) > 0;
+    return {
+      title: scenario.name,
+      move: `${scenario.move.fromRTO} to ${scenario.move.toRTO}`,
+      vehicle:
+        (scenario.move.vehicleType === 'car' ? 'Car' : 'Two-wheeler') +
+        (scenario.move.isBHSeries ? ', BH series' : '') +
+        (scenario.blockers.form35Open ? ', Form 35 open' : ''),
+      licenceExpiry: `Day ${scenario.licenceExpiryDay}`,
+      recommendation: steps.length ? `${steps.join(', then ')}.` : 'No plan available.',
+      totalDays: plan ? `plan finishes on day ${plan.finish}` : 'n/a',
+      statusBadge: degraded
+        ? 'Degraded mode: rules unknown'
+        : lapses
+          ? 'Licence would lapse'
+          : 'Licence renewed in time',
+      statusVariant: degraded ? 'risk' : lapses ? 'missed' : 'safe',
+    };
   }, [activeScenarioKey]);
 
   // Live figures straight from simulated data
@@ -194,9 +219,8 @@ export const StoryPage: React.FC = () => {
             Story — Vehicle &amp; Driving Services, <span className={styles.heroHighlight}>Made Simple.</span>
           </h1>
           <p className={styles.heroSubtitle}>
-            Never miss an RTO deadline or get trapped in confusing government portals. Pravaah
-            calculates your exact last safe dates, warns you about hidden document traps, and
-            organizes your family vehicles in plain English anyone can follow.
+            See your latest safe dates early, spot hidden document traps, and keep your family&apos;s
+            vehicles organised, all in plain English. Everything here runs on simulated data.
           </p>
 
           <div className={styles.heroActions}>
@@ -210,18 +234,18 @@ export const StoryPage: React.FC = () => {
 
           <div className={styles.heroProofRow}>
             <div className={styles.proofItem}>
-              <strong>⏱️ Exact Deadlines</strong>
-              <span>Latest safe dates before late fees</span>
+              <strong>⏱️ Latest Safe Dates</strong>
+              <span>Computed from assumed timings</span>
             </div>
             <div className={styles.proofDivider} aria-hidden="true" />
             <div className={styles.proofItem}>
-              <strong>🛡️ Zero Portal Traps</strong>
-              <span>Warns before you submit wrong docs</span>
+              <strong>🛡️ Trap Warnings</strong>
+              <span>Flags ordering traps in the modelled rules</span>
             </div>
             <div className={styles.proofDivider} aria-hidden="true" />
             <div className={styles.proofItem}>
-              <strong>🔒 100% Private</strong>
-              <span>Masked family data, runs in browser</span>
+              <strong>🔒 Masked by Default</strong>
+              <span>Family data masked; plans computed in your browser</span>
             </div>
           </div>
         </div>
@@ -471,8 +495,9 @@ export const StoryPage: React.FC = () => {
             When moving between states, you need proof of your new address. Many citizens update
             their Aadhaar address first. But beware: your <strong>old RTO</strong> verifies that your
             address still matches your vehicle RC before granting your Form 28 NOC. If you update
-            Aadhaar early, your NOC gets rejected! Pravaah automatically sequences your NOC first,
-            saving you weeks of delays and re-application fees.
+            Aadhaar early, the modelled rules say your NOC gets rejected and must be redone. This is
+            an assumed rule that has not been verified. Pravaah sequences your NOC first and shows
+            what an early update would cost.
           </p>
 
           <div className={styles.trapDiagram} aria-label="Address update dependency chain">
@@ -508,11 +533,12 @@ export const StoryPage: React.FC = () => {
         <div className={styles.sectionHeader}>
           <span className={styles.kicker}>Technical Design</span>
           <h2 id="arch-title" className={styles.sectionTitle}>
-            Fast &amp; 100% Private (Runs in Your Browser)
+            Computed in Your Browser
           </h2>
           <p className={styles.sectionSubtitle}>
-            No external server calls. All dependency math and scheduling calculations run
-            deterministically right on your device.
+            No server calls for planning. Dependency and scheduling calculations run
+            deterministically on your device. The microphone button uses your browser&apos;s
+            speech service, which receives the audio.
           </p>
         </div>
 
@@ -526,33 +552,33 @@ export const StoryPage: React.FC = () => {
         <div className={styles.sectionHeader}>
           <span className={styles.kicker}>Trust &amp; Transparency</span>
           <h2 id="honest-title" className={styles.sectionTitle}>
-            Honest by Design: Verified Legal Rules
+            Honest by Design: Sources, Not Guesses
           </h2>
           <p className={styles.sectionSubtitle}>
-            Every fee and rule displays its exact legal citation from the Motor Vehicle Act.
+            Every fee and rule shows its basis and cited sources, and is marked unverified until the official text has been read.
           </p>
         </div>
 
         <div className={styles.statGrid}>
           <div className={styles.statCard}>
             <span className={styles.statValue}>{sourcesCount}</span>
-            <span className={styles.statLabel}>Official Laws &amp; Portals</span>
+            <span className={styles.statLabel}>Official Sources Registered</span>
             <p className={styles.statDesc}>
-              India Code, MoRTH, Central Motor Vehicle Rules (CMVR), and State Transport Gazettes.
+              India Code, MoRTH, CMVR and state transport portals, listed as places to read.
             </p>
           </div>
           <div className={styles.statCard}>
             <span className={styles.statValue}>{unverifiedCount}</span>
             <span className={styles.statLabel}>Pending Manual Verification</span>
             <p className={styles.statDesc}>
-              We clearly mark modelled rules so citizens know what is statutory versus assumed.
+              Modelled and unverified rules are marked so you can tell them apart from confirmed law (none is confirmed yet).
             </p>
           </div>
           <div className={styles.statCard}>
             <span className={styles.statValue}>{daysRemaining}d</span>
             <span className={styles.statLabel}>Days to Expiry (Scenario A)</span>
             <p className={styles.statDesc}>
-              Simulated scenario countdown showing buffer days and latest safe action dates.
+              Expiry day of the simulated scenario.
             </p>
           </div>
           <div className={styles.statCard}>

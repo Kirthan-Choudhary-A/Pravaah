@@ -171,6 +171,7 @@ export function evaluateMetric1(): Metric1Result {
     hindiDigits: HINDI_DIGITS,
     teluguDigits: TELUGU_DIGITS,
     kannadaDigits: KANNADA_DIGITS,
+    natoAlphabet: NATO_ALPHABET,
   };
 
   for (const spec of GOLD_PLANS) {

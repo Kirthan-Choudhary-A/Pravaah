@@ -52,10 +52,6 @@
     "basis": "modelled",
     "note": "modelled rule (assumed): parent state RTO verifies owner identity against existing registration records before issuing NOC."
   },
-  "classLetters": {
-    "S": "Motor Cycle",
-    "C": "Light Motor Vehicle"
-  },
   "bhSeries": {
     "exemptFromNOC": true,
     "exemptFromReRegistration": true

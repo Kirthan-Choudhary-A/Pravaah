@@ -98,9 +98,14 @@ export interface RulePack {
     readonly basis: RuleBasis;
     readonly note: string;
   };
-  readonly classLetters: {
+  /** Only states whose plates encode the vehicle class carry this (Delhi, unverified). */
+  readonly classLetters?: {
     readonly S: string;
     readonly C: string;
+    readonly basis?: RuleBasis;
+    readonly verified?: boolean;
+    readonly sourceIds?: readonly string[];
+    readonly note?: string;
   };
   readonly bhSeries: {
     readonly exemptFromNOC: boolean;

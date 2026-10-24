@@ -1,6 +1,14 @@
 {
   "stateCode": "DL",
   "version": "v2026.1",
+  "classLetters": {
+    "S": "Two-Wheeler",
+    "C": "Car",
+    "basis": "modelled",
+    "verified": false,
+    "sourceIds": ["state-portal-dl"],
+    "note": "Assumed: Delhi puts a class letter first in the series (S two-wheeler, C car). Not confirmed against a Delhi source."
+  },
   "fees": [
     {
       "id": "fee-dl-faceless-charge",

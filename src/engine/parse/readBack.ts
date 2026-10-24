@@ -17,6 +17,8 @@ export interface ReadBackDictionaries {
   readonly hindiDigits: Record<string, string>;
   readonly teluguDigits: Record<string, string>;
   readonly kannadaDigits: Record<string, string>;
+  /** Word to letter (e.g. bravo to B). When given, series letters are spelled "B for Bravo". */
+  readonly natoAlphabet?: Record<string, string>;
 }
 
 const DEFAULT_SPOKEN_DIGITS: Record<'en' | 'hi' | 'te' | 'kn', Record<string, string>> = {
@@ -70,9 +72,17 @@ export function buildReadBack(
     .map(getDigitSpoken)
     .join(' ');
 
-  const seriesSpoken = plate.series
-    .split('')
-    .join(' ');
+  // Letter to NATO word, so "B" cannot be heard as "8" or "D" as "T"
+  const natoByLetter = new Map<string, string>();
+  for (const [word, letter] of Object.entries(dict.natoAlphabet ?? {})) {
+    if (!natoByLetter.has(letter)) natoByLetter.set(letter, word.charAt(0).toUpperCase() + word.slice(1));
+  }
+  const seriesSpoken = natoByLetter.size
+    ? plate.series
+        .split('')
+        .map((l) => (natoByLetter.has(l) ? `${l} for ${natoByLetter.get(l)}` : l))
+        .join(', ')
+    : plate.series.split('').join(' ');
 
   const numberDigitsSpoken = plate.number
     .split('')

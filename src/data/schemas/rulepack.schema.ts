@@ -71,10 +71,6 @@ export const rulePackSchema = z.object({
     basis: ruleBasisSchema,
     note: z.string(),
   }),
-  classLetters: z.object({
-    S: z.string(),
-    C: z.string(),
-  }),
   bhSeries: z.object({
     exemptFromNOC: z.boolean(),
     exemptFromReRegistration: z.boolean(),
@@ -102,6 +98,10 @@ export const stateRulePackOverrideSchema = z.object({
     .object({
       S: z.string(),
       C: z.string(),
+      basis: ruleBasisSchema,
+      verified: z.boolean(),
+      sourceIds: z.array(z.string()),
+      note: z.string(),
     })
     .optional(),
   bhSeries: z

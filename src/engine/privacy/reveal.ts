@@ -6,7 +6,7 @@
  *   "Submit NOC application", "Pay e-challan", "Verify with RTO", or "Other: <at least 10 characters>".
  *   Bare free text is rejected.
  * - Allowed only when actor may access that field.
- * - Returns a time-limited reveal (60 seconds default) plus an immutable audit entry.
+ * - Returns a time-limited reveal (60 seconds default, same unit as `now`) plus an audit entry.
  */
 
 import type { Consent, RevealResult, AuditEntry } from '../model/types';

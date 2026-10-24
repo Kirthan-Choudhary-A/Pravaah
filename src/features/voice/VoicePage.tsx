@@ -4,6 +4,7 @@ import '@fontsource/noto-sans-devanagari';
 import '@fontsource/noto-sans-telugu';
 import '@fontsource/noto-sans-kannada';
 import { usePlan } from '@state/PlanContext';
+import { loadMergedRulePack } from '@data';
 import {
   parsePlate,
   checkPlateClass,
@@ -69,7 +70,7 @@ interface IWindow extends Window {
 
 export const VoicePage: React.FC = () => {
   const navigate = useNavigate();
-  const { addVehicleAction, rulePack, activeRole } = usePlan();
+  const { addVehicleAction, activeRole } = usePlan();
 
   const [transcriptInput, setTranscriptInput] = useState<string>(
     'kay ay oh three em jay four five seven eight'
@@ -103,6 +104,7 @@ export const VoicePage: React.FC = () => {
       hindiDigits: HINDI_DIGITS,
       teluguDigits: TELUGU_DIGITS,
       kannadaDigits: KANNADA_DIGITS,
+      natoAlphabet: NATO_ALPHABET,
     }),
     []
   );
@@ -121,8 +123,9 @@ export const VoicePage: React.FC = () => {
   // Class check (e.g. DL Car vs Two-Wheeler)
   const classCheck: ClassCheckResult | null = useMemo(() => {
     if (!candidate) return null;
-    return checkPlateClass(candidate, selectedVehicleType, rulePack);
-  }, [candidate, selectedVehicleType, rulePack]);
+    // Each state's own pack says whether its plates encode the vehicle class.
+    return checkPlateClass(candidate, selectedVehicleType, loadMergedRulePack(candidate.state));
+  }, [candidate, selectedVehicleType]);
 
   // Multilingual read-back
   const readBack: ReadBackResult | null = useMemo(() => {

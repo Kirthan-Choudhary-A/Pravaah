@@ -442,7 +442,7 @@ function tryParseBHSeries(chars: string[]): ParsedPlate | null {
 }
 
 /**
- * Checks vehicle registration plate class letter against rule pack.
+ * Checks the plate's class letter against the rule pack of the plate's own state.
  * Never auto-corrects on mismatch; returns an interactive clarification question.
  */
 export function checkPlateClass(
@@ -450,56 +450,53 @@ export function checkPlateClass(
   selectedVehicleType: string,
   pack?: RulePack | null
 ): ClassCheckResult {
-  if (!pack || !pack.classLetters) {
+  if (!pack) {
     return {
       status: 'unknown_pack',
-      note: "Can't check: rule pack or class letter mapping is not available for this state.",
+      note: "Can't check: no rule pack is available for this state.",
     };
   }
-
-  // Currently Delhi explicitly encodes class in the first letter of the series
-  if (plate.state === 'DL') {
-    const firstSeriesLetter = plate.series.charAt(0).toUpperCase();
-    const isTwoWheeler = selectedVehicleType.toLowerCase().includes('two-wheeler');
-    const isCar = selectedVehicleType.toLowerCase().includes('car');
-
-    const expectedLetter = isTwoWheeler ? 'S' : isCar ? 'C' : null;
-
-    if (!expectedLetter) {
-      return {
-        status: 'unsupported',
-        note: `Vehicle category '${selectedVehicleType}' does not have a mapped class letter in Delhi pack.`,
-      };
-    }
-
-    if (firstSeriesLetter !== expectedLetter) {
-      const detectedClass =
-        firstSeriesLetter === 'C'
-          ? 'Car'
-          : firstSeriesLetter === 'S'
-            ? 'Two-Wheeler'
-            : `'${firstSeriesLetter}'`;
-
-      const expectedClass = isTwoWheeler ? 'Two-Wheeler' : 'Car';
-
-      return {
-        status: 'mismatch',
-        detectedClass,
-        expectedClass,
-        question: `Plate ${plate.formatted} has class letter '${firstSeriesLetter}' (${detectedClass}), but vehicle is registered as a ${expectedClass}. Do you want to keep '${detectedClass}' or '${expectedClass}'?`,
-        note: 'State encoding mismatch detected. User confirmation required; no auto-correction applied.',
-      };
-    }
-
+  if (pack.stateCode !== plate.state) {
     return {
-      status: 'match',
-      detectedClass: isTwoWheeler ? 'Two-Wheeler' : 'Car',
-      expectedClass: isTwoWheeler ? 'Two-Wheeler' : 'Car',
+      status: 'unknown_pack',
+      note: `Can't check: the rule pack is for ${pack.stateCode}, the plate is from ${plate.state}.`,
+    };
+  }
+  if (!pack.classLetters) {
+    return {
+      status: 'unsupported',
+      note: `No class letters are recorded for ${plate.state}, so the vehicle type is accepted as chosen.`,
     };
   }
 
-  return {
-    status: 'unsupported',
-    note: `State ${plate.state} does not encode vehicle class in plate series. Accepted with note.`,
-  };
+  // The first series letter carries the class where a pack records it.
+  const type = selectedVehicleType.toLowerCase().replace(/[\s-]/g, '');
+  const isTwoWheeler = type.includes('twowheeler');
+  const isCar = type === 'car';
+  const expectedLetter = isTwoWheeler ? 'S' : isCar ? 'C' : null;
+
+  if (!expectedLetter) {
+    return {
+      status: 'unsupported',
+      note: `Vehicle category '${selectedVehicleType}' has no class letter in the ${plate.state} pack.`,
+    };
+  }
+
+  const classOf = (letter: string): string =>
+    letter === 'C' ? pack.classLetters!.C : letter === 'S' ? pack.classLetters!.S : `'${letter}'`;
+  const firstSeriesLetter = plate.series.charAt(0).toUpperCase();
+  const expectedClass = isTwoWheeler ? pack.classLetters.S : pack.classLetters.C;
+
+  if (firstSeriesLetter !== expectedLetter) {
+    const detectedClass = classOf(firstSeriesLetter);
+    return {
+      status: 'mismatch',
+      detectedClass,
+      expectedClass,
+      question: `Plate ${plate.formatted} has class letter '${firstSeriesLetter}' (${detectedClass}), but vehicle is registered as a ${expectedClass}. Do you want to keep '${detectedClass}' or '${expectedClass}'?`,
+      note: 'State encoding mismatch detected. User confirmation required; no auto-correction applied.',
+    };
+  }
+
+  return { status: 'match', detectedClass: expectedClass, expectedClass };
 }
