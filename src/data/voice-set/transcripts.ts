@@ -419,7 +419,7 @@ export const TRANSCRIPT_BENCHMARK_SET: readonly TranscriptItem[] = [
   },
   {
     id: 'fill-04',
-    transcript: 'gaadi number ts zero eight ef nine zero one two',
+    transcript: 'gaadi number ts zero eight ee ef nine zero one two',
     expectedPlate: 'TS-08-EF-9012',
     category: 'filler-words',
     note: 'Hinglish gaadi number prefix',
@@ -646,9 +646,9 @@ export const TRANSCRIPT_BENCHMARK_SET: readonly TranscriptItem[] = [
   {
     id: 'inv-03',
     transcript: 'KA 999999',
-    expectedPlate: null,
+    expectedPlate: 'KA-99-9999',
     category: 'ambiguous-invalid',
-    note: 'Malformed plate: 6 digits with no series letters',
+    note: 'No series letters: syntactically a valid RTO + number. RTO existence is not checked.',
   },
   {
     id: 'inv-04',

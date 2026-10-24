@@ -76,12 +76,12 @@ export interface Dictionaries {
 export function transcriptToCharacters(text: string, dict: Dictionaries): string[] {
   if (!text) return [];
 
-  // Normalize delimiters and lowercase
-  const rawWords = text
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, ' ')
+  // Normalize delimiters; keep the original casing to tell "EE" (two letters) from "ee" (spoken E)
+  const originalWords = text
+    .replace(/[^A-Za-z0-9\s-]/g, ' ')
     .split(/[\s-]+/)
     .filter(Boolean);
+  const rawWords = originalWords.map((w) => w.toLowerCase());
 
   const characters: string[] = [];
   let i = 0;
@@ -113,6 +113,15 @@ export function transcriptToCharacters(text: string, dict: Dictionaries): string
           continue;
         }
       }
+      i++;
+      continue;
+    }
+
+    // 2b. A capitalised 2-3 letter token is typed letters, not a spoken letter name.
+    // ponytail: an all-caps transcript of spoken names ("KAY AY") is misread; read-back catches it.
+    const original = originalWords[i] ?? '';
+    if (/^[A-Z]{2,3}$/.test(original) && !/^[0-9]$/.test(resolveSingleToken(word, dict) ?? '')) {
+      characters.push(...original.split(''));
       i++;
       continue;
     }
@@ -271,17 +280,8 @@ export function parsePlate(rawText: string, dict: Dictionaries): PlateParseResul
     candidateList.push(bhCandidate);
   }
 
-  // Check 2: Delhi Format (DL + 1-2 digits + class letter + 0-3 series letters + 1-4 digits)
-  const delhiCandidate = tryParseDelhiFormat(chars);
-  if (delhiCandidate) {
-    candidateList.push(delhiCandidate);
-  }
-
-  // Check 3: Standard National Format (State 2 letters + RTO 1-2 digits + Series 0-3 letters + Number 1-4 digits)
-  const standardCandidate = tryParseStandardFormat(chars);
-  if (standardCandidate) {
-    candidateList.push(standardCandidate);
-  }
+  // Check 2: Standard national layout (Delhi is the same layout with a class letter)
+  candidateList.push(...parseStandardCandidates(chars));
 
   if (candidateList.length === 0) {
     return {
@@ -291,8 +291,8 @@ export function parsePlate(rawText: string, dict: Dictionaries): PlateParseResul
     };
   }
 
-  // Filter invalid state codes
-  const validatedCandidates = candidateList.map((cand) => {
+  // Flag invalid state codes; drop them entirely when a known-state reading exists
+  const flagged = candidateList.map((cand) => {
     if (!KNOWN_STATE_CODES.has(cand.state)) {
       return {
         ...cand,
@@ -302,6 +302,9 @@ export function parsePlate(rawText: string, dict: Dictionaries): PlateParseResul
     }
     return cand;
   });
+  const validatedCandidates = flagged.some((c) => c.isValid)
+    ? flagged.filter((c) => c.isValid)
+    : flagged;
 
   return {
     success: true,
@@ -309,164 +312,82 @@ export function parsePlate(rawText: string, dict: Dictionaries): PlateParseResul
   };
 }
 
-function tryParseStandardFormat(chars: string[]): ParsedPlate | null {
-  if (chars.length < 5) return null;
+/**
+ * Fixes one segment to the expected character type. Returns null when a character
+ * cannot be a letter/digit even after look-alike correction (e.g. '7' in a series).
+ */
+function fixSegment(
+  chars: string[],
+  from: number,
+  to: number,
+  type: 'letter' | 'digit',
+  segmentName: string
+): { readonly text: string; readonly fixes: PlateFix[] } | null {
+  let text = '';
   const fixes: PlateFix[] = [];
-
-  // 1. State Code (Pos 0, 1) -> Letters
-  const s0 = fixCharacter(chars[0]!, 'letter', 0, 'State Code');
-  if (s0.fix) fixes.push(s0.fix);
-  const s1 = fixCharacter(chars[1]!, 'letter', 1, 'State Code');
-  if (s1.fix) fixes.push(s1.fix);
-  const state = s0.char + s1.char;
-
-  // 2. RTO Digits (Pos 2, and optionally 3)
-  const r0 = fixCharacter(chars[2]!, 'digit', 2, 'RTO');
-  if (r0.fix) fixes.push(r0.fix);
-
-  let rto = r0.char;
-  let nextIdx = 3;
-
-  // Check if position 3 is also RTO digit or start of series letters
-  if (nextIdx < chars.length) {
-    const lookahead = chars[nextIdx]!;
-    // If it's a digit or look-alike digit (0-9, O, B, etc.) and there are remaining letters afterwards
-    const r1 = fixCharacter(lookahead, 'digit', 3, 'RTO');
-    const remainingCharsCount = chars.length - (nextIdx + 1);
-
-    // Standard plate needs at least 1 digit for number at the end
-    if (r1.fix || /[0-9]/.test(lookahead)) {
-      // If we take pos 3 as RTO digit, we need at least 1 digit for the number
-      if (remainingCharsCount >= 1) {
-        rto += r1.char;
-        if (r1.fix) fixes.push(r1.fix);
-        nextIdx++;
-      }
-    }
+  for (let i = from; i < to; i++) {
+    const r = fixCharacter(chars[i]!, type, i, segmentName);
+    const ok = type === 'digit' ? /^[0-9]$/.test(r.char) : /^[A-Z]$/.test(r.char);
+    if (!ok) return null;
+    text += r.char;
+    if (r.fix) fixes.push(r.fix);
   }
-
-  // Pad single digit RTO for standard display (e.g. "3" -> "03")
-  if (rto.length === 1) {
-    rto = '0' + rto;
-  }
-
-  // 3. Series Letters & Number Digits
-  // Split remaining characters from end: the last 1 to 4 characters must be digits (the number)
-  // Everything between RTO and number is the series letters
-  let numStartIdx = chars.length;
-  for (let idx = chars.length - 1; idx >= nextIdx; idx--) {
-    const c = chars[idx]!;
-    // If it's a digit or look-alike digit
-    const dCheck = fixCharacter(c, 'digit', idx, 'Number');
-    if (dCheck.fix || /[0-9]/.test(c)) {
-      numStartIdx = idx;
-    } else {
-      break;
-    }
-  }
-
-  // Ensure number has 1 to 4 digits
-  if (numStartIdx >= chars.length || chars.length - numStartIdx > 4) {
-    numStartIdx = Math.max(nextIdx, chars.length - 4);
-  }
-
-  // Extract series
-  let series = '';
-  for (let i = nextIdx; i < numStartIdx; i++) {
-    const sChar = fixCharacter(chars[i]!, 'letter', i, 'Series');
-    if (sChar.fix) fixes.push(sChar.fix);
-    series += sChar.char;
-  }
-
-  // Extract number
-  let rawNumber = '';
-  for (let i = numStartIdx; i < chars.length; i++) {
-    const nDigit = fixCharacter(chars[i]!, 'digit', i, 'Number');
-    if (nDigit.fix) fixes.push(nDigit.fix);
-    rawNumber += nDigit.char;
-  }
-
-  if (rawNumber.length === 0) return null;
-
-  // Zero-pad number to 4 digits for official display
-  const formattedNumber = rawNumber.padStart(4, '0');
-  const formatted = series
-    ? `${state}-${rto}-${series}-${formattedNumber}`
-    : `${state}-${rto}-${formattedNumber}`;
-
-  return {
-    raw: chars.join(''),
-    state,
-    rto,
-    series,
-    number: formattedNumber,
-    formatted,
-    format: 'standard',
-    fixes,
-    isValid: true,
-  };
+  return { text, fixes };
 }
 
-function tryParseDelhiFormat(chars: string[]): ParsedPlate | null {
-  if (chars.length < 6) return null;
+/**
+ * Every way to split the characters into State + RTO (1-2 digits) + Series (0-3 letters)
+ * + Number (1-4 digits), best first: fewest look-alike fixes, then a 4-digit number,
+ * then a 2-digit RTO. All valid splits are returned so the caller can ask, not guess.
+ */
+function parseStandardCandidates(chars: string[]): ParsedPlate[] {
+  if (chars.length < 5) return [];
+  const state = fixSegment(chars, 0, 2, 'letter', 'State Code');
+  if (!state) return [];
 
-  const fixes: PlateFix[] = [];
-  const s0 = fixCharacter(chars[0]!, 'letter', 0, 'State Code');
-  const s1 = fixCharacter(chars[1]!, 'letter', 1, 'State Code');
-  if (s0.char + s1.char !== 'DL') return null;
+  const found: { readonly plate: ParsedPlate; readonly score: number }[] = [];
+  for (let numLen = 4; numLen >= 1; numLen--) {
+    for (const rtoLen of [2, 1]) {
+      const seriesLen = chars.length - 2 - rtoLen - numLen;
+      if (seriesLen < 0 || seriesLen > 3) continue;
+      const rto = fixSegment(chars, 2, 2 + rtoLen, 'digit', 'RTO');
+      const series = fixSegment(chars, 2 + rtoLen, 2 + rtoLen + seriesLen, 'letter', 'Series');
+      const num = fixSegment(chars, 2 + rtoLen + seriesLen, chars.length, 'digit', 'Number');
+      if (!rto || !series || !num) continue;
 
-  if (s0.fix) fixes.push(s0.fix);
-  if (s1.fix) fixes.push(s1.fix);
+      const rtoText = rto.text.padStart(2, '0');
+      const number = num.text.padStart(4, '0');
+      const formatted = series.text
+        ? `${state.text}-${rtoText}-${series.text}-${number}`
+        : `${state.text}-${rtoText}-${number}`;
+      if (found.some((c) => c.plate.formatted === formatted)) continue;
 
-  // RTO digit(s)
-  const r0 = fixCharacter(chars[2]!, 'digit', 2, 'RTO');
-  if (r0.fix) fixes.push(r0.fix);
-  const rto = r0.char;
-  let nextIdx = 3;
-
-  // Class letter at nextIdx or pos 4
-  const cChar = fixCharacter(chars[nextIdx]!, 'letter', nextIdx, 'Delhi Class Letter');
-  // In Delhi, common class letters are 'C' (Car), 'S' (Two-Wheeler), 'P' (Passenger), etc.
-  if (cChar.fix) fixes.push(cChar.fix);
-  const classLetter = cChar.char;
-  nextIdx++;
-
-  // Remaining series and number
-  const numStartIdx = Math.max(nextIdx, chars.length - 4);
-  let series = '';
-  for (let i = nextIdx; i < numStartIdx; i++) {
-    const sc = fixCharacter(chars[i]!, 'letter', i, 'Series');
-    if (sc.fix) fixes.push(sc.fix);
-    series += sc.char;
+      const fixes = [...state.fixes, ...rto.fixes, ...series.fixes, ...num.fixes];
+      found.push({
+        plate: {
+          raw: chars.join(''),
+          state: state.text,
+          rto: rtoText,
+          series: series.text,
+          number,
+          formatted,
+          // Delhi encodes the vehicle class in the first series letter; same layout otherwise.
+          format: state.text === 'DL' ? 'delhi' : 'standard',
+          fixes,
+          isValid: true,
+        },
+        // ponytail: modern plates are mostly 4-digit with at most a 2-letter series, so a
+        // shorter number or a 3-letter series costs half a fix. Tune against real plates.
+        score: fixes.length + (numLen < 4 ? 0.5 : 0) + (seriesLen === 3 ? 0.5 : 0),
+      });
+    }
   }
-
-  let rawNumber = '';
-  for (let i = numStartIdx; i < chars.length; i++) {
-    const nd = fixCharacter(chars[i]!, 'digit', i, 'Number');
-    if (nd.fix) fixes.push(nd.fix);
-    rawNumber += nd.char;
-  }
-
-  if (rawNumber.length === 0) return null;
-  const formattedNumber = rawNumber.padStart(4, '0');
-  const fullSeries = `${classLetter}${series}`;
-  const formatted = `DL-${rto.padStart(2, '0')}-${fullSeries}-${formattedNumber}`;
-
-  return {
-    raw: chars.join(''),
-    state: 'DL',
-    rto: rto.padStart(2, '0'),
-    series: fullSeries,
-    number: formattedNumber,
-    formatted,
-    format: 'delhi',
-    fixes,
-    isValid: true,
-  };
+  // Array.sort is stable: ties keep the numLen/rtoLen preference order above.
+  return found.sort((a, b) => a.score - b.score).map((c) => c.plate);
 }
 
 function tryParseBHSeries(chars: string[]): ParsedPlate | null {
-  if (chars.length < 8) return null;
+  if (chars.length !== 10) return null;
 
   // BH pattern: YY BH NNNN XX
   // Look for "BH" at index 2,3
