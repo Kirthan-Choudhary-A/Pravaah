@@ -6,9 +6,8 @@ import { useGSAP } from '@gsap/react';
 import { HeroPlate } from '@three/scenes/HeroPlate/HeroPlate';
 import { ArchitectureStack } from '@three/scenes/ArchitectureStack/ArchitectureStack';
 import { MagneticButton } from '@components/ui/MagneticButton';
-import { loadScenario, loadSources, loadMergedRulePack } from '@data';
-import { planScenario } from '@engine';
-import type { ScheduledTask, SourceEntry } from '@engine';
+import { loadScenario, loadSources } from '@data';
+import type { SourceEntry } from '@engine';
 import { useDeviceCapabilities } from '@hooks/useDeviceCapabilities';
 import styles from './StoryPage.module.css';
 
@@ -25,59 +24,57 @@ interface WalkthroughStep {
   readonly badgeVariant?: 'safe' | 'risk' | 'missed' | undefined;
 }
 
-const STEPS: readonly WalkthroughStep[] = [
+const buildSteps = (daysRemaining: number): readonly WalkthroughStep[] => [
   {
     num: '01',
     title: 'Reads the plate in local rhythm',
-    body: 'Spoken, typed, or noisy audio. Normalises "O" to "0", strips extra hyphens, and pins down the registration series without phoning home.',
-    ruleTag: 'Rule KA-REG-01',
+    body: 'Typed input or scripted voice samples. Normalises "O" to "0", strips extra hyphens, and reads back the registration number for confirmation. Live speech capture is not yet tested.',
+    ruleTag: 'Positional parser',
   },
   {
     num: '02',
-    title: 'Discovers vehicle and licence validity dates',
-    body: 'Pins the licence expiry (16 days away), fitness inspection deadline, and road tax cycle into a unified timeline.',
-    ruleTag: 'CMVR Rule 14 & 62',
-    badgeText: '16d to expiry',
+    title: 'Pins the licence expiry on one timeline',
+    body: `In the simulated scenario the licence expires on day ${daysRemaining}. The move, the open request and the owner's away days go on the same timeline.`,
+    ruleTag: 'Scenario A (simulated)',
+    badgeText: `${daysRemaining} days to expiry (simulated)`,
     badgeVariant: 'risk',
   },
   {
     num: '03',
-    title: 'Builds one DAG with causal explanations',
-    body: 'Every single dependency is grounded in a legal or physical reason. No arbitrary ordering; tasks sit in topological order.',
-    ruleTag: 'MV Act §14(2)',
+    title: 'Builds one DAG with a reason on every link',
+    body: 'Every dependency states why it exists, its basis (statute, notification or modelled) and its sources, and is marked unverified until the source is read. Tasks sit in topological order.',
+    ruleTag: 'Typed links',
   },
   {
     num: '04',
     title: 'Computes Latest Safe Date (LSD)',
-    body: 'Working backwards from critical expirations with real-world buffer days for portal delays, document uploads, and dispatch windows.',
-    ruleTag: 'Engine Back-propagation',
-    badgeText: 'Safe',
-    badgeVariant: 'safe',
+    body: 'Works backwards from the expiry with assumed buffer days for slot queues, processing and absences. Each task shows its own status in words.',
+    ruleTag: 'Engine back-propagation',
   },
   {
     num: '05',
-    title: 'Detects the Address-Proof Trap',
-    body: 'If you move your Aadhaar or DL address, vehicle RC updates become compulsory within 30 days — or your claims risk invalidation.',
-    ruleTag: 'MV Act §49',
-    badgeText: 'RC Invalidates',
+    title: 'Flags the Address-Proof Trap',
+    body: "Modelled rule (assumed): updating Aadhaar before the NOC is issued breaks the old RTO's address check. Pravaah orders the Aadhaar update after the NOC and warns on the link.",
+    ruleTag: 'Modelled rule, unverified',
+    badgeText: 'Invalidates the NOC if done early',
     badgeVariant: 'missed',
   },
   {
     num: '06',
-    title: 'Simulates unannounced disruptions',
-    body: 'Inject travel absences, medical certificate rejections, or slot shortages. The engine rebuilds downstream tasks instantly.',
+    title: 'Simulates disruptions',
+    body: 'Inject a Form 35 rejection, a slot shortage, a longer trip or an early Aadhaar update. The plan and its dates are recomputed with a before and after comparison.',
     ruleTag: 'What-If Engine',
   },
   {
     num: '07',
-    title: 'Masks family records behind verified consent',
-    body: 'Full masking by default. Vehicle identifiers stay shielded until an active consent token with specific scope is granted.',
+    title: 'Masks family records behind consent',
+    body: 'Identifiers are masked by default. Revealing one needs a stated purpose and is written to an audit log.',
     ruleTag: 'Privacy by Design',
   },
   {
     num: '08',
-    title: 'Verifiable legal basis on every card',
-    body: 'Every citation links directly to India Code or Parivahan portals, with unverified rule overrides clearly flagged.',
+    title: 'Shows the basis on every card',
+    body: 'Each task and link lists its basis and cited sources. Every source is currently flagged unverified until someone reads the official text.',
     ruleTag: 'Open Citations',
   },
 ];
@@ -87,30 +84,16 @@ export const StoryPage: React.FC = () => {
   const walkthroughRef = useRef<HTMLDivElement | null>(null);
   const { prefersReducedMotion } = useDeviceCapabilities();
 
-  // Compute live scenario and source metrics
+  // Live figures straight from the bundled simulated data
   const { daysRemaining, sourcesCount, unverifiedCount } = useMemo(() => {
-    try {
-      const scenarioA = loadScenario('A');
-      const mergedPack = loadMergedRulePack(scenarioA.move.toState);
-      const plan = planScenario({
-        scenario: scenarioA,
-        mergedPack,
-        decisions: { form35: 'wait', licenceRoute: 'online' },
-        events: [],
-      });
-      const dlTask = plan.tasks.find((t: ScheduledTask) => t.id.includes('dl') || t.lane === 'licence');
-      const sources = loadSources();
-      const unverified = sources.filter((s: SourceEntry) => !s.verified).length;
-
-      return {
-        daysRemaining: dlTask ? scenarioA.licenceExpiryDay : 16,
-        sourcesCount: sources.length,
-        unverifiedCount: unverified,
-      };
-    } catch {
-      return { daysRemaining: 16, sourcesCount: 10, unverifiedCount: 10 };
-    }
+    const sources = loadSources();
+    return {
+      daysRemaining: loadScenario('A').licenceExpiryDay,
+      sourcesCount: sources.length,
+      unverifiedCount: sources.filter((s: SourceEntry) => !s.verified).length,
+    };
   }, []);
+  const steps = useMemo(() => buildSteps(daysRemaining), [daysRemaining]);
 
   useGSAP(
     () => {
@@ -167,14 +150,14 @@ export const StoryPage: React.FC = () => {
       {/* 1. HERO SECTION WITH 3D PLATE */}
       <section className={styles.heroSection} aria-labelledby="hero-title">
         <div className={styles.heroText}>
-          <span className={styles.kicker}>One plan • Every dependency • Zero surprises</span>
+          <span className={styles.kicker}>One plan • Every dependency explained</span>
           <h1 id="hero-title" className={styles.heroTitle}>
             Story: Transport compliance, untangled.
           </h1>
           <p className={styles.heroSubtitle}>
             A citizen-first assistant for driving licences, personal vehicles, and family fleets.
-            One unified causal schedule, explicit reasons for every deadline, and absolute privacy
-            for delegated household members.
+            One unified schedule, a stated reason for every dependency, and masked, consent-based
+            sharing for household members.
           </p>
           <div className={styles.heroActions}>
             <MagneticButton href="/plan" variant="primary">
@@ -187,12 +170,12 @@ export const StoryPage: React.FC = () => {
           <div className={styles.heroProofRow}>
             <div className={styles.proofItem}>
               <strong>No Guesswork</strong>
-              <span>Every task justified by law</span>
+              <span>Every task shows its reason and basis</span>
             </div>
             <div className={styles.proofDivider} aria-hidden="true" />
             <div className={styles.proofItem}>
               <strong>Privacy First</strong>
-              <span>Zero-knowledge household sharing</span>
+              <span>Masked, consent-based household sharing</span>
             </div>
             <div className={styles.proofDivider} aria-hidden="true" />
             <div className={styles.proofItem}>
@@ -202,7 +185,10 @@ export const StoryPage: React.FC = () => {
           </div>
         </div>
 
-        <div className={styles.heroVisual} aria-label="Interactive 3D Registration Plate and Licence Card">
+        <div
+          className={styles.heroVisual}
+          aria-label="Interactive 3D Registration Plate and Licence Card"
+        >
           <HeroPlate />
         </div>
       </section>
@@ -212,11 +198,11 @@ export const StoryPage: React.FC = () => {
         <div className={styles.sectionHeader}>
           <span className={styles.kicker}>The Friction</span>
           <h2 id="problem-title" className={styles.sectionTitle}>
-            Seven ways Indian transport services fail citizens today
+            Seven points of friction in vehicle and licence services
           </h2>
           <p className={styles.sectionSubtitle}>
-            Administrative fragmentation across disparate portals turns simple routine renewals into
-            compound compliance failures.
+            When several services are needed at once, the order matters and the portals do not lay
+            it out.
           </p>
         </div>
 
@@ -226,8 +212,9 @@ export const StoryPage: React.FC = () => {
             <div>
               <h3 className={styles.problemHeading}>Isolated, siloed portals</h3>
               <p className={styles.problemDesc}>
-                Sarathi handles driving licences, Vahan handles vehicles, and state RTO portals handle
-                permits. None of them share schedules or warn of inter-dependencies.
+                Sarathi handles driving licences, Vahan handles vehicles, and each state sets its
+                own procedures, fees and appointment capacity. A citizen needing several services
+                has to work out the order alone.
               </p>
             </div>
           </li>
@@ -236,8 +223,8 @@ export const StoryPage: React.FC = () => {
             <div>
               <h3 className={styles.problemHeading}>Silent cascading expirations</h3>
               <p className={styles.problemDesc}>
-                A lapsed driving licence invalidates commercial vehicle operations; an expired PUC
-                blocks annual fitness certificates without any proactive notification.
+                An open application or unpaid dues on a vehicle can stop new requests, and the
+                portal often shows only that a transaction is already pending, not what to do first.
               </p>
             </div>
           </li>
@@ -246,9 +233,10 @@ export const StoryPage: React.FC = () => {
             <div>
               <h3 className={styles.problemHeading}>The Address-Update Trap</h3>
               <p className={styles.problemDesc}>
-                Updating your address on Aadhaar creates a statutory 30-day mandate to update all
-                linked registration certificates (RCs). Miss it, and vehicle sales or insurance claims
-                are rejected.
+                A new Aadhaar address proves the new residence, but in the modelled rules the old
+                RTO checks the address against the RC before issuing the NOC. Update too early and
+                the NOC breaks; too late and there is no proof of the new address. This is a
+                modelled rule, not yet verified.
               </p>
             </div>
           </li>
@@ -257,8 +245,8 @@ export const StoryPage: React.FC = () => {
             <div>
               <h3 className={styles.problemHeading}>Unrealistic buffer assumptions</h3>
               <p className={styles.problemDesc}>
-                Portal submission is not completion. Document verification, biometrics, and postal
-                smart-card dispatch can add 14 to 28 days of invisible lead time.
+                Portal submission is not completion. Processing, verification and dispatch add lead
+                time that differs by RTO, so Pravaah uses timings labelled as assumed.
               </p>
             </div>
           </li>
@@ -267,8 +255,8 @@ export const StoryPage: React.FC = () => {
             <div>
               <h3 className={styles.problemHeading}>Absence blindness</h3>
               <p className={styles.problemDesc}>
-                Booking an RTO slot during a planned business trip or overseas vacation guarantees a
-                missed deadline, resetting application queues and wasting paid challan fees.
+                A visit cannot happen while the owner is away. Pravaah schedules in-person visits
+                around the owner's away days and shows when slot scarcity puts a deadline at risk.
               </p>
             </div>
           </li>
@@ -277,8 +265,8 @@ export const StoryPage: React.FC = () => {
             <div>
               <h3 className={styles.problemHeading}>Over-exposure of family records</h3>
               <p className={styles.problemDesc}>
-                Managing an aging parent’s or spouse’s car requires trading raw OTPs, sharing full
-                Aadhaar copies, and exposing unmasked personal identifiers across chat apps.
+                Managing a relative's vehicle can mean passing identifiers and documents around
+                informally. Pravaah masks them by default and logs every reveal.
               </p>
             </div>
           </li>
@@ -287,8 +275,8 @@ export const StoryPage: React.FC = () => {
             <div>
               <h3 className={styles.problemHeading}>Opaque, unsubstantiated rules</h3>
               <p className={styles.problemDesc}>
-                Citizens are quoted contradictory penalties and procedures by agents because portals
-                rarely cite the exact section of the Motor Vehicles Act or CMVR.
+                Rules and fees differ by state and change over time. Pravaah shows the source and
+                last-checked date for each rule and fee, and marks the ones nobody has verified.
               </p>
             </div>
           </li>
@@ -312,7 +300,7 @@ export const StoryPage: React.FC = () => {
         </div>
 
         <div className={styles.walkthroughGrid}>
-          {STEPS.map((step) => (
+          {steps.map((step) => (
             <article key={step.num} className={styles.walkthroughCard}>
               <div className={styles.walkthroughCardTop}>
                 <span className={styles.walkthroughNum}>{step.num}</span>
@@ -343,42 +331,44 @@ export const StoryPage: React.FC = () => {
       <section className={styles.trapSection} aria-labelledby="trap-title">
         <div className={styles.trapContainer}>
           <div className={styles.trapBadgeRow}>
-            <span className={styles.trapWarningTag}>CRITICAL LEGAL DEPENDENCY</span>
-            <span className={styles.trapRuleTag}>Motor Vehicles Act, 1988 §49</span>
+            <span className={styles.trapWarningTag}>MODELLED DEPENDENCY</span>
+            <span className={styles.trapRuleTag}>Modelled rule (assumed), unverified</span>
           </div>
           <h2 id="trap-title" className={styles.trapTitle}>
             The Address-Proof Trap
           </h2>
           <p className={styles.trapExplanation}>
-            When a citizen changes their residence and updates their driving licence or Aadhaar,
-            Section 49 of the Motor Vehicles Act mandates updating every registered vehicle within 30
-            days. If you update the licence first without scheduling vehicle record corrections,
-            your vehicle’s registration details are legally inconsistent — risking invalidation during
-            hypothecation cancellation, ownership transfers, or insurance claims.
+            When a citizen moves state, the new address must be proven for the licence and the
+            vehicle, and an Aadhaar update is the obvious proof. In the modelled rules the old RTO
+            checks the address against the RC before issuing the NOC, so updating Aadhaar first
+            breaks the NOC and it must be redone. Pravaah therefore sequences the Aadhaar update
+            after the NOC and shows the cost if it is done early. A registered rental agreement
+            covers the new-address proof for the registration in the meantime. These are modelled
+            rules, not confirmed law.
           </p>
           <div className={styles.trapDiagram} aria-label="Address update dependency chain">
             <div className={styles.diagramNode}>
-              <span className={styles.nodeKind}>Identity Event</span>
-              <strong>Address Change</strong>
-              <small>New residence registered</small>
+              <span className={styles.nodeKind}>Vehicle Task</span>
+              <strong>Form 28 NOC</strong>
+              <small>Issued by the old RTO</small>
             </div>
             <div className={styles.diagramArrow}>
-              <span>invalidates</span>
+              <span>then (needs)</span>
+              <div className={styles.arrowLine} />
+            </div>
+            <div className={`${styles.diagramNode} ${styles.diagramNodeAlert}`}>
+              <span className={styles.nodeKind}>Identity Task</span>
+              <strong>Aadhaar address update</strong>
+              <small>Invalidates the NOC if done first</small>
+            </div>
+            <div className={styles.diagramArrow}>
+              <span>propagates</span>
               <div className={styles.arrowLine} />
             </div>
             <div className={styles.diagramNode}>
               <span className={styles.nodeKind}>Licence Task</span>
-              <strong>DL Address Change</strong>
-              <small>Proof submitted to Sarathi</small>
-            </div>
-            <div className={styles.diagramArrow}>
-              <span>requires (30d)</span>
-              <div className={styles.arrowLine} />
-            </div>
-            <div className={`${styles.diagramNode} ${styles.diagramNodeAlert}`}>
-              <span className={styles.nodeKind}>Vehicle Mandate</span>
-              <strong>RC Address Update</strong>
-              <small>Forms 33 + Chassis pencil imprint</small>
+              <strong>DL address change</strong>
+              <small>Online, from the new Aadhaar</small>
             </div>
           </div>
         </div>
@@ -407,37 +397,40 @@ export const StoryPage: React.FC = () => {
             Honest by design
           </h2>
           <p className={styles.sectionSubtitle}>
-            Every single date, fee, and prerequisite can be inspected directly down to its legal citation.
+            Every rule, fee and link shows its basis and sources, and is marked unverified until the
+            official text has been read.
           </p>
         </div>
 
         <div className={styles.statGrid}>
           <div className={styles.statCard}>
             <span className={styles.statValue}>{sourcesCount}</span>
-            <span className={styles.statLabel}>Official Sources Seeded</span>
+            <span className={styles.statLabel}>Official Sources Registered</span>
             <p className={styles.statDesc}>
-              India Code, Central Motor Vehicle Rules (CMVR), Sarathi, and state transport portals.
+              India Code, MoRTH, the Parivahan portals and state transport portals, as targets to
+              read.
             </p>
           </div>
           <div className={styles.statCard}>
             <span className={styles.statValue}>{unverifiedCount}</span>
             <span className={styles.statLabel}>Awaiting Manual Verification</span>
             <p className={styles.statDesc}>
-              Strict rule packs explicitly mark unconfirmed state fee overrides with verified: false.
+              Registry entries still marked verified: false. Nothing is verified until someone reads
+              it.
             </p>
           </div>
           <div className={styles.statCard}>
             <span className={styles.statValue}>{daysRemaining}d</span>
-            <span className={styles.statLabel}>Live DL Window (Scenario A)</span>
+            <span className={styles.statLabel}>Days to licence expiry (Scenario A)</span>
             <p className={styles.statDesc}>
-              Dynamic window computed directly from the current seed timeline without estimation.
+              Taken from the simulated scenario's licence expiry day.
             </p>
           </div>
           <div className={styles.statCard}>
-            <span className={styles.statValue}>0ms</span>
-            <span className={styles.statLabel}>Network Latency</span>
+            <span className={styles.statValue}>None</span>
+            <span className={styles.statLabel}>Server calls for planning</span>
             <p className={styles.statDesc}>
-              All calculations execute client-side. Zero telemetry, zero server round-trips.
+              Plans are computed in the browser from bundled, simulated data.
             </p>
           </div>
         </div>
@@ -481,7 +474,8 @@ export const StoryPage: React.FC = () => {
       {/* EDITORIAL NOTE */}
       <div className={styles.storyFooter}>
         <p>
-          Crafted for IMPACTX 2026 Challenge 09 &ldquo;Vehicle & Driving Services Made Simple&rdquo;.
+          Crafted for IMPACTX 2026 Challenge 09 &ldquo;Vehicle & Driving Services Made
+          Simple&rdquo;.
         </p>
       </div>
     </div>
