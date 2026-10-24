@@ -5,7 +5,7 @@
   "licenceStages": {
     "renewalWindowDays": 365,
     "graceDays": 30,
-    "drivingAllowedDuringGrace": true,
+    "drivingAllowedDuringGrace": false,
     "lateFee": {
       "base": 300,
       "perYear": 1000
@@ -14,7 +14,7 @@
     "verified": false,
     "basis": "statute",
     "sourceIds": ["mva-1988-s14", "mva-1988-s15", "cmvr-1989-r81"],
-    "note": "Section 14 & 15 MV Act: renewal allowed within 1 yr before or after expiry; test after 1 yr; driving allowed within 30 days grace."
+    "note": "Section 14 & 15 MV Act: renewal allowed within 1 yr before or after expiry; test after 1 yr. The 30-day grace is assumed for the late-fee start only; driving on an expired licence is NOT assumed lawful (s.181) until an official source says otherwise."
   },
   "reRegistrationLimitDays": {
     "value": 365,
@@ -104,12 +104,12 @@
     {
       "id": "fee-noc-form28",
       "label": "No Objection Certificate (Form 28)",
-      "amount": 0,
-      "tag": "Official",
+      "amount": null,
+      "tag": "Estimate",
       "sourceIds": ["cmvr-1989-r81"],
       "lastChecked": "2026-10-24",
       "verified": false,
-      "note": "Form 28 statutory fee is nil under CMVR Rule 81."
+      "note": "No Form 28 fee appears on the state-department fee page read 24 Oct 2026 (only a 300 per month late charge for motorcycles). Not listed is not the same as nil: unconfirmed until the official schedule is read."
     },
     {
       "id": "fee-new-reg-mark-motorcycle",
@@ -149,7 +149,7 @@
       "sourceIds": ["cmvr-1989-r81"],
       "lastChecked": "2026-10-24",
       "verified": false,
-      "note": "check CMVR Rule 81 table"
+      "note": "State-department fee page read 24 Oct 2026 shows No Fee for termination (rule 61(1)); confirm against the official CMVR Rule 81 table before setting 0 and tagging Official."
     },
     {
       "id": "fee-estimate-road-tax",
