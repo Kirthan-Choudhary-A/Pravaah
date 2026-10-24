@@ -1,12 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { Suspense, lazy, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { usePlan } from '@state/PlanContext';
-import { PageHeader } from '@components/layout/PageHeader';
 import { Runway } from '@components/plan/Runway';
 import { StatusTag } from '@components/ui/StatusTag';
 import { Banner } from '@components/ui/Banner';
 import { Button } from '@components/ui/Button';
 import styles from './DashboardPage.module.css';
+
+const CadVehicleScene = lazy(() =>
+  import('@three/scenes/CadVehicle/CadVehicleScene').then((m) => ({ default: m.CadVehicleScene }))
+);
 
 const ROUTE_TEXT = {
   online: 'online with Aadhaar',
@@ -48,15 +51,40 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      <PageHeader
-        title="Dashboard"
-        description={`${scenario.move.fromRTO} to ${scenario.move.toRTO}. Day 0 is today.`}
-        actions={
-          <Link to="/plan" className={styles.primaryLink}>
-            Open my plan
-          </Link>
-        }
-      />
+      <section className={styles.hero} aria-labelledby="hero-title">
+        <div className={styles.heroText}>
+          <p className={styles.heroKicker}>
+            {scenario.move.fromRTO} to {scenario.move.toRTO}
+          </p>
+          <h1 id="hero-title" className={styles.heroTitle}>
+            Dashboard
+          </h1>
+          <p className={styles.heroCount} aria-label={`Licence expires in ${scenario.licenceExpiryDay} days`}>
+            <span className={styles.heroNumber}>{scenario.licenceExpiryDay}</span>
+            <span className={styles.heroUnit}>days until your licence expires</span>
+          </p>
+          <p className={styles.heroLine}>
+            {renewal
+              ? lapses
+                ? `Renewal would finish on day ${renewal.end}, too late. Choose a faster route.`
+                : `Renewal finishes on day ${renewal.end}, in time.`
+              : 'No renewal is planned yet.'}
+          </p>
+          <div className={styles.heroActions}>
+            <Link to="/plan" className={styles.primaryLink}>
+              Open my plan
+            </Link>
+            <Link to="/simulate" className={styles.ghostLink}>
+              Try a change
+            </Link>
+          </div>
+        </div>
+        <div className={styles.heroScene}>
+          <Suspense fallback={<div className={styles.sceneLoading}>Preparing 3D model…</div>}>
+            <CadVehicleScene solid={1} />
+          </Suspense>
+        </div>
+      </section>
 
       {isDegraded && (
         <Banner variant="degraded" title="No rules for this state">

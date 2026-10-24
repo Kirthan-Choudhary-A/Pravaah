@@ -67,7 +67,7 @@
 }
 
 .selected {
-  background-color: var(--primary) !important;
+  background: var(--primary-gradient) !important;
   color: var(--on-primary) !important;
   font-weight: 600;
   border: 1px solid var(--stone);

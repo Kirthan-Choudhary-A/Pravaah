@@ -1,64 +1,79 @@
 :root {
   /* ============================================================== */
-  /* PLAIN, OFFICIAL-STYLE PALETTE: white pages, grey lines, one navy */
+  /* PREMIUM CLASSIC: ivory, midnight navy, brass. Soft clay depth,   */
+  /* glass over gradients. Status is colour plus a word.              */
   /* ============================================================== */
 
   /* Surfaces */
-  --paper: #ffffff;          /* Page */
-  --paper-warm: #f3f5f8;     /* Quiet panel / table header */
-  --offwhite: #ffffff;       /* Card */
-  --surface-hover: #e6eef8;  /* Hover and selected row */
+  --paper: #f7f2e8;          /* Ivory page */
+  --paper-warm: #efe8d8;     /* Quiet panel, table header */
+  --offwhite: #fffdf8;       /* Card */
+  --surface-hover: #f2e9d3;  /* Champagne hover / selected */
 
-  /* Text and lines */
-  --graphite: #1b2430;       /* Headings and primary text */
-  --charcoal: #232d3a;
-  --olive: #4a5563;          /* Secondary text */
-  --stone: #b9c3cf;          /* Borders */
-  --iron: #3d4856;           /* Body-secondary text (AA on white) */
-  --ink: #1b2430;
+  /* Ink and lines */
+  --graphite: #101b33;       /* Headings and primary text (navy ink) */
+  --charcoal: #1b2742;
+  --olive: #5a6378;          /* Secondary text */
+  --stone: #d8cdb4;          /* Champagne border */
+  --iron: #3e4963;           /* Body-secondary text (AA on ivory) */
+  --ink: #0b1220;            /* Deepest navy, for dark surfaces */
+  --ink-2: #14203a;
 
-  /* Borders: thin and grey */
-  --border-neo: 1px solid #b9c3cf;
-  --border-neo-thick: 2px solid #b9c3cf;
-  --border-neo-thin: 1px solid #b9c3cf;
+  /* Brass accents */
+  --gold: #b8913a;
+  --gold-light: #e2c27d;
+  --gold-dark: #8a6a22;
+  --saffron: #e07b1f;
+  --emerald: #1d7a52;
 
-  /* No drop shadows */
-  --shadow-sm: none;
-  --shadow-md: none;
-  --shadow-lg: none;
-  --shadow-xl: none;
-  --shadow-hover: none;
-  --shadow-active: none;
+  /* Borders */
+  --border-neo: 1px solid #d8cdb4;
+  --border-neo-thick: 1.5px solid #d8cdb4;
+  --border-neo-thin: 1px solid #d8cdb4;
 
-  /* The one action colour */
-  --primary: #0b3d91;
-  --primary-dark: #082c69;
-  --on-primary: #ffffff;
+  /* Clay depth: soft, layered, never hard-edged */
+  --shadow-sm: 0 1px 2px rgba(16, 27, 51, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --shadow-md: 0 10px 26px -12px rgba(16, 27, 51, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-lg: 0 24px 54px -22px rgba(16, 27, 51, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-xl: 0 34px 80px -28px rgba(16, 27, 51, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-hover: 0 14px 30px -12px rgba(16, 27, 51, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-active: inset 0 2px 5px rgba(16, 27, 51, 0.22);
+
+  /* Glass */
+  --glass-bg: rgba(255, 253, 248, 0.72);
+  --glass-border: rgba(184, 145, 58, 0.3);
+  --glass-blur: blur(14px) saturate(1.25);
+
+  /* The one action colour: royal navy with a brass edge */
+  --primary: #14284f;
+  --primary-dark: #0b1936;
+  --on-primary: #fbf6e9;
+  --primary-gradient: linear-gradient(180deg, #1d3a73 0%, #14284f 55%, #0f2044 100%);
 
   /* Soft tints, always used with dark text */
-  --accent-yellow: #fff3c4;
-  --accent-green: #d9f2e3;
-  --accent-coral: #fbdcd3;
-  --accent-blue: #dbe8f6;
-  --accent-purple: #e8ebf1;
-  --accent-pink: #f8dde8;
+  --accent-yellow: #f3e6be;
+  --accent-green: #d6ebdd;
+  --accent-coral: #f6d9d0;
+  --accent-blue: #dce5f2;
+  --accent-purple: #e4e1ef;
+  --accent-pink: #f3dce4;
 
   /* Status: colour plus a word, never colour alone */
-  --status-safe: #1e6b3a;
-  --status-safe-bg: #d9f2e3;
-  --status-safe-border: #1e6b3a;
+  --status-safe: #1b6b45;
+  --status-safe-bg: #d8eee0;
+  --status-safe-border: #1b6b45;
 
   --status-risk: #7a4b00;
-  --status-risk-bg: #fff3c4;
+  --status-risk-bg: #f7e6b8;
   --status-risk-border: #7a4b00;
 
-  --status-missed: #a12622;
-  --status-missed-bg: #fbdcd3;
-  --status-missed-border: #a12622;
+  --status-missed: #a3302b;
+  --status-missed-bg: #f6d6d0;
+  --status-missed-border: #a3302b;
 
-  --status-unknown: #3d4856;
-  --status-unknown-bg: #e8ecf1;
-  --status-unknown-border: #3d4856;
+  --status-unknown: #3e4963;
+  --status-unknown-bg: #e7e3d8;
+  --status-unknown-border: #3e4963;
 
   /* Link Type Stroke Patterns */
   --link-needs-style: solid;
@@ -68,7 +83,8 @@
   --link-invalidates-style: 4, 4;
 
   /* Typography */
-  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* Fluid Type Scale */
@@ -94,11 +110,12 @@
   --space-12: 3rem;
   --space-16: 4rem;
 
-  /* Neo-brutalist Crisp Corners */
+  /* Soft, generous corners */
   --radius-none: 0px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
   --radius-full: 9999px;
 
   /* Z-Index Hierarchy */
@@ -118,11 +135,12 @@
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1440px;
 
-  /* Snappy Tactile Neo-brutalist Motion */
-  --duration-fast: 120ms;
-  --duration-normal: 180ms;
-  --duration-slow: 240ms;
-  --ease-standard: cubic-bezier(0, 0, 0.2, 1);
+  /* Calm, weighted motion */
+  --duration-fast: 160ms;
+  --duration-normal: 260ms;
+  --duration-slow: 420ms;
+  --ease-standard: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {

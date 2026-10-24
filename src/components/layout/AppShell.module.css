@@ -1,11 +1,10 @@
-/* Application shell: sidebar + workspace. Every page renders inside .content,
-   so widths and gutters are decided here and nowhere else. */
+/* Application shell: midnight sidebar + ivory workspace. Every page renders inside
+   .content, so widths and gutters are decided here and nowhere else. */
 
 .shell {
   display: grid;
-  grid-template-columns: 15rem minmax(0, 1fr);
+  grid-template-columns: 16.5rem minmax(0, 1fr);
   min-height: 100vh;
-  background-color: var(--paper);
 }
 
 /* ---------- sidebar ---------- */
@@ -15,38 +14,46 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-  padding: var(--space-4) 0;
-  background-color: var(--paper-warm);
-  border-right: var(--border-neo);
+  gap: var(--space-6);
+  padding: var(--space-6) 0 var(--space-5);
+  color: var(--paper);
+  background:
+    radial-gradient(420px 260px at 0% 0%, rgba(226, 194, 125, 0.16), transparent 70%),
+    linear-gradient(180deg, #0b1220 0%, #14203a 100%);
+  border-right: 1px solid rgba(226, 194, 125, 0.28);
   overflow-y: auto;
 }
 
 .brand {
   display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  color: var(--primary);
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 var(--space-5);
   text-decoration: none;
 }
 
 .brandName {
-  font-size: var(--font-size-lg);
+  font-family: var(--font-display);
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--primary);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #f3dfa6 0%, #c8a24a 70%, #a8842f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .brandHindi {
   font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--iron);
+  letter-spacing: 0.2em;
+  color: rgba(247, 242, 232, 0.6);
 }
 
 .nav {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-5);
   flex: 1;
 }
 
@@ -57,40 +64,47 @@
 }
 
 .navGroupLabel {
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-5);
   margin-bottom: var(--space-1);
-  font-size: var(--font-size-xs);
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--iron);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(226, 194, 125, 0.75);
 }
 
 .navLink {
   display: block;
-  padding: var(--space-2) var(--space-4);
+  margin: 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
   font-size: var(--font-size-sm);
   font-weight: 500;
-  color: var(--graphite);
+  color: rgba(247, 242, 232, 0.82);
   text-decoration: none;
-  border-left: 3px solid transparent;
+  border-radius: var(--radius-md);
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
 }
 
 .navLink:hover {
-  background-color: var(--surface-hover);
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #fff;
 }
 
 .navLinkActive,
 .navLinkActive:hover {
-  background-color: var(--surface-hover);
-  color: var(--primary);
-  border-left-color: var(--primary);
-  font-weight: 700;
+  color: var(--gold-light);
+  font-weight: 600;
+  background: linear-gradient(90deg, rgba(226, 194, 125, 0.2), rgba(226, 194, 125, 0.04));
+  box-shadow: inset 2px 0 0 var(--gold-light);
 }
 
 .sidebarFoot {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-5);
 }
 
 .sideButton {
@@ -98,15 +112,17 @@
   font: inherit;
   font-size: var(--font-size-sm);
   text-align: left;
-  color: var(--primary);
+  color: rgba(247, 242, 232, 0.7);
   background: none;
   border: 0;
   text-decoration: underline;
+  text-decoration-color: rgba(226, 194, 125, 0.5);
+  text-underline-offset: 3px;
   cursor: pointer;
 }
 
 .sideButton:hover {
-  color: var(--primary-dark);
+  color: var(--gold-light);
 }
 
 .navLink:focus-visible,
@@ -114,7 +130,7 @@
 .menuButton:focus-visible,
 .scenarioSelect:focus-visible,
 .brand:focus-visible {
-  outline: 3px solid var(--primary);
+  outline: 2px solid var(--gold-light);
   outline-offset: 2px;
 }
 
@@ -133,14 +149,17 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-6);
-  background-color: var(--paper);
-  border-bottom: var(--border-neo);
+  padding: var(--space-3) var(--space-8);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .topbarBrand {
   display: none;
-  font-size: var(--font-size-md);
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
   font-weight: 700;
   color: var(--primary);
 }
@@ -164,33 +183,37 @@
 }
 
 .scenarioSelect {
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-2) var(--space-3);
   font: inherit;
   font-size: var(--font-size-sm);
+  font-weight: 500;
   color: var(--graphite);
   background-color: var(--offwhite);
   border: var(--border-neo);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .simulatedChip {
-  padding: 2px var(--space-2);
+  padding: 4px var(--space-3);
   font-size: var(--font-size-xs);
   font-weight: 600;
-  color: var(--graphite);
-  background-color: var(--accent-yellow);
-  border: 1px solid var(--status-risk);
-  border-radius: var(--radius-sm);
+  letter-spacing: 0.04em;
+  color: var(--gold-dark);
+  background: linear-gradient(180deg, #fbf1d3, #f3e6be);
+  border: 1px solid rgba(184, 145, 58, 0.55);
+  border-radius: var(--radius-full);
 }
 
 .menuButton {
   display: none;
   flex-direction: column;
   gap: 4px;
-  padding: var(--space-2);
+  padding: var(--space-2) var(--space-3);
   background-color: var(--offwhite);
   border: var(--border-neo);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
 }
 
@@ -198,6 +221,7 @@
   display: block;
   width: 18px;
   height: 2px;
+  border-radius: 2px;
   background-color: var(--graphite);
 }
 
@@ -205,17 +229,16 @@
 .content {
   flex: 1;
   width: 100%;
-  max-width: 64rem;
-  padding: var(--space-6);
+  max-width: 72rem;
+  padding: var(--space-8);
   outline: none;
 }
 
 .statusBar {
-  padding: var(--space-2) var(--space-6);
+  padding: var(--space-2) var(--space-8);
   font-size: var(--font-size-xs);
-  color: var(--iron);
-  background-color: var(--paper-warm);
-  border-top: var(--border-neo);
+  color: var(--olive);
+  border-top: 1px solid var(--glass-border);
 }
 
 .scrim {
@@ -232,16 +255,16 @@
     position: fixed;
     inset: 0 auto 0 0;
     z-index: 40;
-    width: min(18rem, 85vw);
+    width: min(19rem, 86vw);
     transform: translateX(-100%);
     visibility: hidden;
-    transition: transform 160ms ease-out, visibility 0s linear 160ms;
+    transition: transform 240ms var(--ease-out-expo), visibility 0s linear 240ms;
   }
 
   .sidebarOpen {
     transform: translateX(0);
     visibility: visible;
-    transition: transform 160ms ease-out;
+    transition: transform 240ms var(--ease-out-expo);
   }
 
   .scrim {
@@ -250,7 +273,8 @@
     inset: 0;
     z-index: 30;
     border: 0;
-    background-color: rgb(0 0 0 / 0.45);
+    background-color: rgba(11, 18, 32, 0.55);
+    backdrop-filter: blur(3px);
     cursor: pointer;
   }
 
@@ -290,7 +314,7 @@
   }
 
   .content {
-    padding: var(--space-4);
+    padding: var(--space-5) var(--space-4);
   }
 
   .statusBar {
@@ -300,7 +324,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .sidebar,
-  .sidebarOpen {
+  .sidebarOpen,
+  .navLink {
     transition: none;
   }
 }

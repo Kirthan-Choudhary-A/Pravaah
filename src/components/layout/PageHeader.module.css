@@ -1,11 +1,22 @@
 .pageHeader {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--space-3) var(--space-6);
-  padding-bottom: var(--space-4);
-  border-bottom: var(--border-neo-thin);
+  padding-bottom: var(--space-5);
+}
+
+/* A brass rule that fades out: the page's one flourish. */
+.pageHeader::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold) 0%, rgba(184, 145, 58, 0.25) 40%, transparent 100%);
 }
 
 .text {
@@ -15,17 +26,19 @@
 
 .title {
   margin: 0;
-  font-size: var(--font-size-xl);
-  font-weight: 800;
-  line-height: 1.2;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 1.7rem + 1.8vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.05;
   letter-spacing: -0.01em;
+  color: var(--graphite);
 }
 
 .description {
-  margin: var(--space-1) 0 0;
-  max-width: 65ch;
-  font-size: var(--font-size-sm);
-  line-height: 1.5;
+  margin: var(--space-2) 0 0;
+  max-width: 62ch;
+  font-size: var(--font-size-base);
+  line-height: 1.55;
   color: var(--iron);
 }
 

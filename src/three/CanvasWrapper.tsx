@@ -92,7 +92,8 @@ export const CanvasWrapper: React.FC<CanvasWrapperProps> = ({
     >
       <Suspense fallback={<QuietLoader />}>
         <Canvas
-          frameloop={isIntersecting ? 'demand' : 'never'}
+          // 'always' while visible: scenes animate with useFrame. 'demand' left them frozen or blank.
+          frameloop={isIntersecting ? 'always' : 'never'}
           dpr={dpr}
           camera={{
             position: camera.position || [0, 0, 5],

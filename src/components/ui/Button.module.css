@@ -5,7 +5,7 @@
   gap: var(--space-2);
   font-family: var(--font-sans);
   font-weight: 600;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-standard);
   white-space: nowrap;
@@ -48,18 +48,25 @@
 
 /* Variants */
 .primary {
-  background-color: var(--primary);
+  background: var(--primary-gradient);
   color: var(--on-primary);
-  border-color: var(--primary);
+  border-color: rgba(226, 194, 125, 0.55);
+  box-shadow:
+    0 8px 18px -8px rgba(15, 32, 68, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .primary:hover:not(:disabled) {
-  background-color: var(--primary-dark);
-  border-color: var(--primary-dark);
+  background: linear-gradient(180deg, #24478c 0%, #183266 55%, #112650 100%);
+  transform: translateY(-1px);
+  box-shadow:
+    0 12px 22px -8px rgba(15, 32, 68, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .primary:active:not(:disabled) {
-  box-shadow: var(--shadow-active);
+  transform: translateY(0);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
 .secondary {
