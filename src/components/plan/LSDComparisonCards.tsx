@@ -28,9 +28,10 @@ export const LSDComparisonCards: React.FC<LSDComparisonCardsProps> = ({
     <div className={`${styles.wrapper ?? ''} ${className}`.trim()}>
       <div className={styles.header}>
         <div>
-          <h4 className={styles.title}>Statutory Route Comparison & Trade-Offs</h4>
+          <h4 className={styles.title}>Route Comparison & Trade-Offs</h4>
           <span className={styles.subtitle}>
-            Evaluating all 4 route configurations against statutory deadlines and absence window
+            Evaluating all 4 route configurations against the licence deadline and absence window
+            (assumed timings)
           </span>
         </div>
       </div>

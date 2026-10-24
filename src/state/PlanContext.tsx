@@ -189,7 +189,7 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Announce plan updates
     const breaches = plan.checks.filter((c) => !c.passed).length;
     const announceMsg = `Scenario ${scenarioId} planned: ${plan.tasks.length} tasks scheduled, finishing on Day ${plan.finish}. ${
-      breaches === 0 ? 'All statutory checks passed.' : `${breaches} statutory checks flagged.`
+      breaches === 0 ? 'All modelled checks passed.' : `${breaches} modelled checks flagged.`
     }`;
     setAnnouncement(announceMsg);
 

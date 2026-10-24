@@ -20,7 +20,7 @@ export const FeesTable: React.FC<FeesTableProps> = ({
     return (
       <div className={`${styles.wrapper ?? ''} ${className}`.trim()}>
         <div className={styles.header}>
-          <h4 className={styles.title}>Statutory Fee Schedule</h4>
+          <h4 className={styles.title}>Fee Schedule</h4>
         </div>
         <div className={styles.degradedBox}>
           <p className={styles.degradedText}>
@@ -39,9 +39,9 @@ export const FeesTable: React.FC<FeesTableProps> = ({
     <div className={`${styles.wrapper ?? ''} ${className}`.trim()}>
       <div className={styles.header}>
         <div className={styles.titleGroup}>
-          <h4 className={styles.title}>Statutory & Administrative Fee Breakdown</h4>
+          <h4 className={styles.title}>Fee Breakdown</h4>
           <span className={styles.subtitle}>
-            Itemized breakdown of official application fees and estimated statutory costs
+            Itemized breakdown: only items tagged Official are totalled; estimates are not
           </span>
         </div>
         {fees.hasUnverified && <UnverifiedMark label="Fee Rules Unverified" />}
@@ -89,7 +89,7 @@ export const FeesTable: React.FC<FeesTableProps> = ({
           <tfoot>
             <tr className={styles.footerRow}>
               <td colSpan={2} className={styles.footerLabel}>
-                Official Total:
+                {fees.hasUnverified ? 'Official Total (unverified):' : 'Official Total:'}
               </td>
               <td className={`${styles.footerValue ?? ''} ${styles.tdRight ?? ''}`}>
                 ₹{fees.officialTotal.toLocaleString('en-IN')}

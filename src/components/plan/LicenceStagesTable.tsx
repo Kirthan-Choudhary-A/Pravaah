@@ -66,7 +66,7 @@ export const LicenceStagesTable: React.FC<LicenceStagesTableProps> = ({
     },
     {
       key: 'note',
-      header: 'Statutory Note',
+      header: 'Note (modelled)',
       render: (r) => <span className={styles.noteCell}>{r.note}</span>,
     },
   ];
@@ -75,7 +75,7 @@ export const LicenceStagesTable: React.FC<LicenceStagesTableProps> = ({
     <div className={`${styles.wrapper ?? ''} ${className}`.trim()}>
       <div className={styles.header}>
         <div className={styles.titleGroup}>
-          <h4 className={styles.title}>Statutory Driving Licence Renewal Stages</h4>
+          <h4 className={styles.title}>Driving Licence Renewal Stages</h4>
           <span className={styles.subtitle}>
             Derived from single config set (s.14/s.15 MV Act). Grace period:{' '}
             {pack.licenceStages.graceDays} days. Expiry: Day {expiryDay}.

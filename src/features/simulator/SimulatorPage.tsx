@@ -33,18 +33,18 @@ const SCENARIO_OPTIONS = [
 const FORM35_OPTIONS = [
   {
     value: 'withdraw' as Form35Decision,
-    label: 'Withdraw unilateral app',
-    badge: 'Recommended',
+    label: 'Withdraw Form 35',
+    badge: 'Needs bank consent',
   },
   {
     value: 'wait' as Form35Decision,
-    label: 'Wait for unilateral processing',
-    badge: 'Risk: Delays NOC',
+    label: 'Wait for the RTO',
+    badge: 'Slowest, uncertain',
   },
   {
     value: 'resolve' as Form35Decision,
-    label: 'Resolve with bank consent',
-    badge: 'Clean Path',
+    label: 'Resolve via grievance',
+    badge: 'Relies on RTO action',
   },
 ];
 
@@ -267,8 +267,9 @@ export const SimulatorPage: React.FC = () => {
                     size="sm"
                   />
                   <p className={styles.decisionHint}>
-                    Unilateral hypothecation removal causes legal hold at parent RTO, blocking NOC
-                    until resolved or formal consent is produced.
+                    Modelled rule: an open Form 35 locks the vehicle record and blocks the NOC.
+                    Withdrawing frees it but keeps the loan, so the financier must sign Form 28. See
+                    the plan ranking for the computed recommendation.
                   </p>
                 </div>
 

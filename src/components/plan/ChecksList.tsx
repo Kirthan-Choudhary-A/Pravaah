@@ -15,9 +15,9 @@ export const ChecksList: React.FC<ChecksListProps> = ({ checks, className = '' }
     <div className={`${styles.wrapper ?? ''} ${className}`.trim()}>
       <div className={styles.header}>
         <div className={styles.titleGroup}>
-          <h4 className={styles.title}>Statutory & Operational Compliance Checks</h4>
+          <h4 className={styles.title}>Modelled Compliance Checks</h4>
           <span className={styles.subtitle}>
-            {passedCount} of {checks.length} compliance rules verified
+            {passedCount} of {checks.length} modelled checks passed (rules unverified)
           </span>
         </div>
         <span className={styles.scoreBadge}>

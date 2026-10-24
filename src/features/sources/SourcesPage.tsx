@@ -178,9 +178,9 @@ export const SourcesPage: React.FC = () => {
             </div>
             <h1 className={styles.pageTitle}>Official Legal Sources & Rule Packs</h1>
             <p className={styles.pageSubtitle}>
-              Pravaah grounds every recommendation, task duration, and dependency in statutory
-              provisions from the Motor Vehicles Act 1988, Central Motor Vehicles Rules 1989, and
-              official Parivahan Sewa guidelines.
+              Pravaah models its rules on the Motor Vehicles Act 1988, the Central Motor Vehicles
+              Rules 1989, and Parivahan Sewa guidelines. Every rule stays marked unverified until
+              the official source has been read.
             </p>
           </div>
 
@@ -201,8 +201,9 @@ export const SourcesPage: React.FC = () => {
                 portals.
               </li>
               <li>
-                <strong>Safe Fallbacks:</strong> Central MV Act statutory deadlines (e.g. Section 15
-                renewal and Section 47 re-registration limits) remain active.
+                <strong>Safe Fallbacks:</strong> Central rules in the registry (e.g. Section 15
+                renewal and Section 47 re-registration limits) remain in use, still marked
+                unverified.
               </li>
             </ul>
           </Banner>

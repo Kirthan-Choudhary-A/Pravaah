@@ -73,7 +73,7 @@ export const PlannerPage: React.FC = () => {
                 <div className={styles.metricCard}>
                   <span className={styles.metricLabel}>Selected Route</span>
                   <span className={styles.metricValue}>{decisions.licenceRoute}</span>
-                  <span className={styles.metricSub}>Statutory Path</span>
+                  <span className={styles.metricSub}>Modelled Path</span>
                 </div>
               </div>
             </div>
@@ -86,9 +86,9 @@ export const PlannerPage: React.FC = () => {
               title={`Degraded Mode Active: Destination State (${scenario.move.toState}) Rules Unknown`}
             >
               <p>
-                No verified state rule pack is registered for {scenario.move.toState}. Central MV
-                Act defaults apply, but state-specific fees, road tax, and local procedures cannot
-                be modelled without confirmation.
+                No verified state rule pack is registered for {scenario.move.toState}. Central rules
+                in the registry are used but remain unverified, and state-specific fees, road tax,
+                and local procedures cannot be modelled without confirmation.
               </p>
               <p>
                 <strong>Rules unknown – confirm with the local RTO.</strong> Official fee amounts
@@ -139,11 +139,10 @@ export const PlannerPage: React.FC = () => {
           <section aria-labelledby="routes-heading" className={styles.sectionContainer}>
             <div className={styles.sectionHeader}>
               <h2 id="routes-heading" className={styles.sectionTitle}>
-                Statutory Licence Renewal Route Options
+                Licence Renewal Route Options
               </h2>
               <span className={styles.sectionMeta}>
-                Comparing all legally permissible options under Central and State Motor Vehicle
-                Rules
+                Comparing modelled options. Rules are unverified; see Sources.
               </span>
             </div>
             <LSDComparisonCards
