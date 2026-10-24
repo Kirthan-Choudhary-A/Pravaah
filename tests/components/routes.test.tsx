@@ -7,11 +7,11 @@ describe('Route Navigation Smoke Tests', () => {
   const testCases = [
     { path: '/', expectedHeading: 'Dashboard' },
     { path: '/overview', expectedHeading: 'About Pravaah' },
-    { path: '/plan', expectedHeading: 'Planner' },
-    { path: '/simulate', expectedHeading: 'Simulator' },
-    { path: '/household', expectedHeading: 'Household' },
-    { path: '/voice', expectedHeading: 'Voice' },
-    { path: '/sources', expectedHeading: 'Sources' },
+    { path: '/plan', expectedHeading: 'My plan' },
+    { path: '/simulate', expectedHeading: 'What if' },
+    { path: '/household', expectedHeading: 'Family vehicles' },
+    { path: '/voice', expectedHeading: 'Enter a vehicle number' },
+    { path: '/sources', expectedHeading: 'Official sources' },
   ];
 
   testCases.forEach(({ path, expectedHeading }) => {

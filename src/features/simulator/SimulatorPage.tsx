@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePlan, type ScenarioId, type EventTypeKey } from '@state/index';
+import { usePlan, type EventTypeKey } from '@state/index';
 import type { Form35Decision, LicenceRouteDecision } from '@engine/model/types';
 import { Container } from '@components/layout/Container';
 import { Stack } from '@components/layout/Stack';
@@ -13,92 +13,70 @@ import { TaskDetailPanel } from '@components/plan/TaskDetailPanel';
 import { PageHeader } from '@components/layout/PageHeader';
 import styles from './SimulatorPage.module.css';
 
-const SCENARIO_OPTIONS = [
-  {
-    value: 'A' as ScenarioId,
-    label: 'Scenario A: Hyderabad → Bengaluru',
-    badge: 'Form 35 Open',
-  },
-  {
-    value: 'B' as ScenarioId,
-    label: 'Scenario B: Pune → Chennai',
-    badge: 'BH-Series Car',
-  },
-  {
-    value: 'C' as ScenarioId,
-    label: 'Scenario C: Delhi → Gangtok',
-    badge: 'Unknown State (SK)',
-  },
-];
-
 const FORM35_OPTIONS = [
   {
     value: 'withdraw' as Form35Decision,
     label: 'Withdraw Form 35',
-    badge: 'Needs bank consent',
   },
   {
     value: 'wait' as Form35Decision,
     label: 'Wait for the RTO',
-    badge: 'Slowest, uncertain',
   },
   {
     value: 'resolve' as Form35Decision,
     label: 'Resolve via grievance',
-    badge: 'Relies on RTO action',
   },
 ];
 
 const ROUTE_OPTIONS = [
   {
     value: 'rto-visit' as LicenceRouteDecision,
-    label: 'Primary RTO Visit',
+    label: 'At the RTO',
   },
   {
     value: 'another-rto' as LicenceRouteDecision,
-    label: 'Alternative RTO (Fast Slot)',
+    label: 'Another RTO',
   },
   {
     value: 'another-date' as LicenceRouteDecision,
-    label: 'Post-Absence Slot',
+    label: 'After my trip',
   },
   {
     value: 'online' as LicenceRouteDecision,
-    label: 'Aadhaar Online Renewal',
+    label: 'Online with Aadhaar',
   },
 ];
 
 const EVENT_BUTTONS: { key: EventTypeKey; label: string; desc: string }[] = [
   {
     key: 'slotCollapse',
-    label: '⚡ RTO Slot Queue Delayed (+14d)',
-    desc: 'Simulate unexpected slot congestion at destination RTO',
+    label: 'RTO slot queue delayed (+14 days)',
+    desc: 'Appointments are harder to get',
   },
   {
     key: 'tripExtended',
-    label: '✈️ Absence Extended (+7d)',
-    desc: 'Simulate business travel extension overlapping RTO appointment',
+    label: 'Trip extended (+7 days)',
+    desc: 'You are away longer',
   },
   {
     key: 'formRejected',
-    label: '🚫 Form 35 Application Rejected',
-    desc: 'Simulate RTO objection to unilateral hypothecation removal',
+    label: 'Form 35 rejected',
+    desc: 'The loan record request is refused',
   },
   {
     key: 'unknownJurisdiction',
-    label: '⚠️ Unknown Jurisdiction (SK)',
-    desc: 'Trigger degraded mode without state rulepack overrides',
+    label: 'Move to a state with no rules',
+    desc: 'Pravaah has no rules for it',
   },
   {
     key: 'aadhaarEarly',
-    label: '⚡ Aadhaar Address Early Auth',
-    desc: 'Simulate fast-track UIDAI online address intimation',
+    label: 'Aadhaar address updated early',
+    desc: 'Before the NOC is issued',
   },
 ];
 
 export const SimulatorPage: React.FC = () => {
   const {
-    scenarioId,
     scenario,
     parameters,
     decisions,
@@ -108,7 +86,6 @@ export const SimulatorPage: React.FC = () => {
     optionsComparison,
     selectedTaskId,
     sources,
-    setScenarioId,
     setParameter,
     setForm35Decision,
     setLicenceRouteDecision,
@@ -124,24 +101,14 @@ export const SimulatorPage: React.FC = () => {
       <Container size="xl">
         <Stack gap="6">
           <PageHeader
-            title="Plan Simulator & Curveball Engine"
-            description="Change a fact (a slot delay, a longer trip, a rejected form) and watch the plan and its latest safe dates recalculate. All data is simulated."
+            title="What if something changes?"
+            description="Change a delay or a decision and see how your plan moves."
             actions={
               <Button variant="secondary" size="sm" onClick={resetToScenarioDefaults}>
-                Reset scenario defaults
+                Start again
               </Button>
             }
           />
-
-          {/* Scenario Selector */}
-          <div className={styles.controlBox}>
-            <SegmentedControl
-              label="Select Moving Scenario"
-              value={scenarioId}
-              onChange={setScenarioId}
-              options={SCENARIO_OPTIONS}
-            />
-          </div>
 
           {/* Diff Banner if changes occurred */}
           {(planDiff.tasksAdded.length > 0 ||
@@ -150,26 +117,24 @@ export const SimulatorPage: React.FC = () => {
             planDiff.finishChange !== 0) && (
             <Banner
               variant="warning"
-              title={`Simulation Diff: Finish shifted by ${
-                planDiff.finishChange >= 0
-                  ? `+${planDiff.finishChange} days`
-                  : `${planDiff.finishChange} days`
+              title={`Your plan now finishes ${Math.abs(planDiff.finishChange)} days ${
+                planDiff.finishChange >= 0 ? 'later' : 'earlier'
               }`}
             >
               <div className={styles.diffSummary}>
                 {planDiff.tasksAdded.length > 0 && (
                   <p>
-                    <strong>Tasks Added:</strong> {planDiff.tasksAdded.join(', ')}
+                    <strong>Added:</strong> {planDiff.tasksAdded.join(', ')}
                   </p>
                 )}
                 {planDiff.tasksRemoved.length > 0 && (
                   <p>
-                    <strong>Tasks Removed:</strong> {planDiff.tasksRemoved.join(', ')}
+                    <strong>Removed:</strong> {planDiff.tasksRemoved.join(', ')}
                   </p>
                 )}
                 {Object.keys(planDiff.startEndShifts).length > 0 && (
                   <p>
-                    <strong>Schedule Shifts:</strong>{' '}
+                    <strong>Moved:</strong>{' '}
                     {Object.entries(planDiff.startEndShifts)
                       .map(
                         ([id, s]) =>
@@ -186,102 +151,94 @@ export const SimulatorPage: React.FC = () => {
           <div className={styles.controlsGrid}>
             {/* Parameters Column */}
             <div className={styles.controlColumn}>
-              <h3 className={styles.columnHeading}>Operational Timings & Deadlines</h3>
+              <h3 className={styles.columnHeading}>Timings</h3>
               <div className={styles.controlsList}>
                 <Slider
-                  label="Primary RTO Slot Queue"
+                  label="Wait for an RTO appointment"
                   min={1}
                   max={45}
                   step={1}
                   unit=" days"
                   value={parameters.primarySlotQueue}
                   onChange={(val) => setParameter('primarySlotQueue', val)}
-                  description="Days until earliest available appointment at destination RTO"
+                  description="Days until the first free slot"
                 />
 
                 <Slider
-                  label="Absence Window Start"
+                  label="You leave on day"
                   min={0}
                   max={30}
                   step={1}
                   unit=" (Day)"
                   value={parameters.absenceStart}
                   onChange={(val) => setParameter('absenceStart', val)}
-                  description="Day citizen departs for scheduled travel"
+                  description="First day you are away"
                 />
 
                 <Slider
-                  label="Absence Window End"
+                  label="You return on day"
                   min={parameters.absenceStart + 1}
                   max={45}
                   step={1}
                   unit=" (Day)"
                   value={parameters.absenceEnd}
                   onChange={(val) => setParameter('absenceEnd', val)}
-                  description="Day citizen returns from travel"
+                  description="First day you are back"
                 />
 
                 <Slider
-                  label="NOC Processing Time"
+                  label="NOC takes"
                   min={3}
                   max={25}
                   step={1}
                   unit=" days"
                   value={parameters.nocProcessingDays}
                   onChange={(val) => setParameter('nocProcessingDays', val)}
-                  description="Days taken by origin RTO to issue Form 28"
+                  description="Days for the old RTO to issue it"
                 />
 
                 <Slider
-                  label="Bank Hypothecation Consent (Form 28)"
+                  label="Bank consent takes"
                   min={2}
                   max={20}
                   step={1}
                   unit=" days"
                   value={parameters.bankConsentForm28Days}
                   onChange={(val) => setParameter('bankConsentForm28Days', val)}
-                  description="Financier endorsement processing duration"
+                  description="Days for the bank to sign"
                 />
               </div>
             </div>
 
             {/* Decisions & Curveballs Column */}
             <div className={styles.controlColumn}>
-              <h3 className={styles.columnHeading}>Decisions & Curveball Events</h3>
+              <h3 className={styles.columnHeading}>Choices and changes</h3>
               <div className={styles.controlsList}>
                 {/* Form 35 Decision */}
                 <div className={styles.decisionGroup}>
-                  <span className={styles.controlLabel}>Form 35 Hypothecation Strategy</span>
+                  <span className={styles.controlLabel}>Loan record (Form 35)</span>
                   <SegmentedControl
                     value={decisions.form35}
                     onChange={setForm35Decision}
                     options={FORM35_OPTIONS}
                     size="sm"
                   />
-                  <p className={styles.decisionHint}>
-                    Modelled rule: an open Form 35 locks the vehicle record and blocks the NOC.
-                    Withdrawing frees it but keeps the loan, so the financier must sign Form 28. See
-                    the plan ranking for the computed recommendation.
-                  </p>
                 </div>
 
                 {/* Licence Route Decision */}
                 <div className={styles.decisionGroup}>
-                  <span className={styles.controlLabel}>Licence Renewal Route</span>
+                  <span className={styles.controlLabel}>How to renew your licence</span>
                   <SegmentedControl
                     value={decisions.licenceRoute}
                     onChange={setLicenceRouteDecision}
                     options={ROUTE_OPTIONS}
                     size="sm"
                   />
-                  <p className={styles.decisionHint}>
-                    Changes in-person physical appointment requirements and test dependencies.
-                  </p>
                 </div>
 
                 {/* Curveball Event Toggles */}
                 <div className={styles.curveballsSection}>
-                  <span className={styles.controlLabel}>Inject Real-Life Curveball Events</span>
+                  <span className={styles.controlLabel}>Try a change</span>
                   <div className={styles.eventButtonsGrid}>
                     {EVENT_BUTTONS.map((evt) => {
                       const active = isEventActive(evt.key);
@@ -310,11 +267,10 @@ export const SimulatorPage: React.FC = () => {
           <section aria-labelledby="sim-timeline-heading" className={styles.sectionContainer}>
             <div className={styles.sectionHeader}>
               <h2 id="sim-timeline-heading" className={styles.sectionTitle}>
-                Updated Simulation Schedule
+                Updated steps
               </h2>
               <span className={styles.sectionMeta}>
-                Simulated finish: <strong>Day {currentPlan.finish}</strong> • Critical Path:{' '}
-                {currentPlan.criticalPath.length} tasks
+                Everything done by <strong>day {currentPlan.finish}</strong>
               </span>
             </div>
             <Timeline
@@ -330,16 +286,17 @@ export const SimulatorPage: React.FC = () => {
           <section aria-labelledby="sim-options-heading" className={styles.sectionContainer}>
             <div className={styles.sectionHeader}>
               <h2 id="sim-options-heading" className={styles.sectionTitle}>
-                Real-Time Route Evaluation & Trade-Offs
+                Ways to renew compared
               </h2>
-              <span className={styles.sectionMeta}>
-                Evaluated live under current simulation parameters and active events
-              </span>
             </div>
             <LSDComparisonCards
               options={optionsComparison}
-              currentDecision={decisions.licenceRoute}
-              onSelectRoute={setLicenceRouteDecision}
+              current={decisions}
+              limit={3}
+              onSelect={(d) => {
+                setForm35Decision(d.form35);
+                setLicenceRouteDecision(d.licenceRoute);
+              }}
             />
           </section>
         </Stack>

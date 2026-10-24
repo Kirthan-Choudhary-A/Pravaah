@@ -12,14 +12,14 @@ describe('Planner and Simulator Integration', () => {
     render(<RouterProvider router={router} />);
 
     // SIMULATED badge exists
-    expect(screen.getAllByText('SIMULATED')[0]).toBeInTheDocument();
+    expect(screen.getByText(/assumed processing times/i)).toBeInTheDocument();
 
     // Check headings
-    expect(screen.getByRole('heading', { name: /planner/i })).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: /unified schedule & critical path/i })
-    ).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /dependency graph/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /my plan/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /steps in order/i })).toBeInTheDocument();
+    // Detail is one click away, not on the page by default
+    expect(screen.getByText(/why each step comes before another/i)).toBeInTheDocument();
+    expect(screen.getByText(/compare ways to renew your licence/i)).toBeInTheDocument();
 
     // Toggle to Table view in Timeline
     const tableBtn = screen.getByRole('button', { name: /view as table/i });
@@ -36,7 +36,7 @@ describe('Planner and Simulator Integration', () => {
 
     // Simulator title
     expect(
-      screen.getByRole('heading', { name: /plan simulator & curveball engine/i })
+      screen.getByRole('heading', { name: /what if something changes/i })
     ).toBeInTheDocument();
 
     // Curveball buttons exist
@@ -58,7 +58,7 @@ describe('Planner and Simulator Integration', () => {
     render(<RouterProvider router={router} />);
 
     expect(
-      screen.getByRole('heading', { name: /official legal sources & rule packs/i })
+      screen.getByRole('heading', { name: /official sources/i })
     ).toBeInTheDocument();
 
     // Rule packs table

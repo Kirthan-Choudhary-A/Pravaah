@@ -131,7 +131,7 @@ export function compareOptions(input: PlanInput): OptionComparison[] {
       combo.licenceRoute === 'another-rto'
     ) {
       unverifiedRuleImpact =
-        'Recommendation depends on unverified rule: licenceRenewalAtAnyRTO (Section 15 cross-RTO renewal).';
+        'Depends on an unverified rule: that a licence can be renewed at any RTO.';
     }
 
     comparisons.push({

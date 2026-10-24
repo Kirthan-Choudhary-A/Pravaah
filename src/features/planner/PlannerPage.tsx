@@ -1,9 +1,7 @@
-import React, { useState, Suspense } from 'react';
+import React from 'react';
 import { usePlan } from '@state/index';
-import { Container } from '@components/layout/Container';
-import { Stack } from '@components/layout/Stack';
 import { Banner } from '@components/ui/Banner';
-import { SegmentedControl } from '@components/ui/SegmentedControl';
+import { Disclosure } from '@components/ui/Disclosure';
 import { Timeline } from '@components/plan/Timeline';
 import { DependencyGraph } from '@components/plan/DependencyGraph';
 import { LSDComparisonCards } from '@components/plan/LSDComparisonCards';
@@ -14,201 +12,94 @@ import { TaskDetailPanel } from '@components/plan/TaskDetailPanel';
 import { PageHeader } from '@components/layout/PageHeader';
 import styles from './PlannerPage.module.css';
 
-const PlanLandscape = React.lazy(() =>
-  import('@three/scenes/PlanLandscape/PlanLandscape').then((m) => ({ default: m.PlanLandscape }))
-);
-
 export const PlannerPage: React.FC = () => {
   const {
     scenario,
     rulePack,
     sources,
     currentPlan,
-    planDiff,
     optionsComparison,
     decisions,
     selectedTaskId,
     isDegraded,
+    setForm35Decision,
     setLicenceRouteDecision,
     selectTask,
   } = usePlan();
 
-  const [viewDimension, setViewDimension] = useState<'2d' | '3d'>('2d');
-
-  const passedChecks = currentPlan.checks.filter((c) => c.passed).length;
-  const licenceTask = currentPlan.tasks.find((t) => t.id === 'task-licence-renewal');
-
   return (
     <div className={styles.page}>
-      <Container size="xl">
-        <Stack gap="6">
-          <PageHeader
-            id="planner-heading"
-            title="Planner"
-            description={`${scenario.name}. Moving ${scenario.move.fromRTO} to ${scenario.move.toRTO}, ${
-              scenario.move.vehicleType
-            }${scenario.move.isBHSeries ? ' (BH series)' : ''}. Day 0 is today.`}
-            actions={isDegraded ? <span className={styles.degradedBadge}>Degraded mode</span> : undefined}
+      <div className={styles.stack}>
+        <PageHeader
+          id="planner-heading"
+          title="My plan"
+          description={`${scenario.move.fromRTO} to ${scenario.move.toRTO}. Every step with the latest day you can start it. Day 0 is today.`}
+        />
+
+        {isDegraded && (
+          <Banner variant="degraded" title="No rules for this state">
+            <p>
+              Pravaah has no rules for {scenario.move.toRTO}. Steps in that state are marked
+              unknown. Check the state transport website before you act.
+            </p>
+          </Banner>
+        )}
+
+        <p className={styles.note}>
+          Dates use assumed processing times, and the rules are not yet checked against official
+          sources. Confirm with your RTO before you pay or travel.
+        </p>
+
+        <section aria-labelledby="timeline-heading" className={styles.section}>
+          <h2 id="timeline-heading" className={styles.sectionTitle}>
+            Steps in order
+          </h2>
+          <Timeline
+            tasks={currentPlan.tasks}
+            absence={scenario.absence}
+            primarySlotQueue={scenario.primarySlotQueue}
+            selectedTaskId={selectedTaskId}
+            onSelectTask={selectTask}
           />
+        </section>
 
-          <section className={styles.summaryStrip} aria-label="Plan summary">
-            <div className={styles.quickMetrics}>
-              <div className={styles.metricCard}>
-                <span className={styles.metricLabel}>Plan finishes</span>
-                <span className={styles.metricValue}>Day {currentPlan.finish}</span>
-                <span className={styles.metricSub}>Estimated</span>
-              </div>
-              <div className={styles.metricCard}>
-                <span className={styles.metricLabel}>Tasks</span>
-                <span className={styles.metricValue}>{currentPlan.tasks.length}</span>
-                <span className={styles.metricSub}>Scheduled</span>
-              </div>
-              <div className={styles.metricCard}>
-                <span className={styles.metricLabel}>Checks</span>
-                <span className={styles.metricValue}>
-                  {passedChecks}/{currentPlan.checks.length}
-                </span>
-                <span className={styles.metricSub}>Passed</span>
-              </div>
-              <div className={styles.metricCard}>
-                <span className={styles.metricLabel}>Licence route</span>
-                <span className={styles.metricValue}>{decisions.licenceRoute}</span>
-                <span className={styles.metricSub}>Selected</span>
-              </div>
-            </div>
-          </section>
+        <section aria-labelledby="fees-heading" className={styles.section}>
+          <FeesTable
+            fees={currentPlan.fees}
+            isDegraded={isDegraded}
+            stateName={scenario.move.toState}
+          />
+        </section>
 
-          {/* Degraded Mode Banner */}
-          {isDegraded && (
-            <Banner
-              variant="degraded"
-              title={`⚠️ Notice: Destination State (${scenario.move.toState}) Rules Unconfirmed`}
-            >
-              <p>
-                No verified state rule pack is registered for {scenario.move.toState}. Central rules
-                are used with safety buffers, but state-specific road tax or local procedures should
-                be confirmed with your local RTO.
-              </p>
-            </Banner>
-          )}
-
-          {/* Timeline View & 3D Landscape Toggle */}
-          <section aria-labelledby="timeline-heading" className={styles.sectionContainer}>
-            <div className={styles.sectionBar}>
-              <div>
-                <h2 id="timeline-heading" className={styles.sectionTitle}>
-                  Unified Schedule &amp; Critical Path
-                </h2>
-                <span className={styles.sectionMeta}>
-                  Day 0 is Today. Follow this roadmap to finish all paperwork without late penalties.
-                </span>
-              </div>
-              <SegmentedControl<'2d' | '3d'>
-                label="View Style"
-                value={viewDimension}
-                onChange={setViewDimension}
-                options={[
-                  { value: '2d', label: '2D Calendar' },
-                  { value: '3d', label: '3D Visualizer' },
-                ]}
-                size="sm"
-              />
-            </div>
-
-            {viewDimension === '2d' ? (
-              <Timeline
-                tasks={currentPlan.tasks}
-                absence={scenario.absence}
-                primarySlotQueue={scenario.primarySlotQueue}
-                selectedTaskId={selectedTaskId}
-                onSelectTask={selectTask}
-              />
-            ) : (
-              <Suspense
-                fallback={
-                  <div style={{ padding: 'var(--space-6)', textAlign: 'center', backgroundColor: 'var(--offwhite)', border: '1px solid var(--stone)', borderRadius: 'var(--radius-sm)' }}>
-                    Loading 3D plan landscape…
-                  </div>
-                }
-              >
-                <PlanLandscape
-                  tasks={currentPlan.tasks}
-                  links={currentPlan.links}
-                  absence={scenario.absence}
-                  primarySlotQueue={scenario.primarySlotQueue}
-                  finishDay={currentPlan.finish}
-                  finishingTask={currentPlan.finishingTask}
-                  licenceStatus={licenceTask?.status || 'Safe'}
-                  diffCaption={
-                    planDiff.tasksAdded.length > 0
-                      ? `${planDiff.tasksAdded.length} tasks added by curveball event`
-                      : null
-                  }
-                  selectedTaskId={selectedTaskId}
-                  onSelectTask={selectTask}
-                />
-              </Suspense>
-            )}
-          </section>
-
-          {/* Dependency Graph */}
-          <section aria-labelledby="graph-heading" className={styles.sectionContainer}>
-            <div className={styles.sectionHeader}>
-              <h2 id="graph-heading" className={styles.sectionTitle}>
-                Dependency Graph & Consequence Propagation
-              </h2>
-              <span className={styles.sectionMeta}>
-                Layered DAG ordered by dependency depth. Click any node to inspect upstream needs
-                and downstream consequences.
-              </span>
-            </div>
+        <section aria-label="More detail" className={styles.details}>
+          <Disclosure title="Compare ways to renew your licence">
+            <LSDComparisonCards
+              options={optionsComparison}
+              current={decisions}
+              limit={3}
+              onSelect={(d) => {
+                setForm35Decision(d.form35);
+                setLicenceRouteDecision(d.licenceRoute);
+              }}
+            />
+          </Disclosure>
+          <Disclosure title="Why each step comes before another">
             <DependencyGraph
               tasks={currentPlan.tasks}
               links={currentPlan.links}
               selectedTaskId={selectedTaskId}
               onSelectTask={selectTask}
             />
-          </section>
-
-          {/* Route Options Comparison */}
-          <section aria-labelledby="routes-heading" className={styles.sectionContainer}>
-            <div className={styles.sectionHeader}>
-              <h2 id="routes-heading" className={styles.sectionTitle}>
-                Licence Renewal Route Options
-              </h2>
-              <span className={styles.sectionMeta}>
-                Comparing modelled options. Rules are unverified; see Sources.
-              </span>
-            </div>
-            <LSDComparisonCards
-              options={optionsComparison}
-              currentDecision={decisions.licenceRoute}
-              onSelectRoute={setLicenceRouteDecision}
-            />
-          </section>
-
-          {/* Licence Stages Table */}
-          <section aria-labelledby="stages-heading" className={styles.sectionContainer}>
+          </Disclosure>
+          <Disclosure title="Late fees and renewal stages">
             <LicenceStagesTable pack={rulePack} expiryDay={scenario.licenceExpiryDay} />
-          </section>
-
-          {/* Compliance & Checks */}
-          <section aria-labelledby="compliance-heading" className={styles.sectionContainer}>
+          </Disclosure>
+          <Disclosure title="Rule checks">
             <ChecksList checks={currentPlan.checks} />
-          </section>
+          </Disclosure>
+        </section>
+      </div>
 
-          {/* Fees Breakdown */}
-          <section aria-labelledby="fees-heading" className={styles.sectionContainer}>
-            <FeesTable
-              fees={currentPlan.fees}
-              isDegraded={isDegraded}
-              stateName={scenario.move.toState}
-            />
-          </section>
-        </Stack>
-      </Container>
-
-      {/* Task Detail Inspector Dialog / Slide-out */}
       <TaskDetailPanel
         plan={currentPlan}
         selectedTaskId={selectedTaskId}

@@ -13,11 +13,11 @@
 
 ::selection {
   background-color: var(--accent-yellow);
-  color: #000000;
+  color: var(--graphite);
 }
 
 :focus-visible {
-  outline: 3px solid #000000;
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
 }
 
@@ -42,7 +42,7 @@ body {
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  box-shadow: 0 4px 0px #000000;
+  box-shadow: none;
 }
 
 .site-nav {
@@ -86,7 +86,6 @@ body {
 
 .nav-link:hover {
   background-color: var(--accent-yellow);
-  transform: translate(-2px, -2px);
   box-shadow: var(--shadow-md);
 }
 
@@ -122,5 +121,5 @@ body {
   text-align: center;
   font-size: var(--font-size-xs);
   color: var(--iron);
-  box-shadow: 0 -4px 0px #000000;
+  box-shadow: none;
 }

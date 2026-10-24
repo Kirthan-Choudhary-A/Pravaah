@@ -10,46 +10,39 @@
   justify-content: center;
   gap: var(--space-2);
   padding: 12px 24px;
-  background-color: var(--accent-yellow);
-  color: #000000;
-  border: var(--border-neo-thick);
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border: 1px solid var(--primary);
   border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   font-size: var(--font-size-base);
-  font-weight: 800;
+  font-weight: 600;
   text-decoration: none;
   cursor: pointer;
   box-shadow: var(--shadow-md);
   transition: all var(--duration-fast) var(--ease-standard);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
 }
 
 .magneticBtn:hover {
-  background-color: #ffd000;
-  transform: translate(-2px, -2px);
+  background-color: var(--primary-dark);
   box-shadow: var(--shadow-lg);
 }
 
 .magneticBtn:active {
-  transform: translate(2px, 2px);
   box-shadow: var(--shadow-active);
 }
 
 .secondary {
   background-color: var(--offwhite);
-  color: #000000;
-  border: var(--border-neo-thick);
-  box-shadow: var(--shadow-md);
+  color: var(--primary);
+  border: 1px solid var(--primary);
 }
 
 .secondary:hover {
-  background-color: var(--paper-warm);
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-lg);
+  background-color: var(--surface-hover);
 }
 
 .magneticBtn:focus-visible {
-  outline: 3px solid #000000;
+  outline: 3px solid var(--primary);
   outline-offset: 3px;
 }

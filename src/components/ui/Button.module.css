@@ -4,7 +4,7 @@
   justify-content: center;
   gap: var(--space-2);
   font-family: var(--font-sans);
-  font-weight: 700;
+  font-weight: 600;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-standard);
@@ -16,7 +16,7 @@
 }
 
 .button:focus-visible {
-  outline: 3px solid #000000;
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
 }
 
@@ -48,78 +48,70 @@
 
 /* Variants */
 .primary {
-  background-color: var(--accent-yellow);
-  color: #000000;
-  border-color: #000000;
-  box-shadow: var(--shadow-sm);
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
 }
 
 .primary:hover:not(:disabled) {
-  background-color: #ffd000;
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-md);
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
 }
 
 .primary:active:not(:disabled) {
-  transform: translate(2px, 2px);
   box-shadow: var(--shadow-active);
 }
 
 .secondary {
   background-color: var(--offwhite);
-  color: #000000;
-  border-color: #000000;
+  color: var(--graphite);
+  border-color: var(--stone);
   box-shadow: var(--shadow-sm);
 }
 
 .secondary:hover:not(:disabled) {
   background-color: var(--paper-warm);
-  transform: translate(-2px, -2px);
   box-shadow: var(--shadow-md);
 }
 
 .secondary:active:not(:disabled) {
-  transform: translate(2px, 2px);
   box-shadow: var(--shadow-active);
 }
 
 .subtle {
   background-color: transparent;
-  color: #000000;
+  color: var(--graphite);
   border-color: transparent;
   box-shadow: none;
 }
 
 .subtle:hover:not(:disabled) {
   background-color: var(--offwhite);
-  border-color: #000000;
+  border-color: var(--stone);
   box-shadow: var(--shadow-sm);
-  transform: translate(-1px, -1px);
 }
 
 .danger {
   background-color: var(--accent-coral);
-  color: #000000;
-  border-color: #000000;
+  color: var(--graphite);
+  border-color: var(--stone);
   box-shadow: var(--shadow-sm);
 }
 
 .danger:hover:not(:disabled) {
-  background-color: #ff3811;
-  color: #ffffff;
-  transform: translate(-2px, -2px);
+  background-color: var(--status-missed);
+  color: var(--on-primary);
   box-shadow: var(--shadow-md);
 }
 
 .danger:active:not(:disabled) {
-  transform: translate(2px, 2px);
   box-shadow: var(--shadow-active);
 }
 
 .spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid currentColor;
+  border: 1px solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;

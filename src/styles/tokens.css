@@ -1,59 +1,64 @@
 :root {
   /* ============================================================== */
-  /* NEO-BRUTALISM COLOR PALETTE & DESIGN SYSTEM                    */
+  /* PLAIN, OFFICIAL-STYLE PALETTE: white pages, grey lines, one navy */
   /* ============================================================== */
 
-  /* Canvas & Card Surfaces */
-  --paper: #fffdf5;          /* Warm vibrant canvas */
-  --paper-warm: #fff9e6;     /* Cream tinted background */
-  --offwhite: #ffffff;       /* Pure white card surface */
-  --surface-hover: #fef08a;  /* Subtle yellow tint on interactive hover */
+  /* Surfaces */
+  --paper: #ffffff;          /* Page */
+  --paper-warm: #f3f5f8;     /* Quiet panel / table header */
+  --offwhite: #ffffff;       /* Card */
+  --surface-hover: #e6eef8;  /* Hover and selected row */
 
-  /* High-Contrast Inks & Borders (Strict Neo-brutalism) */
-  --graphite: #000000;       /* Pure deep black */
-  --charcoal: #121212;       /* Charcoal deep black */
-  --olive: #374151;          /* Secondary dark grey */
-  --stone: #000000;          /* All structural borders are solid black */
-  --iron: #1f2937;           /* High contrast readable body text */
-  --ink: #000000;
+  /* Text and lines */
+  --graphite: #1b2430;       /* Headings and primary text */
+  --charcoal: #232d3a;
+  --olive: #4a5563;          /* Secondary text */
+  --stone: #b9c3cf;          /* Borders */
+  --iron: #3d4856;           /* Body-secondary text (AA on white) */
+  --ink: #1b2430;
 
-  /* Structural Neo-brutalist Borders */
-  --border-neo: 2.5px solid #000000;
-  --border-neo-thick: 3px solid #000000;
-  --border-neo-thin: 2px solid #000000;
+  /* Borders: thin and grey */
+  --border-neo: 1px solid #b9c3cf;
+  --border-neo-thick: 2px solid #b9c3cf;
+  --border-neo-thin: 1px solid #b9c3cf;
 
-  /* Hard Unblurred Neo-brutalist Drop Shadows */
-  --shadow-sm: 2px 2px 0px #000000;
-  --shadow-md: 4px 4px 0px #000000;
-  --shadow-lg: 6px 6px 0px #000000;
-  --shadow-xl: 8px 8px 0px #000000;
-  --shadow-hover: 6px 6px 0px #000000;
-  --shadow-active: 1px 1px 0px #000000;
+  /* No drop shadows */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
+  --shadow-hover: none;
+  --shadow-active: none;
 
-  /* Neo-brutalist Signature Accents */
-  --accent-yellow: #ffe600;  /* Electric Canary Yellow */
-  --accent-green: #00e599;   /* Mint / Cyber Green */
-  --accent-coral: #ff5733;   /* Energetic Tangerine Coral */
-  --accent-blue: #38bdf8;    /* Electric Sky Cyan */
-  --accent-purple: #c4b5fd;  /* Retro Lavender */
-  --accent-pink: #f472b6;    /* Punchy Pink */
+  /* The one action colour */
+  --primary: #0b3d91;
+  --primary-dark: #082c69;
+  --on-primary: #ffffff;
 
-  /* Status Accents (Vibrant, high-contrast, WCAG AAA compliant) */
-  --status-safe: #047857;
-  --status-safe-bg: #86efac;
-  --status-safe-border: #000000;
+  /* Soft tints, always used with dark text */
+  --accent-yellow: #fff3c4;
+  --accent-green: #d9f2e3;
+  --accent-coral: #fbdcd3;
+  --accent-blue: #dbe8f6;
+  --accent-purple: #e8ebf1;
+  --accent-pink: #f8dde8;
 
-  --status-risk: #9a3412;
-  --status-risk-bg: #fed7aa;
-  --status-risk-border: #000000;
+  /* Status: colour plus a word, never colour alone */
+  --status-safe: #1e6b3a;
+  --status-safe-bg: #d9f2e3;
+  --status-safe-border: #1e6b3a;
 
-  --status-missed: #991b1b;
-  --status-missed-bg: #fca5a5;
-  --status-missed-border: #000000;
+  --status-risk: #7a4b00;
+  --status-risk-bg: #fff3c4;
+  --status-risk-border: #7a4b00;
 
-  --status-unknown: #1f2937;
-  --status-unknown-bg: #e2e8f0;
-  --status-unknown-border: #000000;
+  --status-missed: #a12622;
+  --status-missed-bg: #fbdcd3;
+  --status-missed-border: #a12622;
+
+  --status-unknown: #3d4856;
+  --status-unknown-bg: #e8ecf1;
+  --status-unknown-border: #3d4856;
 
   /* Link Type Stroke Patterns */
   --link-needs-style: solid;

@@ -20,7 +20,6 @@
 .title {
   font-size: var(--font-size-sm);
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--graphite);
   margin: 0;
@@ -176,7 +175,7 @@
 
 .grandTotalRow {
   background-color: var(--paper);
-  border-top: 2px solid var(--graphite);
+  border-top: 1px solid var(--graphite);
 }
 
 .grandTotalLabel {

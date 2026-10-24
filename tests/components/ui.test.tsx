@@ -115,7 +115,7 @@ describe('Design System UI Components', () => {
       render(<FeesTable fees={mockFees} />);
       expect(screen.getByText('Licence Renewal Fee')).toBeInTheDocument();
       expect(screen.getAllByText(/200/).length).toBeGreaterThanOrEqual(1);
-      expect(screen.getByText(/fee rules unverified/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/not yet verified/i).length).toBeGreaterThan(0);
     });
 
     it('shows degraded mode without amounts when state rules are unknown', () => {

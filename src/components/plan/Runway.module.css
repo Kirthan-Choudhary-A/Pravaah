@@ -91,7 +91,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  border-left: 3px solid var(--graphite);
+  border-left: 1px solid var(--graphite);
 }
 
 .finish {

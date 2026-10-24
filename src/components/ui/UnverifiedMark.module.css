@@ -3,7 +3,6 @@
   font-family: var(--font-mono);
   font-size: 0.625rem;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0 4px;
   background-color: var(--status-risk-bg);

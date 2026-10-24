@@ -21,7 +21,14 @@ export const Timeline: React.FC<TimelineProps> = ({
   onSelectTask,
   className = '',
 }) => {
-  const [viewMode, setViewMode] = useState<'timeline' | 'table'>('timeline');
+  // Phones get the table: a wide chart is hard to read at that width.
+  const [viewMode, setViewMode] = useState<'timeline' | 'table'>(() =>
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(max-width: 40rem)').matches
+      ? 'table'
+      : 'timeline'
+  );
 
   const lanes = useMemo(() => {
     const hasHousehold = tasks.some((t) => t.lane === 'household');

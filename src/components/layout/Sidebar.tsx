@@ -10,7 +10,7 @@ export interface SidebarProps {
   readonly onResetDemo: () => void;
 }
 
-const GROUPS = ['Workspace', 'People and vehicles', 'Evidence', 'About'] as const;
+const GROUPS = ['Services', 'For reviewers'] as const;
 
 export const Sidebar: React.FC<SidebarProps> = ({
   open,

@@ -43,7 +43,6 @@
   color: var(--terracotta);
   border: 1px solid var(--terracotta);
   border-radius: var(--radius-sm);
-  text-transform: uppercase;
 }
 
 .subMeta {
@@ -133,7 +132,6 @@
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--sage);
 }
@@ -213,7 +211,7 @@
 .disclaimerBanner {
   padding: var(--space-3) var(--space-4);
   background-color: var(--paper-warm);
-  border-left: 3px solid var(--bronze);
+  border-left: 1px solid var(--bronze);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-family: var(--font-sans);
   font-size: var(--font-size-xs);

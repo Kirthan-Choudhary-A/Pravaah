@@ -271,24 +271,19 @@ export const HouseholdPage: React.FC = () => {
   return (
     <div className={styles.pageContainer}>
         <PageHeader
-          title="Household & Privacy"
-          description="Manage your own vehicles and family vehicles in one place. Aadhaar, chassis and licence numbers stay masked, and the owner's Aadhaar, licence and challans are never shown to a delegate."
-          actions={
-            <span className={styles.simulatedBadge}>
-              <span aria-hidden="true">🔒</span> SIMULATED DATA ONLY
-            </span>
-          }
+          title="Family vehicles"
+          description="Your vehicles and the family vehicles shared with you. Identity numbers stay masked."
         />
 
         {/* Role Switcher */}
         <div className={styles.roleToggleContainer}>
           <SegmentedControl
-            label="Switch Device View"
+            label="View as"
             value={activeRole}
             onChange={(val) => setActiveRole(val)}
             options={[
               { value: 'You', label: 'You (Citizen Device)' },
-              { value: 'Family member', label: 'Family member’s view (SIMULATED)' },
+              { value: 'Family member', label: 'Family member (simulated)' },
             ]}
           />
         </div>
@@ -302,29 +297,29 @@ export const HouseholdPage: React.FC = () => {
             {activeConsent ? (
               <Banner
                 variant="info"
-                title="Active Family Delegation Granted"
+                title="A family vehicle is shared with you"
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
                   <span>
-                    Family member granted scopes: <strong>{activeConsent.scopes.join(', ')}</strong>. You can view vehicle renewal deadlines and latest safe dates.
+                    Allowed: <strong>{activeConsent.scopes.join(', ')}</strong>. You can see its renewal dates.
                   </span>
                   <Button
                     variant="secondary"
                     size="sm"
                     onClick={() => revokeConsentAction(activeConsent.id)}
                   >
-                    Relinquish Delegation
+                    Stop access
                   </Button>
                 </div>
               </Banner>
             ) : (
               <Banner
                 variant="info"
-                title="No Active Family Delegation"
+                title="No family vehicle is shared with you"
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
                   <span>
-                    To view and manage a family member’s vehicle deadlines, request explicit delegation from their device.
+                    Ask the family member to share their vehicle with you.
                   </span>
                   <Button
                     variant="primary"
@@ -337,7 +332,7 @@ export const HouseholdPage: React.FC = () => {
                       });
                     }}
                   >
-                    Request Access
+                    Ask for access
                   </Button>
                 </div>
               </Banner>
@@ -345,7 +340,7 @@ export const HouseholdPage: React.FC = () => {
 
             {/* Vehicles Header & Add Button */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'var(--space-4)' }}>
-              <h2 style={{ fontSize: 'var(--font-size-xl)' }}>Household Vehicles</h2>
+              <h2 style={{ fontSize: 'var(--font-size-xl)' }}>Vehicles</h2>
               <Button variant="primary" size="sm" onClick={() => setIsAddVehicleOpen(true)}>
                 + Add a Vehicle
               </Button>
@@ -514,7 +509,7 @@ export const HouseholdPage: React.FC = () => {
                     {/* Renewal items / tasks */}
                     {v.renewalItems.length > 0 && (
                       <div className={styles.renewalsList}>
-                        <div className={styles.renewalHeader}>Upcoming Statutory Deadlines</div>
+                        <div className={styles.renewalHeader}>Upcoming dates</div>
                         {v.renewalItems.map((item) => (
                           <div key={item.id} className={styles.renewalItem}>
                             <span>{item.name}</span>
@@ -547,7 +542,7 @@ export const HouseholdPage: React.FC = () => {
             </Banner>
 
             {/* Pending Requests */}
-            <h2 style={{ fontSize: 'var(--font-size-xl)' }}>Pending Delegation Requests</h2>
+            <h2 style={{ fontSize: 'var(--font-size-xl)' }}>Requests to approve</h2>
             {pendingRequestsForFamily.length === 0 ? (
               <p style={{ color: 'var(--iron)', fontSize: 'var(--font-size-sm)' }}>
                 No pending requests. Requests made from the citizen view will appear here for authorization.
@@ -649,10 +644,10 @@ export const HouseholdPage: React.FC = () => {
           <div className={styles.auditHeaderRow}>
             <div>
               <h2 id="audit-log-title" style={{ fontSize: 'var(--font-size-xl)' }}>
-                Privacy & Access Audit Log (simulated)
+                Access log
               </h2>
               <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--iron)', margin: 0 }}>
-                Every consent grant, decline, revocation, and field reveal is recorded here with purpose justifications. This is a simulated log kept in your browser; it is not tamper-evident.
+                Every sharing change and reveal. Kept in this browser only; not tamper-proof.
               </p>
             </div>
             <div className={styles.auditActionsGroup}>

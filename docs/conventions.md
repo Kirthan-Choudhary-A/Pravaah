@@ -45,7 +45,8 @@ Rules every change follows. Items marked "(lint)" are enforced by `eslint.config
 ## Design and accessibility
 
 - CSS tokens only; no colour literals in `components/`, `features/` or `state/` (lint). `three/` may use literal colours for WebGL.
-- The palette rule in `docs/adr/0001-foundation.md` (warm architectural, no blue/cyan/violet/purple/neon) is the project default. The current restyle departs from it and needs an explicit decision.
+- Look and feel: plain and official-style. White pages, thin grey borders, no shadows, one navy action colour (`--primary`), soft tints with dark text, status shown as colour plus a word. This replaces the warm palette in `docs/adr/0001-foundation.md` and the neo-brutalist restyle. No tricolour or other symbols that suggest an official site.
+- Say less. A page shows what a citizen needs to act; reviewer and detail material goes behind a disclosure or under "For reviewers". Plain words, sentence case, no jargon or internal ids in the UI.
 - Status is always shown in words, never by colour alone.
 - Critical planning and legal information never exists only inside a 3D canvas.
 

@@ -31,13 +31,13 @@
   gap: var(--space-1);
   padding: 2px 8px;
   background-color: var(--accent-purple);
-  border: 1.5px solid #000000;
-  box-shadow: 1.5px 1.5px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   letter-spacing: 0.05em;
 }
 
@@ -47,16 +47,15 @@
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
   background-color: var(--paper-warm);
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
 }
 
 .roleToggleLabel {
   font-size: var(--font-size-xs);
   font-weight: 800;
-  color: #000000;
-  text-transform: uppercase;
+  color: var(--graphite);
 }
 
 .vehiclesGrid {
@@ -79,9 +78,8 @@
 }
 
 .vehicleCard:hover {
-  transform: translate(-2px, -2px);
   box-shadow: var(--shadow-lg);
-  border-color: #000000;
+  border-color: var(--stone);
 }
 
 .cardHeader {
@@ -95,11 +93,11 @@
   font-family: var(--font-mono);
   font-size: var(--font-size-base);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   background-color: var(--accent-yellow);
   padding: 4px 10px;
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
 }
 
@@ -108,10 +106,10 @@
   font-weight: 800;
   padding: 2px 8px;
   background-color: var(--accent-blue);
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
-  color: #000000;
+  color: var(--graphite);
 }
 
 .fieldGrid {
@@ -127,14 +125,13 @@
   justify-content: space-between;
   gap: var(--space-2);
   padding: var(--space-1) 0;
-  border-bottom: 1.5px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .fieldLabel {
   color: var(--olive);
   font-weight: 700;
   font-size: var(--font-size-xs);
-  text-transform: uppercase;
 }
 
 .fieldValueGroup {
@@ -145,36 +142,35 @@
 
 .fieldValue {
   font-family: var(--font-mono);
-  color: #000000;
+  color: var(--graphite);
   font-weight: 800;
 }
 
 .lockedNotice {
   font-size: 0.6875rem;
-  color: #000000;
+  color: var(--graphite);
   background-color: #f1f5f9;
   padding: 2px 6px;
   border-radius: var(--radius-sm);
-  border: 1px dashed #000000;
+  border: 1px dashed var(--stone);
   font-weight: 700;
 }
 
 .revealBtn {
   font-size: var(--font-size-xs);
   padding: 3px 10px;
-  border: 1.5px solid #000000;
-  box-shadow: 1.5px 1.5px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   background-color: var(--accent-yellow);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  color: #000000;
+  color: var(--graphite);
   font-weight: 800;
   transition: all var(--duration-fast) var(--ease-standard);
 }
 
 .revealBtn:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 2.5px 2.5px 0px #000000;
+  box-shadow: none;
 }
 
 .activeRevealNotice {
@@ -182,12 +178,12 @@
   align-items: center;
   gap: var(--space-2);
   font-size: var(--font-size-xs);
-  color: #000000;
+  color: var(--graphite);
   font-family: var(--font-mono);
   background-color: var(--accent-coral);
   padding: 2px 8px;
-  border: 1.5px solid #000000;
-  box-shadow: 1.5px 1.5px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   font-weight: 800;
 }
@@ -195,8 +191,8 @@
 .hideNowBtn {
   font-size: 0.6875rem;
   background: #ffffff;
-  border: 1px solid #000000;
-  color: #000000;
+  border: 1px solid var(--stone);
+  color: var(--graphite);
   padding: 1px 6px;
   border-radius: 2px;
   cursor: pointer;
@@ -209,14 +205,13 @@
   gap: var(--space-2);
   margin-top: var(--space-2);
   padding-top: var(--space-2);
-  border-top: 2px solid #000000;
+  border-top: 1px solid var(--stone);
 }
 
 .renewalHeader {
   font-size: var(--font-size-xs);
   font-weight: 800;
-  text-transform: uppercase;
-  color: #000000;
+  color: var(--graphite);
   letter-spacing: 0.05em;
 }
 
@@ -257,7 +252,7 @@
 .modalTitle {
   font-size: var(--font-size-lg);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
 }
 
 .modalForm {
@@ -275,7 +270,7 @@
 .formLabel {
   font-size: var(--font-size-sm);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
 }
 
 .selectInput,
@@ -284,10 +279,10 @@
   font-family: var(--font-sans);
   font-size: var(--font-size-sm);
   padding: var(--space-2);
-  border: 2px solid #000000;
+  border: 1px solid var(--stone);
   border-radius: var(--radius-sm);
   background-color: #ffffff;
-  color: #000000;
+  color: var(--graphite);
   font-weight: 600;
 }
 

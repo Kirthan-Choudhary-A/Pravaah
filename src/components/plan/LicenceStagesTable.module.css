@@ -21,7 +21,6 @@
 .title {
   font-size: var(--font-size-sm);
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--graphite);
   margin: 0;

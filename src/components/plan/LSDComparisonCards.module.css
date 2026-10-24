@@ -14,9 +14,8 @@
 .title {
   font-size: var(--font-size-sm);
   font-weight: 800;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #000000;
+  color: var(--graphite);
   margin: 0;
 }
 
@@ -46,16 +45,15 @@
 }
 
 .card:hover {
-  transform: translate(-2px, -2px);
   box-shadow: var(--shadow-lg);
-  border-color: #000000;
+  border-color: var(--stone);
 }
 
 .cardSelected {
   background-color: #ffffff;
   border: var(--border-neo-thick);
   box-shadow: var(--shadow-lg);
-  outline: 2px solid #000000;
+  outline: 3px solid var(--primary);
 }
 
 .cardRecommended {
@@ -87,9 +85,9 @@
   font-size: 0.625rem;
   font-weight: 800;
   background-color: var(--accent-blue);
-  color: #000000;
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  color: var(--graphite);
+  border: 1px solid var(--stone);
+  box-shadow: none;
   padding: 2px 6px;
   border-radius: 2px;
 }
@@ -99,9 +97,9 @@
   font-size: 0.625rem;
   font-weight: 800;
   background-color: var(--accent-green);
-  color: #000000;
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  color: var(--graphite);
+  border: 1px solid var(--stone);
+  box-shadow: none;
   padding: 2px 6px;
   border-radius: 2px;
 }
@@ -111,9 +109,9 @@
   font-size: 0.625rem;
   font-weight: 800;
   background-color: var(--accent-yellow);
-  color: #000000;
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  color: var(--graphite);
+  border: 1px solid var(--stone);
+  box-shadow: none;
   padding: 2px 6px;
   border-radius: 2px;
 }
@@ -121,7 +119,7 @@
 .cardName {
   font-size: var(--font-size-base);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   margin: 0;
 }
 
@@ -138,23 +136,22 @@
   justify-content: space-between;
   padding: var(--space-3);
   background-color: var(--paper-warm);
-  border: 1.5px solid #000000;
+  border: 1px solid var(--stone);
   border-radius: var(--radius-sm);
-  box-shadow: 2px 2px 0px #000000;
+  box-shadow: none;
 }
 
 .lsdLabel {
   font-size: var(--font-size-xs);
   font-weight: 700;
-  color: #000000;
-  text-transform: uppercase;
+  color: var(--graphite);
 }
 
 .lsdValue {
   font-family: var(--font-mono);
   font-size: var(--font-size-lg);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
 }
 
 .detailsList {
@@ -178,7 +175,7 @@
 
 .detailVal {
   font-weight: 700;
-  color: #000000;
+  color: var(--graphite);
 }
 
 .rationale {
@@ -188,7 +185,7 @@
   margin: 0;
   padding: var(--space-2);
   background-color: #f1f5f9;
-  border: 1px solid #000000;
+  border: 1px solid var(--stone);
   border-radius: var(--radius-sm);
 }
 
@@ -206,21 +203,26 @@
   font-weight: 800;
   padding: 6px 14px;
   background-color: var(--accent-yellow);
-  color: #000000;
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  color: var(--graphite);
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-standard);
 }
 
 .selectBtn:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px #000000;
+  box-shadow: none;
 }
 
 .selectBtn:disabled {
   background-color: var(--accent-green);
-  color: #000000;
+  color: var(--graphite);
   cursor: default;
+}
+
+.summaryLine {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
 }

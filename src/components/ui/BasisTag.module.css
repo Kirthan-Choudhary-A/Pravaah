@@ -8,18 +8,18 @@
   border-radius: var(--radius-sm);
   white-space: nowrap;
   line-height: 1.2;
-  border: 1.5px solid #000000;
-  box-shadow: 1.5px 1.5px 0px #000000;
-  color: #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
+  color: var(--graphite);
 }
 
 .official {
   background-color: var(--accent-blue);
-  color: #000000;
+  color: var(--graphite);
 }
 
 .modelled {
   background-color: var(--accent-yellow);
-  color: #000000;
-  border: 1.5px dashed #000000;
+  color: var(--graphite);
+  border: 1px dashed var(--stone);
 }

@@ -50,7 +50,7 @@ export const Topbar: React.FC<TopbarProps> = ({
           </select>
         </label>
         <span className={styles.simulatedChip} title="All data in this prototype is simulated">
-          SIMULATED
+          Simulated data
         </span>
       </div>
     </header>

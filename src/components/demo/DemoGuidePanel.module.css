@@ -48,7 +48,6 @@
   font-size: var(--font-size-xs);
   font-weight: 700;
   color: var(--sage);
-  text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
@@ -89,7 +88,7 @@
 
 .takeawayBox {
   background-color: var(--paper-warm);
-  border-left: 3px solid var(--sage);
+  border-left: 1px solid var(--sage);
   padding: var(--space-2) var(--space-3);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-size: 0.6875rem;
@@ -98,7 +97,6 @@
 
 .takeawayBox strong {
   color: var(--sage);
-  text-transform: uppercase;
   font-family: var(--font-mono);
   font-size: 0.625rem;
   letter-spacing: 0.05em;

@@ -65,6 +65,6 @@ describe('Engine: Option Comparison and Ranking', () => {
 
     const anotherRtoOption = comparisons.find((c) => c.decisions.licenceRoute === 'another-rto');
     expect(anotherRtoOption).toBeDefined();
-    expect(anotherRtoOption?.unverifiedRuleImpact).toContain('licenceRenewalAtAnyRTO');
+    expect(anotherRtoOption?.unverifiedRuleImpact).toContain('unverified rule');
   });
 });

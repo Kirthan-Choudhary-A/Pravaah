@@ -39,12 +39,12 @@ export const FeesTable: React.FC<FeesTableProps> = ({
     <div className={`${styles.wrapper ?? ''} ${className}`.trim()}>
       <div className={styles.header}>
         <div className={styles.titleGroup}>
-          <h4 className={styles.title}>Fee Breakdown</h4>
+          <h4 className={styles.title}>Fees</h4>
           <span className={styles.subtitle}>
-            Itemized breakdown: only items tagged Official are totalled; estimates are not
+            Only items marked Official are added up. Estimates vary by RTO.
           </span>
         </div>
-        {fees.hasUnverified && <UnverifiedMark label="Fee Rules Unverified" />}
+        {fees.hasUnverified && <UnverifiedMark label="Not yet verified" />}
       </div>
 
       <div className={styles.tableContainer}>
@@ -53,10 +53,10 @@ export const FeesTable: React.FC<FeesTableProps> = ({
           <thead>
             <tr>
               <th scope="col" className={styles.th}>
-                Fee Item
+                Fee
               </th>
               <th scope="col" className={styles.th}>
-                Classification
+                Type
               </th>
               <th scope="col" className={`${styles.th ?? ''} ${styles.thRight ?? ''}`}>
                 Amount
@@ -67,11 +67,7 @@ export const FeesTable: React.FC<FeesTableProps> = ({
             {fees.items.map((item, idx) => (
               <tr key={`${item.id}-${idx}`}>
                 <td className={styles.td}>
-                  <div className={styles.itemNameGroup}>
-                    <span className={styles.itemName}>{item.label}</span>
-                    {!item.verified && <UnverifiedMark />}
-                  </div>
-                  {item.note && <span className={styles.itemNote}>{item.note}</span>}
+                  <span className={styles.itemName}>{item.label}</span>
                 </td>
                 <td className={styles.td}>
                   <span className={styles.lanePill}>{item.tag}</span>
@@ -80,7 +76,7 @@ export const FeesTable: React.FC<FeesTableProps> = ({
                   <span className={styles.itemAmount}>
                     {item.amount !== null
                       ? `₹${item.amount.toLocaleString('en-IN')}`
-                      : 'Variable / RTO confirmation'}
+                      : 'Varies'}
                   </span>
                 </td>
               </tr>
@@ -89,7 +85,7 @@ export const FeesTable: React.FC<FeesTableProps> = ({
           <tfoot>
             <tr className={styles.footerRow}>
               <td colSpan={2} className={styles.footerLabel}>
-                {fees.hasUnverified ? 'Official Total (unverified):' : 'Official Total:'}
+                {fees.hasUnverified ? 'Official total (not yet verified)' : 'Official total'}
               </td>
               <td className={`${styles.footerValue ?? ''} ${styles.tdRight ?? ''}`}>
                 ₹{fees.officialTotal.toLocaleString('en-IN')}
@@ -101,7 +97,7 @@ export const FeesTable: React.FC<FeesTableProps> = ({
                   colSpan={2}
                   className={`${styles.footerLabel ?? ''} ${styles.penaltyLabel ?? ''}`}
                 >
-                  Variable / Estimated Items:
+                  Estimated items
                 </td>
                 <td
                   className={`${styles.footerValue ?? ''} ${styles.tdRight ?? ''} ${styles.penaltyValue ?? ''}`}

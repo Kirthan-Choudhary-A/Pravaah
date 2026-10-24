@@ -39,3 +39,7 @@ The core scheduling and compliance logic in `src/engine/` is completely decouple
 - Engine algorithms are 100% unit-testable in isolation with instant test feedback.
 - Refactoring UI views cannot corrupt core planning invariants.
 - Strict ESLint checks catch architectural violations at compile/lint time.
+
+## Update
+
+The warm architectural palette in decision 1 was replaced by a plain official-style look (white pages, thin grey borders, one navy action colour). See `docs/conventions.md`.

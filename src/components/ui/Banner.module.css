@@ -25,7 +25,7 @@
 .title {
   font-size: var(--font-size-sm);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -43,28 +43,28 @@
 /* Variants */
 .info {
   background-color: #e0f2fe;
-  border-color: #000000;
-  color: #000000;
+  border-color: var(--stone);
+  color: var(--graphite);
 }
 
 .info .title {
-  color: #000000;
+  color: var(--graphite);
 }
 
 .warning {
   background-color: var(--accent-yellow);
-  border-color: #000000;
-  color: #000000;
+  border-color: var(--stone);
+  color: var(--graphite);
 }
 
 .warning .title {
-  color: #000000;
+  color: var(--graphite);
 }
 
 .error {
   background-color: var(--status-missed-bg);
-  border-color: #000000;
-  color: #000000;
+  border-color: var(--stone);
+  color: var(--graphite);
 }
 
 .error .title {
@@ -73,7 +73,7 @@
 
 .degraded {
   background-color: #fef08a;
-  border: 2.5px dashed #000000;
+  border: 1px dashed var(--stone);
 }
 
 .degraded .title {

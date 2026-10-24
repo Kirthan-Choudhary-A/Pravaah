@@ -15,7 +15,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 2px solid var(--status-missed);
+  border: 1px solid var(--status-missed);
   display: flex;
   align-items: center;
   justify-content: center;

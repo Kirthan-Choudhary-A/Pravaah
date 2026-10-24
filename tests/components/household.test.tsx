@@ -19,10 +19,9 @@ describe('Household & Privacy UI Integration Tests', () => {
     );
   };
 
-  it('renders Household page with visible SIMULATED notice', () => {
+  it('renders the family vehicles page', () => {
     renderHousehold();
-    expect(screen.getByRole('heading', { level: 1, name: /household & privacy/i })).toBeInTheDocument();
-    expect(screen.getByText(/simulated data only/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /family vehicles/i })).toBeInTheDocument();
   });
 
   it('strictly preserves privacy boundaries: never exposes raw secrets in DOM by default', () => {
@@ -77,7 +76,7 @@ describe('Household & Privacy UI Integration Tests', () => {
   it('switches to granter device view to inspect family member permissions', () => {
     renderHousehold();
 
-    const familyTab = screen.getByRole('radio', { name: /family member’s view/i });
+    const familyTab = screen.getByRole('radio', { name: /family member \(simulated\)/i });
     fireEvent.click(familyTab);
 
     expect(screen.getByText(/granter device view \(simulated\)/i)).toBeInTheDocument();

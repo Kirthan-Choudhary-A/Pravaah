@@ -73,8 +73,7 @@ export const Layout: React.FC = () => {
           <Outlet />
         </main>
         <footer className={styles.statusBar} role="contentinfo">
-          <span>{SITE_CONFIG.simulatedNotice}</span>
-          <span>{SITE_CONFIG.challenge}</span>
+          {SITE_CONFIG.simulatedNotice}
         </footer>
       </div>
 

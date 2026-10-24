@@ -20,9 +20,8 @@
 .title {
   font-size: var(--font-size-sm);
   font-weight: 800;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #000000;
+  color: var(--graphite);
   margin: 0;
 }
 
@@ -39,9 +38,9 @@
   padding: 4px 10px;
   border-radius: var(--radius-sm);
   background-color: var(--accent-yellow);
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
-  color: #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
+  color: var(--graphite);
 }
 
 .list {
@@ -66,7 +65,6 @@
 }
 
 .item:hover {
-  transform: translate(-1px, -1px);
   box-shadow: var(--shadow-md);
 }
 
@@ -98,17 +96,17 @@
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   background-color: var(--paper-warm);
   padding: 1px 4px;
-  border: 1px solid #000000;
+  border: 1px solid var(--stone);
   border-radius: 2px;
 }
 
 .checkTitle {
   font-size: var(--font-size-sm);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   margin: 0;
 }
 
@@ -122,8 +120,8 @@
 
 .remedyBox {
   background-color: var(--accent-yellow);
-  border: 1.5px solid #000000;
-  box-shadow: 1.5px 1.5px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-3);
   display: flex;
@@ -135,13 +133,12 @@
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 800;
-  color: #000000;
-  text-transform: uppercase;
+  color: var(--graphite);
 }
 
 .remedyText {
   font-size: var(--font-size-xs);
-  color: #000000;
+  color: var(--graphite);
   font-weight: 600;
   margin: 0;
 }

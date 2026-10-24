@@ -31,12 +31,11 @@
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 800;
-  text-transform: uppercase;
   letter-spacing: 0.08em;
   background-color: var(--accent-purple);
-  color: #000000;
-  border: 1.5px solid #000000;
-  box-shadow: 1.5px 1.5px 0px #000000;
+  color: var(--graphite);
+  border: 1px solid var(--stone);
+  box-shadow: none;
   padding: 2px 8px;
   border-radius: var(--radius-sm);
 }
@@ -46,9 +45,9 @@
   font-size: 0.6875rem;
   font-weight: 800;
   background-color: var(--accent-green);
-  color: #000000;
-  border: 1.5px solid #000000;
-  box-shadow: 1.5px 1.5px 0px #000000;
+  color: var(--graphite);
+  border: 1px solid var(--stone);
+  box-shadow: none;
   padding: 2px 8px;
   border-radius: var(--radius-sm);
 }
@@ -57,7 +56,7 @@
   font-size: var(--font-size-2xl);
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: #000000;
+  color: var(--graphite);
   margin: 0;
 }
 
@@ -122,12 +121,11 @@
 .columnHeading {
   font-size: var(--font-size-sm);
   font-weight: 800;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #000000;
+  color: var(--graphite);
   margin: 0;
   padding-bottom: var(--space-2);
-  border-bottom: 2px solid #000000;
+  border-bottom: 1px solid var(--stone);
 }
 
 .controlsList {
@@ -149,8 +147,7 @@
 .controlLabel {
   font-size: var(--font-size-xs);
   font-weight: 800;
-  color: #000000;
-  text-transform: uppercase;
+  color: var(--graphite);
   letter-spacing: 0.05em;
 }
 
@@ -181,8 +178,8 @@
   gap: 2px;
   padding: var(--space-3) var(--space-4);
   background-color: var(--paper-warm);
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   text-align: left;
@@ -191,31 +188,29 @@
 
 .eventButton:hover {
   background-color: #ffffff;
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px #000000;
+  box-shadow: none;
 }
 
 .eventButton:focus-visible {
-  outline: 3px solid #000000;
+  outline: 3px solid var(--primary);
   outline-offset: 1px;
 }
 
 .eventButtonActive {
   background-color: var(--accent-yellow) !important;
-  border: 2.5px solid #000000 !important;
-  box-shadow: 3px 3px 0px #000000 !important;
-  transform: translate(-1px, -1px);
+  border: 1px solid var(--stone) !important;
+  box-shadow: none;
 }
 
 .eventButtonActive .eventBtnLabel {
-  color: #000000;
+  color: var(--graphite);
   font-weight: 800;
 }
 
 .eventBtnLabel {
   font-size: var(--font-size-xs);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
 }
 
 .eventBtnDesc {
@@ -240,7 +235,7 @@
   font-size: var(--font-size-base);
   font-weight: 800;
   letter-spacing: -0.01em;
-  color: #000000;
+  color: var(--graphite);
   margin: 0;
 }
 

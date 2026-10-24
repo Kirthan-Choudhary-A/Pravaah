@@ -75,30 +75,29 @@ test('household delegation and privacy controls: role switch and audit log downl
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/household');
 
-  // Verify SIMULATED notice
-  await expect(page.getByText(/SIMULATED DATA ONLY/i)).toBeVisible();
+  // The shell always says the data is simulated
+  await expect(page.getByText('Simulated data', { exact: true })).toBeVisible();
 
   // Verify masked plate
   await expect(page.getByText('KA-03-**-**78')).toBeVisible();
 
   // Switch role to Family Member
-  const familyRadio = page.getByRole('radio', { name: /Family member’s view/i });
+  const familyRadio = page.getByRole('radio', { name: /Family member \(simulated\)/i });
   await familyRadio.click();
   await expect(page.getByText(/Granter Device View \(Simulated\)/i)).toBeVisible();
 
   // Switch back to You
   const youRadio = page.getByRole('radio', { name: /You \(Citizen Device\)/i });
   await youRadio.click();
-  await expect(page.getByRole('heading', { level: 2, name: /Household Vehicles/i })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Vehicles' })).toBeVisible();
 });
 
 test('voice and plate parsing: sample selection and multilingual read-back', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/voice');
 
-  // Verify SIMULATED notice and privacy notice
-  await expect(page.getByText(/BROWSER SPEECH SERVICE/i)).toBeVisible();
-  await expect(page.getByRole('note')).toBeVisible();
+  // The speech notice is shown
+  await expect(page.getByRole('note')).toContainText(/speech service/i);
 
   // Click Sample 1
   const sample1 = page.getByRole('button', { name: /Sample 1: KA-03/i });

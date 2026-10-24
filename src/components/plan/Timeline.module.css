@@ -23,14 +23,13 @@
   align-items: center;
   gap: var(--space-3);
   font-size: var(--font-size-xs);
-  color: #000000;
+  color: var(--graphite);
   flex-wrap: wrap;
 }
 
 .legendTitle {
   font-weight: 800;
-  color: #000000;
-  text-transform: uppercase;
+  color: var(--graphite);
   letter-spacing: 0.04em;
 }
 
@@ -45,8 +44,8 @@
   display: inline-block;
   padding: 1px 6px;
   background-color: var(--accent-green);
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: 2px;
   font-weight: 800;
 }
@@ -55,8 +54,8 @@
   display: inline-block;
   padding: 1px 6px;
   background-color: var(--accent-yellow);
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: 2px;
   font-weight: 800;
 }
@@ -65,8 +64,8 @@
   display: inline-block;
   padding: 1px 6px;
   background-color: var(--accent-coral);
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: 2px;
   font-weight: 800;
 }
@@ -76,12 +75,12 @@
   height: 12px;
   background: repeating-linear-gradient(
     45deg,
-    #000000,
-    #000000 3px,
+    var(--stone),
+    var(--stone) 3px,
     transparent 3px,
     transparent 6px
   );
-  border: 1.5px solid #000000;
+  border: 1px solid var(--stone);
   border-radius: 2px;
 }
 
@@ -89,18 +88,18 @@
   display: flex;
   gap: 4px;
   background-color: var(--paper-warm);
-  border: 1.5px solid #000000;
+  border: 1px solid var(--stone);
   border-radius: var(--radius-sm);
   padding: 2px;
 }
 
 .viewBtn {
-  border: 1.5px solid transparent;
+  border: 1px solid transparent;
   background: transparent;
   font-size: var(--font-size-xs);
   font-family: var(--font-sans);
   font-weight: 700;
-  color: #000000;
+  color: var(--graphite);
   padding: 4px 10px;
   border-radius: 2px;
   cursor: pointer;
@@ -109,9 +108,9 @@
 
 .viewBtnActive {
   background-color: var(--accent-yellow);
-  color: #000000;
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  color: var(--graphite);
+  border: 1px solid var(--stone);
+  box-shadow: none;
   font-weight: 800;
 }
 
@@ -127,7 +126,7 @@
 }
 
 .scrollContainer:focus-visible {
-  outline: 3px solid #000000;
+  outline: 3px solid var(--primary);
   outline-offset: -2px;
 }
 
@@ -141,7 +140,7 @@
   display: flex;
   height: 42px;
   background-color: var(--paper-warm);
-  border-bottom: 2px solid #000000;
+  border-bottom: 1px solid var(--stone);
   position: sticky;
   top: 0;
   z-index: 2;
@@ -153,9 +152,8 @@
   padding: var(--space-2) var(--space-3);
   font-size: var(--font-size-xs);
   font-weight: 800;
-  text-transform: uppercase;
-  color: #000000;
-  border-right: 2px solid #000000;
+  color: var(--graphite);
+  border-right: 1px solid var(--stone);
   background-color: var(--accent-yellow);
   position: sticky;
   left: 0;
@@ -184,24 +182,24 @@
 .tickLabel {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  color: #000000;
+  color: var(--graphite);
   font-weight: 700;
   padding-top: 4px;
 }
 
 .axisTickToday .tickLabel {
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   background-color: var(--accent-yellow);
   padding: 0 4px;
-  border: 1px solid #000000;
+  border: 1px solid var(--stone);
   border-radius: 2px;
 }
 
 .tickLine {
   width: 2px;
   height: 8px;
-  background-color: #000000;
+  background-color: var(--graphite);
   align-self: center;
 }
 
@@ -209,7 +207,7 @@
 .laneRow {
   display: flex;
   min-height: 88px;
-  border-bottom: 2px solid #000000;
+  border-bottom: 1px solid var(--stone);
   position: relative;
 }
 
@@ -221,7 +219,7 @@
   width: 150px;
   min-width: 150px;
   padding: var(--space-3);
-  border-right: 2px solid #000000;
+  border-right: 1px solid var(--stone);
   background-color: var(--paper-warm);
   display: flex;
   flex-direction: column;
@@ -229,14 +227,13 @@
   position: sticky;
   left: 0;
   z-index: 2;
-  box-shadow: 2px 0 0px #000000;
+  box-shadow: none;
 }
 
 .laneName {
   font-size: var(--font-size-xs);
   font-weight: 800;
-  color: #000000;
-  text-transform: uppercase;
+  color: var(--graphite);
 }
 
 .laneTaskCount {
@@ -268,8 +265,8 @@
     transparent 6px,
     transparent 12px
   );
-  border-left: 2px dashed #000000;
-  border-right: 2px dashed #000000;
+  border-left: 1px dashed var(--stone);
+  border-right: 1px dashed var(--stone);
   pointer-events: none;
   z-index: 1;
 }
@@ -281,12 +278,12 @@
   font-size: 0.625rem;
   font-family: var(--font-mono);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   background-color: var(--accent-yellow);
   padding: 2px 6px;
   border-radius: 2px;
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
 }
 
 /* Slot queue */
@@ -295,7 +292,7 @@
   top: 0;
   bottom: 0;
   width: 3px;
-  background-color: #000000;
+  background-color: var(--graphite);
   z-index: 1;
   pointer-events: none;
 }
@@ -307,12 +304,12 @@
   font-size: 0.625rem;
   font-family: var(--font-mono);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   background-color: var(--accent-coral);
   padding: 2px 6px;
   border-radius: 2px;
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   white-space: nowrap;
 }
 
@@ -327,29 +324,28 @@
   padding: 0 var(--space-3);
   cursor: pointer;
   z-index: 2;
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   transition: all var(--duration-fast) var(--ease-standard);
   overflow: hidden;
   text-align: left;
 }
 
 .taskBar:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: none;
   z-index: 4;
 }
 
 .taskBar:focus-visible {
-  outline: 3px solid #000000;
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
   z-index: 5;
 }
 
 .taskBarSelected {
-  outline: 3px solid #000000;
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: none;
   z-index: 5;
 }
 
@@ -371,22 +367,22 @@
 /* Status variants */
 .status_safe {
   background-color: var(--accent-green);
-  color: #000000;
+  color: var(--graphite);
 }
 
 .status_risk {
   background-color: var(--accent-yellow);
-  color: #000000;
+  color: var(--graphite);
 }
 
 .status_missed {
   background-color: var(--accent-coral);
-  color: #000000;
+  color: var(--graphite);
 }
 
 .status_unknown {
   background-color: #e2e8f0;
-  color: #000000;
+  color: var(--graphite);
 }
 
 /* LSD Tick */
@@ -395,7 +391,7 @@
   top: 0;
   bottom: 0;
   width: 3px;
-  background-color: #000000;
+  background-color: var(--graphite);
   opacity: 0.8;
 }
 
@@ -403,7 +399,7 @@
 .tableTaskName {
   display: block;
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
 }
 
 .tableTaskId {
@@ -421,7 +417,7 @@
   background-color: var(--paper-warm);
   padding: 2px 6px;
   border-radius: var(--radius-sm);
-  border: 1.5px solid #000000;
+  border: 1px solid var(--stone);
 }
 
 .monoCell {

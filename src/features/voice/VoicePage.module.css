@@ -32,13 +32,13 @@
   gap: var(--space-1);
   padding: 2px 8px;
   background-color: var(--accent-purple);
-  border: 1.5px solid #000000;
-  box-shadow: 1.5px 1.5px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   letter-spacing: 0.05em;
 }
 
@@ -48,8 +48,8 @@
   background-color: var(--paper-warm);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
-  border: 1.5px solid #000000;
-  box-shadow: 1.5px 1.5px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -85,13 +85,13 @@
   text-align: left;
   padding: var(--space-2) var(--space-3);
   background-color: var(--paper-warm);
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: var(--font-size-xs);
   font-family: var(--font-sans);
-  color: #000000;
+  color: var(--graphite);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -103,13 +103,12 @@
 
 .sampleButton:hover {
   background-color: var(--accent-yellow);
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px #000000;
+  box-shadow: none;
 }
 
 .sampleTitle {
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
 }
 
 .sampleTranscript {
@@ -136,11 +135,11 @@
   font-family: var(--font-mono);
   font-size: var(--font-size-base);
   padding: var(--space-2) var(--space-3);
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   background-color: #ffffff;
-  color: #000000;
+  color: var(--graphite);
   font-weight: 700;
   box-sizing: border-box;
 }
@@ -150,21 +149,20 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   background-color: var(--accent-yellow);
   font-family: var(--font-sans);
   font-size: var(--font-size-sm);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-standard);
 }
 
 .micButton:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px #000000;
+  box-shadow: none;
 }
 
 .micButtonListening {
@@ -200,11 +198,11 @@
   font-family: var(--font-mono);
   font-size: var(--font-size-2xl);
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   background-color: var(--accent-yellow);
   padding: var(--space-3) var(--space-5);
-  border: 3px solid #000000;
-  box-shadow: 4px 4px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   letter-spacing: 0.05em;
   align-self: flex-start;
@@ -222,8 +220,7 @@
 .segmentTitle {
   font-size: var(--font-size-xs);
   font-weight: 800;
-  text-transform: uppercase;
-  color: #000000;
+  color: var(--graphite);
   letter-spacing: 0.05em;
 }
 
@@ -239,10 +236,10 @@
   font-weight: 800;
   padding: 3px 8px;
   background-color: var(--paper-warm);
-  border: 1.5px solid #000000;
-  box-shadow: 1px 1px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
-  color: #000000;
+  color: var(--graphite);
 }
 
 .tokenFiller {
@@ -256,15 +253,15 @@
   gap: var(--space-2);
   padding: var(--space-3);
   background-color: #fef08a;
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
 }
 
 .fixesTitle {
   font-weight: 800;
-  color: #000000;
+  color: var(--graphite);
   display: flex;
   align-items: center;
   gap: var(--space-1);
@@ -277,8 +274,8 @@
   padding: var(--space-3);
   background-color: var(--accent-coral);
   color: #ffffff;
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
+  border: 1px solid var(--stone);
+  box-shadow: none;
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
 }

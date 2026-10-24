@@ -13,7 +13,7 @@ describe('App shell', () => {
     renderAt('/');
     expect(screen.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeInTheDocument();
     const nav = screen.getByRole('navigation', { name: /main navigation/i });
-    for (const label of ['Dashboard', 'Plan', 'Simulate', 'Household', 'Plate entry', 'Sources', 'Metrics']) {
+    for (const label of ['Dashboard', 'My plan', 'What if', 'Family vehicles', 'Enter plate', 'Official sources']) {
       expect(within(nav).getByRole('link', { name: label })).toBeInTheDocument();
     }
     expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page');
@@ -30,7 +30,7 @@ describe('App shell', () => {
     renderAt('/');
     const select = screen.getByRole('combobox', { name: /scenario/i });
     fireEvent.change(select, { target: { value: 'C' } });
-    expect(screen.getByText(/rules unknown for the destination state/i)).toBeInTheDocument();
+    expect(screen.getByText(/no rules for this state/i)).toBeInTheDocument();
   });
 
   it('opens and closes the navigation drawer', () => {
@@ -47,27 +47,29 @@ describe('App shell', () => {
 describe('Dashboard', () => {
   it('shows the licence runway, written out in words, from the plan', () => {
     renderAt('/');
-    expect(screen.getByRole('heading', { name: /licence runway/i })).toBeInTheDocument();
-    expect(screen.getByText(/The licence expires on day 21/)).toBeInTheDocument();
-    expect(screen.getByText(/The owner is away on days 12 to 25/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /licence timeline/i })).toBeInTheDocument();
+    expect(screen.getByText(/The licence expires on day 21\./)).toBeInTheDocument();
+    expect(screen.getByText(/You are away on days 12 to 25\./)).toBeInTheDocument();
   });
 
   it('recommends a route and applies it on request', () => {
     renderAt('/');
-    const apply = screen.queryByRole('button', { name: /use the recommended plan/i });
+    const apply = screen.queryByRole('button', { name: /use this plan/i });
     if (apply) fireEvent.click(apply);
-    expect(screen.getByText(/you are on the recommended plan/i)).toBeInTheDocument();
-    expect(screen.getByText(/timings are assumed/i)).toBeInTheDocument();
+    expect(screen.getByText(/you are on this plan/i)).toBeInTheDocument();
   });
 
-  it('lists what needs attention with a link into the plan', () => {
+  it('stays short: three sections and a link to the full plan', () => {
     renderAt('/');
-    expect(screen.getByRole('heading', { name: /needs attention/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /next up/i })).toBeInTheDocument();
+    const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent);
+    expect(headings).toEqual(['Licence timeline', 'Next steps', 'Best way to renew']);
+    expect(screen.getByRole('link', { name: /see all \d+ steps/i })).toHaveAttribute('href', '/plan');
   });
 
-  it('never claims a family vehicle is shared when no consent is active', () => {
+  it('keeps reviewer material out of the main services', () => {
     renderAt('/');
-    expect(screen.getByText(/owner identity numbers stay masked/i)).toBeInTheDocument();
+    const nav = screen.getByRole('navigation', { name: /main navigation/i });
+    expect(within(nav).getByText('For reviewers')).toBeInTheDocument();
+    expect(within(nav).getByRole('link', { name: 'Metrics' })).toBeInTheDocument();
   });
 });

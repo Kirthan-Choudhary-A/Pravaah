@@ -40,7 +40,7 @@ export const Runway: React.FC<RunwayProps> = ({
   const lapses = renewal !== null && renewal.end > expiryDay;
 
   return (
-    <figure className={styles.runway} aria-label="Licence runway from today to the end of the plan">
+    <figure className={styles.runway}>
       <div className={styles.track}>
         <div className={styles.row}>
           <span className={styles.rowLabel}>Licence renewal</span>
@@ -94,14 +94,10 @@ export const Runway: React.FC<RunwayProps> = ({
       </div>
 
       <figcaption className={styles.caption}>
-        Day 0 is today. The licence expires on day {expiryDay}
-        {renewal
-          ? `; its renewal runs from day ${renewal.start} to day ${renewal.end} (${renewal.status})${
-              lapses ? ' and finishes after expiry' : ''
-            }`
-          : ''}
-        . The owner is away on days {absence.start} to {absence.end - 1}, the first appointment is
-        on day {firstSlotDay}, and the plan finishes on day {finishDay}.
+        The licence expires on day {expiryDay}.
+        {renewal ? ` Renewal finishes on day ${renewal.end} (${renewal.status}).` : ''}
+        {lapses ? ' That is after expiry.' : ''} You are away on days {absence.start} to{' '}
+        {absence.end - 1}. The first appointment is on day {firstSlotDay}.
       </figcaption>
     </figure>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import { usePlan } from '@state/index';
 import { Container } from '@components/layout/Container';
 import { Stack } from '@components/layout/Stack';
-import { Banner } from '@components/ui/Banner';
+import { Disclosure } from '@components/ui/Disclosure';
 import { DataTable, type Column } from '@components/ui/DataTable';
 import { UnverifiedMark } from '@components/ui/UnverifiedMark';
 import type { SourceEntry } from '@engine/model/types';
@@ -66,7 +66,7 @@ const UNVERIFIED_REGISTER = [
   {
     field: 'Licence Stages Grace & Late Fees',
     section: 'MV Act Section 14, 15 & CMVR Rule 32',
-    status: 'Statutory basis modelled; exact gazette penalty rates pending confirmation.',
+    status: 'Modelled; exact penalty rates not yet confirmed.',
   },
   {
     field: 'Re-Registration 12-Month Limit',
@@ -77,7 +77,7 @@ const UNVERIFIED_REGISTER = [
     field: 'RC Address Change Intimation (30 Days)',
     section: 'MV Act Section 49',
     status:
-      'Statutory 30-day notice limit modelled; online vs offline parity unverified per state.',
+      '30-day notice limit is modelled; online and offline rules not confirmed per state.',
   },
   {
     field: 'Inter-RTO Licence Renewal Jurisdiction',
@@ -97,14 +97,8 @@ export const SourcesPage: React.FC = () => {
 
   const sourceColumns: readonly Column<SourceEntry>[] = [
     {
-      key: 'id',
-      header: 'Source ID',
-      width: '140px',
-      render: (s) => <span className={styles.monoCell}>{s.id}</span>,
-    },
-    {
       key: 'title',
-      header: 'Document Title & Publisher',
+      header: 'Law or website',
       render: (s) => (
         <div>
           <span className={styles.sourceTitle}>{s.title}</span>
@@ -120,16 +114,28 @@ export const SourcesPage: React.FC = () => {
     },
     {
       key: 'url',
-      header: 'Official Portal URL',
-      render: (s) => (
-        <a href={s.url} target="_blank" rel="noreferrer noopener" className={styles.sourceUrl}>
-          {s.url} ↗
-        </a>
-      ),
+      header: 'Website',
+      render: (s) => {
+        // Link to the official site itself; the exact page is not confirmed yet.
+        let site = s.url;
+        let host = s.url;
+        try {
+          const u = new URL(s.url);
+          site = u.origin;
+          host = u.hostname;
+        } catch {
+          // keep the raw value
+        }
+        return (
+          <a href={site} target="_blank" rel="noreferrer noopener" className={styles.sourceUrl}>
+            {host}
+          </a>
+        );
+      },
     },
     {
       key: 'verification',
-      header: 'Audit Status',
+      header: 'Status',
       width: '110px',
       render: (s) =>
         s.verified ? <span className={styles.verifiedTag}>Verified</span> : <UnverifiedMark />,
@@ -172,96 +178,45 @@ export const SourcesPage: React.FC = () => {
       <Container size="xl">
         <Stack gap="6">
           <PageHeader
-            title="Official Legal Sources & Rule Packs"
-            description="Pravaah models its rules on the Motor Vehicles Act 1988, the Central Motor Vehicles Rules 1989 and Parivahan Sewa guidelines. Every rule stays marked unverified until the official source has been read."
-            actions={<span className={styles.simulatedPill}>SIMULATED</span>}
+            title="Official sources"
+            description="Where each rule and fee comes from. None has been checked against the official text yet, so confirm with your RTO before you act."
           />
 
-          {/* Degraded Mode Architectural Notice */}
-          <Banner variant="info" title="Degraded Mode & Unknown Jurisdiction Architecture">
-            <p>
-              When a citizen moves to or operates in a state with no custom rule pack (such as
-              Sikkim &apos;SK&apos; in Scenario C), Pravaah runs in <strong>Degraded Mode</strong>:
-            </p>
-            <ul className={styles.principlesList}>
-              <li>
-                <strong>No Hallucinated Rules:</strong> The system never invents local fees, local
-                road tax, or fictitious state portal requirements.
-              </li>
-              <li>
-                <strong>Clear Warnings:</strong> Items requiring local verification display
-                &ldquo;Rules unknown – confirm with the RTO&rdquo; and link directly to official
-                portals.
-              </li>
-              <li>
-                <strong>Safe Fallbacks:</strong> Central rules in the registry (e.g. Section 15
-                renewal and Section 47 re-registration limits) remain in use, still marked
-                unverified.
-              </li>
-            </ul>
-          </Banner>
-
-          {/* Layered Rule Packs Registry */}
-          <section aria-labelledby="rulepacks-heading" className={styles.sectionContainer}>
-            <div className={styles.sectionHeader}>
-              <h2 id="rulepacks-heading" className={styles.sectionTitle}>
-                Layered Rule Packs (Central + State Overrides)
-              </h2>
-              <span className={styles.sectionMeta}>
-                Versioned rule packs layered on top of Union of India Central rules
-              </span>
-            </div>
-            <DataTable
-              caption="Registered State & Central Rule Packs"
-              columns={packColumns}
-              data={REGISTERED_PACKS}
-              getRowKey={(p) => p.code}
-            />
-          </section>
-
-          {/* Official Sources Registry */}
           <section aria-labelledby="sources-heading" className={styles.sectionContainer}>
-            <div className={styles.sectionHeader}>
-              <h2 id="sources-heading" className={styles.sectionTitle}>
-                Official Source Registry ({sources.length} Documents)
-              </h2>
-              <span className={styles.sectionMeta}>
-                Restricted to whitelisted official domains: indiacode.nic.in, morth.nic.in,
-                parivahan.gov.in, and official state transport portals.
-              </span>
-            </div>
+            <h2 id="sources-heading" className={styles.sectionTitle}>
+              Laws and government websites ({sources.length})
+            </h2>
             <DataTable
-              caption="Official Statutory Citations and Government Portals"
+              caption="Official laws and government portals"
               columns={sourceColumns}
               data={sources}
               getRowKey={(s) => s.id}
             />
           </section>
 
-          {/* Unverified Items Register */}
-          <section aria-labelledby="unverified-heading" className={styles.sectionContainer}>
-            <div className={styles.sectionHeader}>
-              <h2 id="unverified-heading" className={styles.sectionTitle}>
-                Unverified Items & Audit Register
-              </h2>
-              <span className={styles.sectionMeta}>
-                Modelled legal logic undergoing verification against latest official gazette
-                notifications
-              </span>
-            </div>
-
-            <div className={styles.unverifiedGrid}>
-              {UNVERIFIED_REGISTER.map((item, idx) => (
-                <div key={idx} className={styles.unverifiedCard}>
-                  <div className={styles.cardTop}>
-                    <h4 className={styles.fieldTitle}>{item.field}</h4>
-                    <UnverifiedMark />
+          <section aria-label="More detail" className={styles.sectionContainer}>
+            <Disclosure title="Rules not yet checked">
+              <div className={styles.unverifiedGrid}>
+                {UNVERIFIED_REGISTER.map((item, idx) => (
+                  <div key={idx} className={styles.unverifiedCard}>
+                    <div className={styles.cardTop}>
+                      <h4 className={styles.fieldTitle}>{item.field}</h4>
+                      <UnverifiedMark />
+                    </div>
+                    <span className={styles.statutoryCitation}>{item.section}</span>
+                    <p className={styles.auditStatus}>{item.status}</p>
                   </div>
-                  <span className={styles.statutoryCitation}>{item.section}</span>
-                  <p className={styles.auditStatus}>{item.status}</p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </Disclosure>
+            <Disclosure title="Rules by state">
+              <DataTable
+                caption="States with rules in Pravaah"
+                columns={packColumns}
+                data={REGISTERED_PACKS}
+                getRowKey={(p) => p.code}
+              />
+            </Disclosure>
           </section>
         </Stack>
       </Container>

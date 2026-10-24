@@ -17,8 +17,8 @@ describe('Voice & Typed Plate Entry UI Tests', () => {
 
   it('renders Voice page with speech notices and input controls', () => {
     renderVoice();
-    expect(screen.getByRole('heading', { level: 1, name: /voice & typed plate entry/i })).toBeInTheDocument();
-    expect(screen.getByText(/browser speech service/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /enter a vehicle number/i })).toBeInTheDocument();
+    expect(screen.getByText(/speech service/i)).toBeInTheDocument();
     // The microphone uses a cloud speech service; the page must say so and never claim "local".
     expect(screen.getByRole('note')).toHaveTextContent(/receives the audio/i);
     expect(screen.queryByText(/transcribed locally/i)).not.toBeInTheDocument();
@@ -30,11 +30,11 @@ describe('Voice & Typed Plate Entry UI Tests', () => {
 
     // Default or Sample 1 is parsed
     expect(screen.getByLabelText(/parsed plate number: ka-03-mj-4578/i)).toBeInTheDocument();
-    expect(screen.getByText(/phonetic & look-alike auto-corrections/i)).toBeInTheDocument();
+    expect(screen.getByText(/corrected for you/i)).toBeInTheDocument();
     expect(screen.getByText(/corrected to/i)).toBeInTheDocument();
 
     // Multilingual read-back present
-    expect(screen.getByText(/multilingual read-back:/i)).toBeInTheDocument();
+    expect(screen.getByText(/read back to you:/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /listen \(audio\)/i })).toBeInTheDocument();
   });
 

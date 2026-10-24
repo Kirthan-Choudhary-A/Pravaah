@@ -252,43 +252,24 @@ export const VoicePage: React.FC = () => {
     setSavedSuccess(`Vehicle ${candidate.formatted} successfully registered in household!`);
   };
 
-  // Raw token display
-  const rawTokens = useMemo(() => {
-    return transcriptInput
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, ' ')
-      .split(/[\s-]+/)
-      .filter(Boolean);
-  }, [transcriptInput]);
-
   return (
     <div className={styles.pageContainer}>
         <PageHeader
-          title="Voice & Typed Plate Entry"
-          description="Type or speak your vehicle number in English, Hindi, Telugu or Kannada. Look-alike mix-ups are corrected by position, Delhi class letters are checked against your vehicle type, and the number is read back before anything is saved."
-          actions={
-            <span className={styles.simulatedBadge}>
-              <span aria-hidden="true">🎙️</span> BROWSER SPEECH SERVICE
-            </span>
-          }
+          title="Enter a vehicle number"
+          description="Type it or say it. Pravaah reads the number back before saving."
         />
 
-        <div className={styles.privacyNotice} role="note">
-          <span>🛡️</span>
-          <span>
-            <strong>Audio Privacy Notice:</strong> Typed input and the demo samples stay in your
-            browser. The microphone button uses your browser&apos;s speech service (in Chrome, a
-            Google service), which receives the audio. Do not speak a real registration number.
-            Live speech accuracy is not yet tested.
-          </span>
-        </div>
+        <p className={styles.privacyNotice} role="note">
+          Typing stays in your browser. The microphone uses your browser&apos;s speech service,
+          which receives the audio. Do not say a real registration number.
+        </p>
 
         {/* Input Section */}
         <section className={styles.inputSection} aria-label="Registration Entry Mode">
           {/* Quick Demo Samples */}
           <div className={styles.samplesRow}>
             <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 600, color: 'var(--graphite)' }}>
-              Or click a demo spoken sample:
+              Try an example:
             </span>
             <div className={styles.samplesGrid}>
               <button
@@ -409,25 +390,6 @@ export const VoicePage: React.FC = () => {
         {/* ============================================================== */}
         {candidate && (
           <section className={styles.resultsSection} aria-label="Parsed Plate Results">
-            {/* Heard Transcript */}
-            <div className={styles.segmentsGroup}>
-              <div className={styles.segmentTitle}>Heard Transcript Tokens</div>
-              <div className={styles.tokenList}>
-                {rawTokens.map((token, idx) => {
-                  const isFiller = FILLER_WORDS.has(token);
-                  return (
-                    <span
-                      key={`${token}-${idx}`}
-                      className={`${styles.tokenBadge} ${isFiller ? styles.tokenFiller : ''}`}
-                      title={isFiller ? 'Filler word ignored by parser' : undefined}
-                    >
-                      {token}
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-
             {/* Formatted Plate Display */}
             <div className={styles.resultPlateBadge} aria-label={`Parsed plate number: ${candidate.formatted}`}>
               {candidate.formatted}
@@ -459,7 +421,7 @@ export const VoicePage: React.FC = () => {
               <div className={styles.fixesBox} role="alert">
                 <div className={styles.fixesTitle}>
                   <span>⚠️</span>
-                  <span>Phonetic & Look-Alike Auto-Corrections ({candidate.fixes.length})</span>
+                  <span>Corrected for you ({candidate.fixes.length})</span>
                 </div>
                 <ul style={{ margin: 0, paddingLeft: 'var(--space-4)' }}>
                   {candidate.fixes.map((fix, idx) => (
@@ -505,7 +467,7 @@ export const VoicePage: React.FC = () => {
                 <div className={styles.readBackHeaderRow}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                     <span style={{ fontWeight: 600, fontSize: 'var(--font-size-sm)' }}>
-                      Multilingual Read-Back:
+                      Read back to you:
                     </span>
                     {NATIVE_REVIEW_REQUIRED[readBackLang] && (
                       <span className={styles.reviewBadge}>Needs native speaker review</span>
