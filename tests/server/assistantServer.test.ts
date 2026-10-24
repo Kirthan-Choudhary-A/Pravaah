@@ -204,6 +204,22 @@ describe('API handlers', () => {
     expect(calls).toHaveLength(0);
   });
 
+  it('tts: chooses the voice by gender and ignores anything else', async () => {
+    const bodies: Record<string, unknown>[] = [];
+    const { deps } = fakeDeps(() => ok({ audios: ['QUJD'] }));
+    const spy: UpstreamDeps = {
+      fetch: (async (u: unknown, init?: RequestInit) => {
+        bodies.push(JSON.parse(String(init?.body)));
+        return deps.fetch(u as string, init);
+      }) as typeof fetch,
+      sleep: deps.sleep,
+    };
+    await handleApi(post('tts', { text: 'hi', language: 'en-IN', voice: 'male' }, '6.6.6.1'), env, spy);
+    await handleApi(post('tts', { text: 'hi', language: 'en-IN', voice: 'shubh; drop table' }, '6.6.6.2'), env, spy);
+    expect(bodies[0]!.speaker).toBe('shubh');
+    expect(bodies[1]!.speaker).toBe('ritu');
+  });
+
   it('refuses GET on action endpoints and unknown routes', async () => {
     expect((await handleApi(new Request('http://x/api/chat'), env)).status).toBe(405);
     expect((await handleApi(post('nope', {}, '3.3.3.3'), env)).status).toBe(404);

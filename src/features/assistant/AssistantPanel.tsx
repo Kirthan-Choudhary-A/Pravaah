@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePlan } from '@state/PlanContext';
 import { askAssistant, type ChatMessage } from './client';
 import { ASSISTANT_LANGUAGES, STARTERS, type AssistantLanguage } from './languages';
-import { speak, startRecording, stopSpeaking, transcribe, type Recorder } from './voice';
+import { speak, startRecording, stopSpeaking, transcribe, type Recorder, type VoiceChoice } from './voice';
 import styles from './AssistantPanel.module.css';
 
 interface Bubble {
@@ -25,6 +25,23 @@ const readLang = (): AssistantLanguage => {
   return 'en-IN';
 };
 
+const readPref = <T extends string>(key: string, allowed: readonly T[], fallback: T): T => {
+  try {
+    const v = localStorage.getItem(key);
+    if (allowed.includes(v as T)) return v as T;
+  } catch {
+    // storage unavailable: use the default
+  }
+  return fallback;
+};
+const savePref = (key: string, value: string) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // not essential
+  }
+};
+
 export const AssistantPanel: React.FC = () => {
   const plan = usePlan();
   const navigate = useNavigate();
@@ -37,6 +54,8 @@ export const AssistantPanel: React.FC = () => {
   const [recording, setRecording] = useState(false);
   const [health, setHealth] = useState<Health>('unknown');
   const [speakingId, setSpeakingId] = useState<number | null>(null);
+  const [voice, setVoice] = useState<VoiceChoice>(() => readPref('pravaah_voice', ['female', 'male'] as const, 'female'));
+  const [readAloud, setReadAloud] = useState<boolean>(() => readPref('pravaah_read_aloud', ['on', 'off'] as const, 'off') === 'on');
 
   const history = useRef<readonly ChatMessage[]>([]);
   const recorder = useRef<Recorder | null>(null);
@@ -125,14 +144,14 @@ export const AssistantPanel: React.FC = () => {
       setBusy(false);
       history.current = result.updated;
       const id = push(result.ok ? 'assistant' : 'notice', result.text);
-      if (result.ok && spokenAnswer) {
+      if (result.ok && (spokenAnswer || readAloud)) {
         setSpeakingId(id);
-        await speak(result.text, language);
+        await speak(result.text, language, voice);
         setSpeakingId(null);
       }
       inputRef.current?.focus();
     },
-    [busy, language, navigate, push]
+    [busy, language, navigate, push, readAloud, voice]
   );
 
   const toggleMic = async () => {
@@ -165,7 +184,7 @@ export const AssistantPanel: React.FC = () => {
       return;
     }
     setSpeakingId(b.id);
-    await speak(b.text, language);
+    await speak(b.text, language, voice);
     setSpeakingId(null);
   };
 
@@ -210,6 +229,37 @@ export const AssistantPanel: React.FC = () => {
               </select>
             </label>
           </header>
+
+          <div className={styles.settings}>
+            <label className={styles.setting}>
+              <span>Voice</span>
+              <select
+                className={styles.lang}
+                value={voice}
+                onChange={(e) => {
+                  const v = e.target.value as VoiceChoice;
+                  setVoice(v);
+                  savePref('pravaah_voice', v);
+                }}
+                aria-label="Voice"
+              >
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
+            </label>
+            <label className={styles.setting}>
+              <input
+                type="checkbox"
+                checked={readAloud}
+                onChange={(e) => {
+                  setReadAloud(e.target.checked);
+                  savePref('pravaah_read_aloud', e.target.checked ? 'on' : 'off');
+                  if (!e.target.checked) stopSpeaking();
+                }}
+              />
+              <span>Read answers aloud</span>
+            </label>
+          </div>
 
           <div ref={listRef} className={styles.list} aria-live="polite" aria-relevant="additions">
             {unavailable && (

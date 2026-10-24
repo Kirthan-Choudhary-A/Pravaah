@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { routes } from '@app/routes';
@@ -33,14 +33,37 @@ describe('App shell', () => {
     expect(screen.getByText(/no rules for this state/i)).toBeInTheDocument();
   });
 
-  it('opens and closes the navigation drawer', () => {
+  it('opens and closes the sidebar on desktop, and remembers the choice', () => {
+    localStorage.removeItem('pravaah_nav_open');
     renderAt('/');
-    const toggle = screen.getByRole('button', { name: /open navigation menu/i });
-    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    const toggle = screen.getByRole('button', { name: /close navigation menu/i });
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
     fireEvent.click(toggle);
-    expect(screen.getByRole('button', { name: /close navigation menu/i, expanded: true })).toBeInTheDocument();
-    fireEvent.keyDown(window, { key: 'Escape' });
-    expect(screen.getByRole('button', { name: /open navigation menu/i })).toHaveAttribute('aria-expanded', 'false');
+    const reopen = screen.getByRole('button', { name: /open navigation menu/i });
+    expect(reopen).toHaveAttribute('aria-expanded', 'false');
+    expect(localStorage.getItem('pravaah_nav_open')).toBe('0');
+    fireEvent.click(reopen);
+    expect(screen.getByRole('button', { name: /close navigation menu/i })).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('starts with the sidebar closed on a phone and closes it with Escape', () => {
+    vi.stubGlobal('matchMedia', (q: string) => ({
+      matches: q.includes('56rem'),
+      media: q,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+    }));
+    try {
+      renderAt('/');
+      const toggle = screen.getByRole('button', { name: /open navigation menu/i });
+      expect(toggle).toHaveAttribute('aria-expanded', 'false');
+      fireEvent.click(toggle);
+      expect(screen.getByRole('button', { name: /close navigation menu/i, expanded: true })).toBeInTheDocument();
+      fireEvent.keyDown(window, { key: 'Escape' });
+      expect(screen.getByRole('button', { name: /open navigation menu/i })).toHaveAttribute('aria-expanded', 'false');
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });
 

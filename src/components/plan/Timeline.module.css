@@ -3,439 +3,350 @@
   flex-direction: column;
   gap: var(--space-3);
   width: 100%;
+  min-width: 0;
 }
 
+/* ---------- toolbar ---------- */
 .toolbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  background-color: var(--offwhite);
+  background: var(--offwhite);
   border: var(--border-neo);
-  box-shadow: var(--shadow-sm);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
 }
 
 .legend {
   display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  font-size: var(--font-size-xs);
-  color: var(--graphite);
   flex-wrap: wrap;
-}
-
-.legendTitle {
-  font-weight: 800;
-  color: var(--graphite);
-  letter-spacing: 0.04em;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
 }
 
 .legendItem {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 700;
+  gap: var(--space-2);
 }
 
-.legendSafeSymbol {
-  display: inline-block;
-  padding: 1px 6px;
-  background-color: var(--accent-green);
-  border: 1px solid var(--stone);
-  box-shadow: none;
-  border-radius: 2px;
-  font-weight: 800;
-}
-
-.legendRiskSymbol {
-  display: inline-block;
-  padding: 1px 6px;
-  background-color: var(--accent-yellow);
-  border: 1px solid var(--stone);
-  box-shadow: none;
-  border-radius: 2px;
-  font-weight: 800;
-}
-
-.legendMissedSymbol {
-  display: inline-block;
-  padding: 1px 6px;
-  background-color: var(--accent-coral);
-  border: 1px solid var(--stone);
-  box-shadow: none;
-  border-radius: 2px;
-  font-weight: 800;
+.swatch {
+  width: 1.1rem;
+  height: 0.7rem;
+  border-radius: 3px;
+  border: 1px solid transparent;
 }
 
 .legendAbsenceBox {
-  width: 16px;
-  height: 12px;
-  background: repeating-linear-gradient(
-    45deg,
-    var(--stone),
-    var(--stone) 3px,
-    transparent 3px,
-    transparent 6px
-  );
+  width: 1.1rem;
+  height: 0.7rem;
+  border-radius: 3px;
   border: 1px solid var(--stone);
-  border-radius: 2px;
+  background-image: repeating-linear-gradient(135deg, var(--paper-warm) 0 4px, var(--offwhite) 4px 8px);
+}
+
+.legendLsd {
+  width: 2px;
+  height: 0.9rem;
+  background: var(--graphite);
 }
 
 .viewToggleGroup {
-  display: flex;
-  gap: 4px;
-  background-color: var(--paper-warm);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-sm);
-  padding: 2px;
+  display: inline-flex;
+  padding: 3px;
+  background: var(--paper-warm);
+  border: var(--border-neo);
+  border-radius: var(--radius-full);
 }
 
 .viewBtn {
-  border: 1px solid transparent;
-  background: transparent;
-  font-size: var(--font-size-xs);
-  font-family: var(--font-sans);
-  font-weight: 700;
+  padding: var(--space-1) var(--space-4);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
   color: var(--graphite);
-  padding: 4px 10px;
-  border-radius: 2px;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-standard);
 }
 
 .viewBtnActive {
-  background-color: var(--accent-yellow);
-  color: var(--graphite);
-  border: 1px solid var(--stone);
-  box-shadow: none;
-  font-weight: 800;
+  color: var(--on-primary);
+  background: var(--primary-gradient);
+  font-weight: 600;
 }
 
-/* Scroll area */
-.scrollContainer {
-  width: 100%;
-  overflow-x: auto;
-  border: var(--border-neo);
-  border-radius: var(--radius-sm);
-  background-color: var(--offwhite);
-  box-shadow: var(--shadow-md);
-  position: relative;
-}
-
-.scrollContainer:focus-visible {
+.viewBtn:focus-visible,
+.rowLabel:focus-visible {
   outline: 3px solid var(--primary);
-  outline-offset: -2px;
+  outline-offset: 2px;
 }
 
-.gridBoard {
+/* ---------- status colours (bars and legend) ---------- */
+.status_safe {
+  background: var(--status-safe-bg);
+  border-color: var(--status-safe);
+  color: var(--status-safe);
+}
+
+.status_risk {
+  background: var(--status-risk-bg);
+  border-color: var(--status-risk);
+  color: var(--status-risk);
+}
+
+.status_missed {
+  background: var(--status-missed-bg);
+  border-color: var(--status-missed);
+  color: var(--status-missed);
+}
+
+.status_unknown {
+  background: var(--status-unknown-bg);
+  border-color: var(--status-unknown);
+  color: var(--status-unknown);
+}
+
+/* ---------- pipeline ---------- */
+.board {
+  --label: clamp(11rem, 30%, 20rem);
+  background: var(--offwhite);
+  border: var(--border-neo);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.axis {
   display: flex;
-  flex-direction: column;
-  min-width: 100%;
+  background: var(--paper-warm);
+  border-bottom: var(--border-neo);
 }
 
-.axisRow {
-  display: flex;
-  height: 42px;
-  background-color: var(--paper-warm);
-  border-bottom: 1px solid var(--stone);
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-.laneLabelCorner {
-  width: 150px;
-  min-width: 150px;
-  padding: var(--space-2) var(--space-3);
+.axisLabel {
+  flex: 0 0 var(--label);
+  padding: var(--space-2) var(--space-4);
   font-size: var(--font-size-xs);
-  font-weight: 800;
-  color: var(--graphite);
-  border-right: 1px solid var(--stone);
-  background-color: var(--accent-yellow);
-  position: sticky;
-  left: 0;
-  z-index: 3;
+  font-weight: 700;
+  color: var(--iron);
 }
 
 .axisTrack {
   position: relative;
-  height: 100%;
+  flex: 1;
+  height: 2rem;
+  margin-right: var(--space-4);
 }
 
-.axisTick {
+.tick {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transform: translateX(-50%);
-}
-
-.axisTickToday {
-  transform: none;
-}
-
-.tickLabel {
+  top: 50%;
+  transform: translate(-50%, -50%);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  color: var(--graphite);
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+}
+
+.axisTrack .tick:first-child {
+  transform: translate(0, -50%);
   font-weight: 700;
-  padding-top: 4px;
-}
-
-.axisTickToday .tickLabel {
-  font-weight: 800;
   color: var(--graphite);
-  background-color: var(--accent-yellow);
-  padding: 0 4px;
-  border: 1px solid var(--stone);
-  border-radius: 2px;
 }
 
-.tickLine {
-  width: 2px;
-  height: 8px;
-  background-color: var(--graphite);
-  align-self: center;
-}
-
-/* Lane rows */
-.laneRow {
-  display: flex;
-  min-height: 88px;
-  border-bottom: 1px solid var(--stone);
+.body {
   position: relative;
 }
 
-.laneRow:last-child {
-  border-bottom: none;
+/* Sits behind the rows, in the same column as the tracks. */
+.underlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--label);
+  right: var(--space-4);
+  pointer-events: none;
 }
 
-.laneHeader {
-  width: 150px;
-  min-width: 150px;
-  padding: var(--space-3);
-  border-right: 1px solid var(--stone);
-  background-color: var(--paper-warm);
+.gridLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(184, 145, 58, 0.18);
+}
+
+.absence {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(135deg, rgba(216, 205, 180, 0.55) 0 5px, rgba(255, 253, 248, 0) 5px 10px);
+  border-left: 1px dashed var(--olive);
+  border-right: 1px dashed var(--olive);
+}
+
+.absence span,
+.slotLine span {
+  position: absolute;
+  bottom: var(--space-1);
+  left: var(--space-1);
+  padding: 1px var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--offwhite);
+  border: var(--border-neo);
+  border-radius: var(--radius-full);
+}
+
+.slotLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 2px solid var(--gold);
+}
+
+.slotLine span {
+  bottom: auto;
+  top: var(--space-1);
+  color: var(--gold-dark);
+  border-color: var(--gold);
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  min-height: 3.4rem;
+  border-top: var(--border-neo);
+}
+
+.row:first-child {
+  border-top: 0;
+}
+
+.rowSelected {
+  background: rgba(243, 230, 190, 0.45);
+}
+
+.rowLabel {
+  flex: 0 0 var(--label);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  box-shadow: none;
-}
-
-.laneName {
-  font-size: var(--font-size-xs);
-  font-weight: 800;
+  gap: 2px;
+  padding: var(--space-2) var(--space-4);
+  font: inherit;
+  text-align: left;
   color: var(--graphite);
+  background: none;
+  border: 0;
+  cursor: pointer;
 }
 
-.laneTaskCount {
-  font-size: 0.6875rem;
-  color: var(--olive);
+.rowLabel:hover .rowName {
+  text-decoration: underline;
+}
+
+.rowName {
+  font-size: var(--font-size-sm);
   font-weight: 600;
+  line-height: 1.3;
 }
 
-.laneTrack {
-  position: relative;
-  flex: 1;
-  min-height: 88px;
-  padding: var(--space-2) 0;
+.rowMeta {
   display: flex;
   flex-wrap: wrap;
-  align-content: center;
-  gap: var(--space-2);
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--iron);
 }
 
-/* Absence */
-.absenceOverlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(0, 0, 0, 0.12),
-    rgba(0, 0, 0, 0.12) 6px,
-    transparent 6px,
-    transparent 12px
-  );
-  border-left: 1px dashed var(--stone);
-  border-right: 1px dashed var(--stone);
-  pointer-events: none;
-  z-index: 1;
+.track {
+  position: relative;
+  flex: 1;
+  margin-right: var(--space-4);
 }
 
-.absenceTag {
+.bar {
   position: absolute;
-  top: 4px;
-  left: 4px;
-  font-size: 0.625rem;
-  font-family: var(--font-mono);
-  font-weight: 800;
-  color: var(--graphite);
-  background-color: var(--accent-yellow);
-  padding: 2px 6px;
-  border-radius: 2px;
-  border: 1px solid var(--stone);
-  box-shadow: none;
-}
-
-/* Slot queue */
-.slotQueueLine {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: var(--graphite);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.slotQueueTag {
-  position: absolute;
-  bottom: 4px;
-  left: 4px;
-  font-size: 0.625rem;
-  font-family: var(--font-mono);
-  font-weight: 800;
-  color: var(--graphite);
-  background-color: var(--accent-coral);
-  padding: 2px 6px;
-  border-radius: 2px;
-  border: 1px solid var(--stone);
-  box-shadow: none;
-  white-space: nowrap;
-}
-
-/* Task bars */
-.taskBar {
-  position: absolute;
-  height: 48px;
-  border-radius: var(--radius-sm);
+  top: 50%;
+  height: 1.7rem;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: 0 var(--space-3);
-  cursor: pointer;
-  z-index: 2;
-  border: 1px solid var(--stone);
-  box-shadow: none;
-  transition: all var(--duration-fast) var(--ease-standard);
+  padding: 0 var(--space-2);
   overflow: hidden;
-  text-align: left;
-}
-
-.taskBar:hover {
-  box-shadow: none;
-  z-index: 4;
-}
-
-.taskBar:focus-visible {
-  outline: 3px solid var(--primary);
-  outline-offset: 2px;
-  z-index: 5;
-}
-
-.taskBarSelected {
-  outline: 3px solid var(--primary);
-  outline-offset: 2px;
-  box-shadow: none;
-  z-index: 5;
-}
-
-.taskBarSymbol {
-  font-size: 0.85rem;
-  flex-shrink: 0;
-  font-weight: 800;
-}
-
-.taskBarName {
+  font: inherit;
   font-size: var(--font-size-xs);
-  font-weight: 800;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 700;
   white-space: nowrap;
-  line-height: 1.2;
+  border: 1px solid;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  box-shadow: 0 2px 5px -2px rgba(16, 27, 51, 0.3);
 }
 
-/* Status variants */
-.status_safe {
-  background-color: var(--accent-green);
-  color: var(--graphite);
+.barText {
+  overflow: hidden;
+  text-overflow: clip;
 }
 
-.status_risk {
-  background-color: var(--accent-yellow);
-  color: var(--graphite);
-}
-
-.status_missed {
-  background-color: var(--accent-coral);
-  color: var(--graphite);
-}
-
-.status_unknown {
-  background-color: #e2e8f0;
-  color: var(--graphite);
-}
-
-/* LSD Tick */
-.lsdTick {
+/* The latest day the step can start. */
+.lsd {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: var(--graphite);
-  opacity: 0.8;
+  top: 18%;
+  bottom: 18%;
+  width: 2px;
+  background: var(--graphite);
+  border-radius: 1px;
 }
 
-/* Table view helpers */
+/* ---------- table view ---------- */
 .tableTaskName {
   display: block;
-  font-weight: 800;
-  color: var(--graphite);
+  font-weight: 600;
 }
 
 .tableTaskId {
   display: block;
-  font-size: 0.6875rem;
-  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
   color: var(--olive);
 }
 
-.lanePill {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: capitalize;
-  background-color: var(--paper-warm);
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--stone);
-}
-
 .monoCell {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: 700;
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
 }
 
 .slackPos {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: 800;
-  color: #047857;
+  font-weight: 600;
+  color: var(--status-safe);
 }
 
 .slackNeg {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: 800;
-  color: #b91c1c;
+  font-weight: 600;
+  color: var(--status-missed);
+}
+
+@media (max-width: 56rem) {
+  .board {
+    --label: clamp(8.5rem, 34%, 12rem);
+  }
+
+  .rowMeta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* On a phone, label every fourth tick so the numbers never overlap. */
+@media (max-width: 40rem) {
+  .axisTrack .tick:not(:nth-child(4n + 1)) {
+    display: none;
+  }
 }

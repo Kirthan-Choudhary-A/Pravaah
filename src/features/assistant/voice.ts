@@ -22,14 +22,32 @@ function base64ToBlob(b64: string, mime: string): Blob {
   return new Blob([bytes], { type: mime });
 }
 
+export type VoiceChoice = 'female' | 'male';
+
+/** The most natural-sounding voice the browser has for a language, if any. */
+export function pickBrowserVoice(language: string, voices: readonly SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+  const base = language.split('-')[0]!.toLowerCase();
+  const matching = voices.filter((v) => v.lang.toLowerCase().startsWith(base));
+  const score = (v: SpeechSynthesisVoice) =>
+    (v.lang.toLowerCase() === language.toLowerCase() ? 4 : 0) +
+    (/natural|neural|online|google/i.test(v.name) ? 3 : 0) +
+    (v.localService ? 0 : 1);
+  return [...matching].sort((a, b) => score(b) - score(a))[0] ?? null;
+}
+
 /** Speak with the Sarvam voice; if that is unavailable, use the browser's own voice. */
-export async function speak(text: string, language: string, fetchImpl: typeof fetch = (...a) => fetch(...a)): Promise<boolean> {
+export async function speak(
+  text: string,
+  language: string,
+  voice: VoiceChoice = 'female',
+  fetchImpl: typeof fetch = (...a) => fetch(...a)
+): Promise<boolean> {
   stopSpeaking();
   try {
     const res = await fetchImpl('/api/tts', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ text, language }),
+      body: JSON.stringify({ text, language, voice }),
     });
     if (res.ok) {
       const { audio, mime } = (await res.json()) as { audio: string; mime: string };
@@ -45,6 +63,9 @@ export async function speak(text: string, language: string, fetchImpl: typeof fe
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = language;
+    u.rate = 0.95;
+    const better = pickBrowserVoice(language, window.speechSynthesis.getVoices());
+    if (better) u.voice = better;
     window.speechSynthesis.speak(u);
     return true;
   }

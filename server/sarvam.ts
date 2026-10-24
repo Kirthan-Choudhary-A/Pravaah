@@ -103,11 +103,17 @@ export function translate(
   );
 }
 
+/** Sarvam bulbul:v3 speakers; the browser asks for a gender, never a raw speaker name. */
+export const VOICES = { female: 'ritu', male: 'shubh' } as const;
+export type VoiceChoice = keyof typeof VOICES;
+export const isVoiceChoice = (v: unknown): v is VoiceChoice => v === 'female' || v === 'male';
+
 /** Returns one base64 WAV string. */
 export function textToSpeech(
   pool: KeyPool,
   text: string,
   language: LanguageCode,
+  voice: VoiceChoice = 'female',
   deps: UpstreamDeps = defaultDeps
 ): Promise<SarvamResult<string>> {
   return call(
@@ -121,9 +127,9 @@ export function textToSpeech(
         text: text.slice(0, 2400),
         language_code: language,
         model: 'bulbul:v3',
-        speaker: 'shubh',
-        pace: 1,
-        speech_sample_rate: 24000,
+        speaker: VOICES[voice],
+        pace: 0.95,
+        speech_sample_rate: 32000,
       }),
     }),
     (j) => {

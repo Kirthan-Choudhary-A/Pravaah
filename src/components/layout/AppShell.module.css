@@ -1,10 +1,12 @@
-/* Application shell: midnight sidebar + ivory workspace. Every page renders inside
-   .content, so widths and gutters are decided here and nowhere else. */
+/* Application shell: light sidebar that opens and closes + ivory workspace. Every page renders
+   inside .content, so widths and gutters are decided here and nowhere else. */
 
 .shell {
+  --sidebar: 16rem;
   display: grid;
-  grid-template-columns: 16.5rem minmax(0, 1fr);
+  grid-template-columns: var(--sidebar) minmax(0, 1fr);
   min-height: 100vh;
+  transition: grid-template-columns var(--duration-normal) var(--ease-standard);
 }
 
 /* ---------- sidebar ---------- */
@@ -15,39 +17,33 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  padding: var(--space-6) 0 var(--space-5);
-  color: var(--paper);
-  background:
-    radial-gradient(420px 260px at 0% 0%, rgba(226, 194, 125, 0.16), transparent 70%),
-    linear-gradient(180deg, #0b1220 0%, #14203a 100%);
-  border-right: 1px solid rgba(226, 194, 125, 0.28);
+  padding: var(--space-5) 0 var(--space-5);
+  color: var(--graphite);
+  background: linear-gradient(180deg, #fffdf8 0%, #f6efdf 100%);
+  border-right: var(--border-neo);
   overflow-y: auto;
 }
 
 .brand {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: baseline;
+  gap: var(--space-2);
   padding: 0 var(--space-5);
   text-decoration: none;
 }
 
 .brandName {
   font-family: var(--font-display);
-  font-size: 2rem;
+  font-size: 1.9rem;
   font-weight: 700;
   line-height: 1;
-  letter-spacing: 0.02em;
-  background: linear-gradient(180deg, #f3dfa6 0%, #c8a24a 70%, #a8842f 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  letter-spacing: 0.01em;
+  color: var(--graphite);
 }
 
 .brandHindi {
   font-size: var(--font-size-sm);
-  letter-spacing: 0.2em;
-  color: rgba(247, 242, 232, 0.6);
+  color: var(--olive);
 }
 
 .nav {
@@ -66,11 +62,9 @@
 .navGroupLabel {
   padding: 0 var(--space-5);
   margin-bottom: var(--space-1);
-  font-size: 0.6875rem;
+  font-size: var(--font-size-xs);
   font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(226, 194, 125, 0.75);
+  color: var(--olive);
 }
 
 .navLink {
@@ -79,25 +73,22 @@
   padding: var(--space-2) var(--space-3);
   font-size: var(--font-size-sm);
   font-weight: 500;
-  color: rgba(247, 242, 232, 0.82);
+  color: var(--graphite);
   text-decoration: none;
   border-radius: var(--radius-md);
-  transition:
-    background-color var(--duration-fast) var(--ease-standard),
-    color var(--duration-fast) var(--ease-standard);
+  transition: background-color var(--duration-fast) var(--ease-standard);
 }
 
 .navLink:hover {
-  background-color: rgba(255, 255, 255, 0.07);
-  color: #fff;
+  background-color: rgba(16, 27, 51, 0.06);
 }
 
 .navLinkActive,
 .navLinkActive:hover {
-  color: var(--gold-light);
-  font-weight: 600;
-  background: linear-gradient(90deg, rgba(226, 194, 125, 0.2), rgba(226, 194, 125, 0.04));
-  box-shadow: inset 2px 0 0 var(--gold-light);
+  font-weight: 700;
+  color: var(--graphite);
+  background-color: var(--accent-yellow);
+  box-shadow: inset 3px 0 0 var(--graphite);
 }
 
 .sidebarFoot {
@@ -112,17 +103,16 @@
   font: inherit;
   font-size: var(--font-size-sm);
   text-align: left;
-  color: rgba(247, 242, 232, 0.7);
+  color: var(--iron);
   background: none;
   border: 0;
   text-decoration: underline;
-  text-decoration-color: rgba(226, 194, 125, 0.5);
   text-underline-offset: 3px;
   cursor: pointer;
 }
 
 .sideButton:hover {
-  color: var(--gold-light);
+  color: var(--graphite);
 }
 
 .navLink:focus-visible,
@@ -130,7 +120,7 @@
 .menuButton:focus-visible,
 .scenarioSelect:focus-visible,
 .brand:focus-visible {
-  outline: 2px solid var(--gold-light);
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
 }
 
@@ -161,7 +151,7 @@
   font-family: var(--font-display);
   font-size: var(--font-size-xl);
   font-weight: 700;
-  color: var(--primary);
+  color: var(--graphite);
 }
 
 .topbarTools {
@@ -205,9 +195,11 @@
   border-radius: var(--radius-full);
 }
 
+/* Opens and closes the sidebar on every screen size. */
 .menuButton {
-  display: none;
+  display: inline-flex;
   flex-direction: column;
+  justify-content: center;
   gap: 4px;
   padding: var(--space-2) var(--space-3);
   background-color: var(--offwhite);
@@ -225,11 +217,12 @@
   background-color: var(--graphite);
 }
 
-/* One content width and one gutter for every page. */
+/* Fill the space the sidebar leaves; only very wide screens get side margins. */
 .content {
   flex: 1;
   width: 100%;
-  max-width: 72rem;
+  max-width: 100rem;
+  margin-inline: auto;
   padding: var(--space-8);
   outline: none;
 }
@@ -245,7 +238,20 @@
   display: none;
 }
 
-/* ---------- narrow screens: sidebar becomes a drawer ---------- */
+/* ---------- desktop: the sidebar can be tucked away ---------- */
+@media (min-width: 56.01rem) {
+  .shellCollapsed {
+    --sidebar: 0rem;
+  }
+
+  .shellCollapsed .sidebar {
+    visibility: hidden;
+    border-right-color: transparent;
+    overflow: hidden;
+  }
+}
+
+/* ---------- narrow screens: the sidebar is a drawer ---------- */
 @media (max-width: 56rem) {
   .shell {
     grid-template-columns: minmax(0, 1fr);
@@ -258,6 +264,7 @@
     width: min(19rem, 86vw);
     transform: translateX(-100%);
     visibility: hidden;
+    box-shadow: var(--shadow-xl);
     transition: transform 240ms var(--ease-out-expo), visibility 0s linear 240ms;
   }
 
@@ -273,13 +280,9 @@
     inset: 0;
     z-index: 30;
     border: 0;
-    background-color: rgba(11, 18, 32, 0.55);
+    background-color: rgba(11, 18, 32, 0.45);
     backdrop-filter: blur(3px);
     cursor: pointer;
-  }
-
-  .menuButton {
-    display: flex;
   }
 
   .topbar {
@@ -323,6 +326,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .shell,
   .sidebar,
   .sidebarOpen,
   .navLink {

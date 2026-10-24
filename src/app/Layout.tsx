@@ -14,10 +14,27 @@ import styles from '@components/layout/AppShell.module.css';
 const SCENARIO_IDS = ['A', 'B', 'C'] as const;
 type ScenarioKey = (typeof SCENARIO_IDS)[number];
 
+const NARROW_QUERY = '(max-width: 56rem)';
+const NAV_PREF_KEY = 'pravaah_nav_open';
+
+const isNarrow = (): boolean =>
+  typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(NARROW_QUERY).matches;
+
+/** Desktop remembers whether the sidebar was left open; phones always start with it closed. */
+const initialNavOpen = (): boolean => {
+  if (isNarrow()) return false;
+  try {
+    return localStorage.getItem(NAV_PREF_KEY) !== '0';
+  } catch {
+    return true;
+  }
+};
+
 export const Layout: React.FC = () => {
   const { scenarioId, setScenarioId } = usePlan();
   const { pathname } = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [narrow, setNarrow] = useState(isNarrow);
+  const [navOpen, setNavOpen] = useState(initialNavOpen);
   const [demoGuideOpen, setDemoGuideOpen] = useState(false);
 
   const scenarioOptions = useMemo(
@@ -29,43 +46,71 @@ export const Layout: React.FC = () => {
     []
   );
 
-  // Close the drawer when the page changes or Escape is pressed.
-  useEffect(() => setMenuOpen(false), [pathname]);
+  // Switching between phone and desktop width resets the sidebar sensibly.
   useEffect(() => {
-    if (!menuOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false);
+    if (typeof window.matchMedia !== 'function') return;
+    const mq = window.matchMedia(NARROW_QUERY);
+    const onChange = () => {
+      setNarrow(mq.matches);
+      setNavOpen(mq.matches ? false : initialNavOpen());
+    };
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  // On a phone the drawer closes when the page changes or Escape is pressed.
+  useEffect(() => {
+    if (narrow) setNavOpen(false);
+  }, [pathname, narrow]);
+  useEffect(() => {
+    if (!narrow || !navOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setNavOpen(false);
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [menuOpen]);
+  }, [narrow, navOpen]);
+
+  const toggleNav = () =>
+    setNavOpen((open) => {
+      const next = !open;
+      if (!narrow) {
+        try {
+          localStorage.setItem(NAV_PREF_KEY, next ? '1' : '0');
+        } catch {
+          // not essential
+        }
+      }
+      return next;
+    });
+  const closeOnPhone = () => narrow && setNavOpen(false);
 
   return (
-    <div className={styles.shell}>
+    <div className={`${styles.shell ?? ''} ${navOpen ? '' : (styles.shellCollapsed ?? '')}`.trim()}>
       <SkipLink />
       <Sidebar
-        open={menuOpen}
-        onNavigate={() => setMenuOpen(false)}
+        open={navOpen}
+        onNavigate={closeOnPhone}
         onOpenDemoGuide={() => {
-          setMenuOpen(false);
+          closeOnPhone();
           setDemoGuideOpen(true);
         }}
         onResetDemo={() => {
-          setMenuOpen(false);
+          closeOnPhone();
           resetDemoStorage();
         }}
       />
-      {menuOpen && (
+      {narrow && navOpen && (
         <button
           type="button"
           className={styles.scrim}
           aria-label="Close navigation menu"
-          onClick={() => setMenuOpen(false)}
+          onClick={() => setNavOpen(false)}
         />
       )}
 
       <div className={styles.workspace}>
         <Topbar
-          menuOpen={menuOpen}
-          onToggleMenu={() => setMenuOpen((o) => !o)}
+          menuOpen={navOpen}
+          onToggleMenu={toggleNav}
           scenarioId={scenarioId}
           scenarioOptions={scenarioOptions}
           onScenarioChange={(id) => setScenarioId(id as ScenarioKey)}

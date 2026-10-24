@@ -5,7 +5,7 @@
 import { readConfig, type ServerConfig } from './config';
 import { KeyPool } from './keyPool';
 import { groqChat, defaultDeps, type UpstreamDeps } from './groq';
-import { isLanguageCode, speechToText, textToSpeech, translate, LANGUAGES } from './sarvam';
+import { isLanguageCode, isVoiceChoice, speechToText, textToSpeech, translate, LANGUAGES } from './sarvam';
 
 type Env = Readonly<Record<string, string | undefined>>;
 
@@ -124,11 +124,11 @@ export async function handleApi(
 
   if (route === 'tts') {
     const body = await readJson(req);
-    const { text, language } = body ?? {};
+    const { text, language, voice } = body ?? {};
     if (typeof text !== 'string' || !text.trim() || !isLanguageCode(language)) {
       return fail(400, 'Send text and a language code.');
     }
-    const r = await textToSpeech(pools.sarvam, text, language, deps);
+    const r = await textToSpeech(pools.sarvam, text, language, isVoiceChoice(voice) ? voice : 'female', deps);
     return r.ok ? json({ audio: r.data, mime: 'audio/wav' }) : fail(r.status, r.error);
   }
 

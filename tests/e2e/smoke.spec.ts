@@ -223,3 +223,27 @@ test('the assistant answers through the API using a plan tool', async ({ page })
   await expect(page.getByText('Your licence expires on day 21.')).toBeVisible();
   expect(chats).toBe(2);
 });
+
+test('the sidebar opens and closes, content fills the freed space, and the plan timeline fits the page', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await page.goto('/plan');
+  const sidebar = page.getByRole('navigation', { name: /main navigation/i });
+  await expect(sidebar).toBeVisible();
+  const before = await page.locator('main').boundingBox();
+  await page.getByRole('button', { name: /close navigation menu/i }).click();
+  await expect(sidebar).toBeHidden();
+  const after = await page.locator('main').boundingBox();
+  expect(after!.width).toBeGreaterThan(before!.width);
+
+  // The pipeline never needs sideways scrolling.
+  const board = page.getByRole('group', { name: /plan timeline/i });
+  await expect(board).toBeVisible();
+  const overflows = await board.evaluate((el) => el.scrollWidth > el.clientWidth + 1);
+  expect(overflows).toBe(false);
+
+  // The choice is remembered.
+  await page.reload();
+  await expect(sidebar).toBeHidden();
+  await page.getByRole('button', { name: /open navigation menu/i }).click();
+  await expect(sidebar).toBeVisible();
+});
