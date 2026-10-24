@@ -11,6 +11,7 @@ import { LicenceStagesTable } from '@components/plan/LicenceStagesTable';
 import { ChecksList } from '@components/plan/ChecksList';
 import { FeesTable } from '@components/plan/FeesTable';
 import { TaskDetailPanel } from '@components/plan/TaskDetailPanel';
+import { PageHeader } from '@components/layout/PageHeader';
 import styles from './PlannerPage.module.css';
 
 const PlanLandscape = React.lazy(() =>
@@ -19,7 +20,6 @@ const PlanLandscape = React.lazy(() =>
 
 export const PlannerPage: React.FC = () => {
   const {
-    scenarioId,
     scenario,
     rulePack,
     sources,
@@ -42,48 +42,38 @@ export const PlannerPage: React.FC = () => {
     <div className={styles.page}>
       <Container size="xl">
         <Stack gap="6">
-          {/* Header & Scenario Summary Strip */}
-          <section className={styles.summaryStrip} aria-labelledby="planner-heading">
-            <div className={styles.summaryTopRow}>
-              <div>
-                <div className={styles.badgeRow}>
-                  <span className={styles.simulatedPill}>SIMULATED</span>
-                  <span className={styles.scenarioBadge}>Scenario {scenarioId}</span>
-                  {isDegraded && <span className={styles.degradedBadge}>DEGRADED MODE</span>}
-                </div>
-                <h1 id="planner-heading" className={styles.pageTitle}>
-                  Planner — Smart Transport Roadmap — {scenario.name}
-                </h1>
-                <p className={styles.moveDescription}>
-                  Moving: {scenario.move.fromRTO} ({scenario.move.fromState}) ──▶{' '}
-                  {scenario.move.toRTO} ({scenario.move.toState}) • Vehicle:{' '}
-                  {scenario.move.vehicleType} {scenario.move.isBHSeries ? '(BH Series Plate)' : ''}
-                </p>
-              </div>
+          <PageHeader
+            id="planner-heading"
+            title="Planner"
+            description={`${scenario.name}. Moving ${scenario.move.fromRTO} to ${scenario.move.toRTO}, ${
+              scenario.move.vehicleType
+            }${scenario.move.isBHSeries ? ' (BH series)' : ''}. Day 0 is today.`}
+            actions={isDegraded ? <span className={styles.degradedBadge}>Degraded mode</span> : undefined}
+          />
 
-              <div className={styles.quickMetrics}>
-                <div className={styles.metricCard}>
-                  <span className={styles.metricLabel}>Total Duration</span>
-                  <span className={styles.metricValue}>Day {currentPlan.finish}</span>
-                  <span className={styles.metricSub}>Estimated Finish</span>
-                </div>
-                <div className={styles.metricCard}>
-                  <span className={styles.metricLabel}>Tasks</span>
-                  <span className={styles.metricValue}>{currentPlan.tasks.length}</span>
-                  <span className={styles.metricSub}>Steps Scheduled</span>
-                </div>
-                <div className={styles.metricCard}>
-                  <span className={styles.metricLabel}>Compliance</span>
-                  <span className={styles.metricValue}>
-                    {passedChecks}/{currentPlan.checks.length}
-                  </span>
-                  <span className={styles.metricSub}>Checks Passed</span>
-                </div>
-                <div className={styles.metricCard}>
-                  <span className={styles.metricLabel}>Selected Path</span>
-                  <span className={styles.metricValue}>{decisions.licenceRoute}</span>
-                  <span className={styles.metricSub}>Active Choice</span>
-                </div>
+          <section className={styles.summaryStrip} aria-label="Plan summary">
+            <div className={styles.quickMetrics}>
+              <div className={styles.metricCard}>
+                <span className={styles.metricLabel}>Plan finishes</span>
+                <span className={styles.metricValue}>Day {currentPlan.finish}</span>
+                <span className={styles.metricSub}>Estimated</span>
+              </div>
+              <div className={styles.metricCard}>
+                <span className={styles.metricLabel}>Tasks</span>
+                <span className={styles.metricValue}>{currentPlan.tasks.length}</span>
+                <span className={styles.metricSub}>Scheduled</span>
+              </div>
+              <div className={styles.metricCard}>
+                <span className={styles.metricLabel}>Checks</span>
+                <span className={styles.metricValue}>
+                  {passedChecks}/{currentPlan.checks.length}
+                </span>
+                <span className={styles.metricSub}>Passed</span>
+              </div>
+              <div className={styles.metricCard}>
+                <span className={styles.metricLabel}>Licence route</span>
+                <span className={styles.metricValue}>{decisions.licenceRoute}</span>
+                <span className={styles.metricSub}>Selected</span>
               </div>
             </div>
           </section>
@@ -104,7 +94,7 @@ export const PlannerPage: React.FC = () => {
 
           {/* Timeline View & 3D Landscape Toggle */}
           <section aria-labelledby="timeline-heading" className={styles.sectionContainer}>
-            <div className={styles.sectionHeader} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+            <div className={styles.sectionBar}>
               <div>
                 <h2 id="timeline-heading" className={styles.sectionTitle}>
                   Unified Schedule &amp; Critical Path

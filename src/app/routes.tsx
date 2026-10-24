@@ -1,8 +1,9 @@
 import React from 'react';
 import type { RouteObject } from 'react-router-dom';
-import { Layout } from '@components/layout/Layout';
+import { Layout } from './Layout';
 import { PlanProvider } from '@state/index';
 import { ErrorBoundary } from '@components/feedback/ErrorBoundary';
+import { DashboardPage } from '@features/dashboard/DashboardPage';
 import { StoryPage } from '@features/story/StoryPage';
 import { PlannerPage } from '@features/planner/PlannerPage';
 import { SimulatorPage } from '@features/simulator/SimulatorPage';
@@ -27,7 +28,8 @@ export const routes: RouteObject[] = [
     path: '/',
     element: <Root />,
     children: [
-      { index: true, element: <StoryPage /> },
+      { index: true, element: <DashboardPage /> },
+      { path: 'overview', element: <StoryPage /> },
       { path: 'plan', element: <PlannerPage /> },
       { path: 'simulate', element: <SimulatorPage /> },
       { path: 'household', element: <HouseholdPage /> },

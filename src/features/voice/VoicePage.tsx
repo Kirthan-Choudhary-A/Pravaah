@@ -28,6 +28,7 @@ import {
 } from '../../i18n/words';
 import { Button } from '@components/ui/Button';
 import { Banner } from '@components/ui/Banner';
+import { PageHeader } from '@components/layout/PageHeader';
 import styles from './VoicePage.module.css';
 
 // Web Speech API interface
@@ -261,28 +262,25 @@ export const VoicePage: React.FC = () => {
   }, [transcriptInput]);
 
   return (
-    <main className="site-main" id="main-content">
-      <div className={styles.pageContainer}>
-        {/* Header Section */}
-        <div className={styles.headerSection}>
-          <div className={styles.titleRow}>
-            <h1>Voice &amp; Typed Plate Entry — Plate Assistant</h1>
-            <div className={styles.simulatedBadge}>
+    <div className={styles.pageContainer}>
+        <PageHeader
+          title="Voice & Typed Plate Entry"
+          description="Type or speak your vehicle number in English, Hindi, Telugu or Kannada. Look-alike mix-ups are corrected by position, Delhi class letters are checked against your vehicle type, and the number is read back before anything is saved."
+          actions={
+            <span className={styles.simulatedBadge}>
               <span aria-hidden="true">🎙️</span> BROWSER SPEECH SERVICE
-            </div>
-          </div>
-          <p className="page-description">
-            Type or speak your vehicle number in English, Hindi, Telugu, or Kannada. We auto-correct
-            voice typos (like &ldquo;oh&rdquo; for &ldquo;zero&rdquo;), check Delhi class letters against
-            your vehicle type, and read it back to you.
-          </p>
-
-          <div className={styles.privacyNotice} role="note">
-            <span>🛡️</span>
-            <span>
-              <strong>Audio Privacy Notice:</strong> Typed input and the demo samples stay in your browser. The microphone button uses your browser&apos;s speech service (in Chrome, a Google service), which receives the audio. Do not speak a real registration number. Live speech accuracy is not yet tested.
             </span>
-          </div>
+          }
+        />
+
+        <div className={styles.privacyNotice} role="note">
+          <span>🛡️</span>
+          <span>
+            <strong>Audio Privacy Notice:</strong> Typed input and the demo samples stay in your
+            browser. The microphone button uses your browser&apos;s speech service (in Chrome, a
+            Google service), which receives the audio. Do not speak a real registration number.
+            Live speech accuracy is not yet tested.
+          </span>
         </div>
 
         {/* Input Section */}
@@ -611,7 +609,6 @@ export const VoicePage: React.FC = () => {
             )}
           </section>
         )}
-      </div>
-    </main>
+    </div>
   );
 };

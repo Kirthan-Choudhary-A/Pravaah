@@ -36,6 +36,12 @@ Rules every change follows. Items marked "(lint)" are enforced by `eslint.config
 
 - `engine/`: only engine files. `data/`: engine types only. `components/`: no `features/`, `state/`, `three/scenes/`. `features/`: never import a sibling feature. `three/`: no `features/` or `state/`. See `docs/architecture.md`.
 
+## Layout
+
+- Pravaah is an application, not a deck. The shell (`src/app/Layout.tsx`, `components/layout/Sidebar`, `Topbar`) owns the sidebar, top bar, content width and gutters. Pages render inside it and never add their own width, margin or `<main>`.
+- Every page starts with `PageHeader` (title, one-line description, actions). Home is the dashboard; the long-form introduction lives at `/overview`.
+- Left-align content. Narrow screens turn the sidebar into a drawer.
+
 ## Design and accessibility
 
 - CSS tokens only; no colour literals in `components/`, `features/` or `state/` (lint). `three/` may use literal colours for WebGL.

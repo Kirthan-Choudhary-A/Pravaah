@@ -10,6 +10,7 @@ import { Banner } from '@components/ui/Banner';
 import { Timeline } from '@components/plan/Timeline';
 import { LSDComparisonCards } from '@components/plan/LSDComparisonCards';
 import { TaskDetailPanel } from '@components/plan/TaskDetailPanel';
+import { PageHeader } from '@components/layout/PageHeader';
 import styles from './SimulatorPage.module.css';
 
 const SCENARIO_OPTIONS = [
@@ -122,24 +123,15 @@ export const SimulatorPage: React.FC = () => {
     <div className={styles.page}>
       <Container size="xl">
         <Stack gap="6">
-          {/* Header */}
-          <div className={styles.header}>
-            <div className={styles.headerTitleGroup}>
-              <div className={styles.badgeRow}>
-                <span className={styles.simulatedPill}>SIMULATED</span>
-                <span className={styles.interactiveBadge}>Interactive Sandbox</span>
-              </div>
-              <h1 className={styles.pageTitle}>Plan Simulator &amp; Curveball Engine — Disruption Sandbox</h1>
-              <p className={styles.pageSubtitle}>
-                Simulate sudden RTO slot delays, extended vacations, or form rejections. Watch your
-                smart roadmap automatically adapt and recalculate your latest safe dates in real time.
-              </p>
-            </div>
-
-            <Button variant="secondary" size="sm" onClick={resetToScenarioDefaults}>
-              Reset Scenario Defaults
-            </Button>
-          </div>
+          <PageHeader
+            title="Plan Simulator & Curveball Engine"
+            description="Change a fact (a slot delay, a longer trip, a rejected form) and watch the plan and its latest safe dates recalculate. All data is simulated."
+            actions={
+              <Button variant="secondary" size="sm" onClick={resetToScenarioDefaults}>
+                Reset scenario defaults
+              </Button>
+            }
+          />
 
           {/* Scenario Selector */}
           <div className={styles.controlBox}>

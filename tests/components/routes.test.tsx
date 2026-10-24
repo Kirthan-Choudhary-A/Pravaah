@@ -5,7 +5,8 @@ import { routes } from '@app/routes';
 
 describe('Route Navigation Smoke Tests', () => {
   const testCases = [
-    { path: '/', expectedHeading: 'Story' },
+    { path: '/', expectedHeading: 'Dashboard' },
+    { path: '/overview', expectedHeading: 'About Pravaah' },
     { path: '/plan', expectedHeading: 'Planner' },
     { path: '/simulate', expectedHeading: 'Simulator' },
     { path: '/household', expectedHeading: 'Household' },

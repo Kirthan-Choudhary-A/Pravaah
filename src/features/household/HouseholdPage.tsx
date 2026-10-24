@@ -18,6 +18,7 @@ import { Button } from '@components/ui/Button';
 import { SegmentedControl } from '@components/ui/SegmentedControl';
 import { DataTable, type Column } from '@components/ui/DataTable';
 import { StatusTag } from '@components/ui/StatusTag';
+import { PageHeader } from '@components/layout/PageHeader';
 import styles from './HouseholdPage.module.css';
 
 interface RevealModalState {
@@ -268,33 +269,28 @@ export const HouseholdPage: React.FC = () => {
   ];
 
   return (
-    <main className="site-main" id="main-content">
-      <div className={styles.pageContainer}>
-        {/* Header Section */}
-        <div className={styles.headerSection}>
-          <div className={styles.titleRow}>
-            <h1>Household &amp; Privacy — Family Garage</h1>
-            <div className={styles.simulatedBadge}>
+    <div className={styles.pageContainer}>
+        <PageHeader
+          title="Household & Privacy"
+          description="Manage your own vehicles and family vehicles in one place. Aadhaar, chassis and licence numbers stay masked, and the owner's Aadhaar, licence and challans are never shown to a delegate."
+          actions={
+            <span className={styles.simulatedBadge}>
               <span aria-hidden="true">🔒</span> SIMULATED DATA ONLY
-            </div>
-          </div>
-          <p className="page-description">
-            Manage your personal cars, bikes, and family vehicles in one place. Sensitive Aadhaar,
-            chassis, and driving licence numbers stay masked to protect your family’s privacy.
-          </p>
+            </span>
+          }
+        />
 
-          {/* Role Switcher */}
-          <div className={styles.roleToggleContainer}>
-            <SegmentedControl
-              label="Switch Device View"
-              value={activeRole}
-              onChange={(val) => setActiveRole(val)}
-              options={[
-                { value: 'You', label: 'You (Citizen Device)' },
-                { value: 'Family member', label: 'Family member’s view (SIMULATED)' },
-              ]}
-            />
-          </div>
+        {/* Role Switcher */}
+        <div className={styles.roleToggleContainer}>
+          <SegmentedControl
+            label="Switch Device View"
+            value={activeRole}
+            onChange={(val) => setActiveRole(val)}
+            options={[
+              { value: 'You', label: 'You (Citizen Device)' },
+              { value: 'Family member', label: 'Family member’s view (SIMULATED)' },
+            ]}
+          />
         </div>
 
         {/* ============================================================== */}
@@ -890,7 +886,6 @@ export const HouseholdPage: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
-    </main>
+    </div>
   );
 };

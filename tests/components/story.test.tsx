@@ -4,7 +4,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { routes } from '@app/routes';
 
 const renderStory = () => {
-  const router = createMemoryRouter(routes, { initialEntries: ['/'] });
+  const router = createMemoryRouter(routes, { initialEntries: ['/overview'] });
   return render(<RouterProvider router={router} />);
 };
 

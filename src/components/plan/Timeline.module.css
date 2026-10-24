@@ -177,6 +177,10 @@
   transform: translateX(-50%);
 }
 
+.axisTickToday {
+  transform: none;
+}
+
 .tickLabel {
   font-family: var(--font-mono);
   font-size: 0.6875rem;

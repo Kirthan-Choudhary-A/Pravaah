@@ -1,0 +1,158 @@
+.runway {
+  margin: 0;
+}
+
+.track {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-left: 7.5rem;
+  padding-bottom: var(--space-6);
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rowLabel {
+  position: absolute;
+  left: -7.5rem;
+  width: 7rem;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--iron);
+}
+
+.lane {
+  position: relative;
+  flex: 1;
+  height: 2rem;
+  background-color: var(--offwhite);
+  border: var(--border-neo-thin);
+  border-radius: var(--radius-sm);
+}
+
+.bar,
+.away,
+.slot {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  border: var(--border-neo-thin);
+  border-radius: var(--radius-sm);
+}
+
+.safe {
+  background-color: var(--status-safe-bg);
+}
+
+.risk {
+  background-color: var(--status-risk-bg);
+}
+
+.missed {
+  background-color: var(--status-missed-bg);
+}
+
+.unknown {
+  background-color: var(--status-unknown-bg);
+}
+
+.away {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--paper-warm) 0 6px,
+    var(--offwhite) 6px 12px
+  );
+}
+
+.slot {
+  background-color: var(--accent-yellow);
+}
+
+.markers {
+  position: absolute;
+  inset: 0 0 var(--space-6) 7.5rem;
+  pointer-events: none;
+}
+
+.expiry,
+.finish {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 3px solid var(--graphite);
+}
+
+.finish {
+  border-left-style: dashed;
+}
+
+.finish .markerText {
+  left: auto;
+  right: var(--space-1);
+}
+
+.markerText {
+  position: absolute;
+  top: calc(-1 * var(--space-5));
+  left: var(--space-1);
+  padding: 0 var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  white-space: nowrap;
+  background-color: var(--paper);
+}
+
+.axis {
+  position: absolute;
+  left: 7.5rem;
+  right: 0;
+  bottom: 0;
+  height: var(--space-5);
+}
+
+.tick {
+  position: absolute;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+}
+
+.caption {
+  margin-top: var(--space-3);
+  max-width: 70ch;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  color: var(--iron);
+}
+
+@media (max-width: 40rem) {
+  .track {
+    padding-left: 0;
+    padding-top: var(--space-2);
+  }
+
+  .rowLabel {
+    position: static;
+    width: auto;
+    margin-right: var(--space-2);
+    flex: 0 0 6rem;
+  }
+
+  .markers,
+  .axis {
+    display: none;
+  }
+}

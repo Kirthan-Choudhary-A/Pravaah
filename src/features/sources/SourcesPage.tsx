@@ -6,6 +6,7 @@ import { Banner } from '@components/ui/Banner';
 import { DataTable, type Column } from '@components/ui/DataTable';
 import { UnverifiedMark } from '@components/ui/UnverifiedMark';
 import type { SourceEntry } from '@engine/model/types';
+import { PageHeader } from '@components/layout/PageHeader';
 import styles from './SourcesPage.module.css';
 
 interface RulePackMeta {
@@ -170,19 +171,11 @@ export const SourcesPage: React.FC = () => {
     <div className={styles.page}>
       <Container size="xl">
         <Stack gap="6">
-          {/* Header */}
-          <div className={styles.header}>
-            <div className={styles.badgeRow}>
-              <span className={styles.simulatedPill}>SIMULATED</span>
-              <span className={styles.officialBadge}>Legal Knowledge Registry</span>
-            </div>
-            <h1 className={styles.pageTitle}>Official Legal Sources & Rule Packs</h1>
-            <p className={styles.pageSubtitle}>
-              Pravaah models its rules on the Motor Vehicles Act 1988, the Central Motor Vehicles
-              Rules 1989, and Parivahan Sewa guidelines. Every rule stays marked unverified until
-              the official source has been read.
-            </p>
-          </div>
+          <PageHeader
+            title="Official Legal Sources & Rule Packs"
+            description="Pravaah models its rules on the Motor Vehicles Act 1988, the Central Motor Vehicles Rules 1989 and Parivahan Sewa guidelines. Every rule stays marked unverified until the official source has been read."
+            actions={<span className={styles.simulatedPill}>SIMULATED</span>}
+          />
 
           {/* Degraded Mode Architectural Notice */}
           <Banner variant="info" title="Degraded Mode & Unknown Jurisdiction Architecture">

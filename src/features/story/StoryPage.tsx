@@ -203,20 +203,12 @@ export const StoryPage: React.FC = () => {
 
   return (
     <div ref={containerRef} className={styles.storyPage}>
-      {/* 0. TOP BANNER */}
-      <div className={styles.topBadgeBar}>
-        <span className={styles.simulatedPill}>SIMULATED</span>
-        <span className={styles.topBadgeText}>
-          🚗 Pravaah • All-in-One Smart Vehicle & Driving Assistant • Built for Every Indian Citizen
-        </span>
-      </div>
-
       {/* 1. HERO SECTION WITH 3D PLATE */}
       <section className={styles.heroSection} aria-labelledby="hero-title">
         <div className={styles.heroText}>
           <span className={styles.kicker}>Simple • Step-by-Step • No RTO Fines</span>
           <h1 id="hero-title" className={styles.heroTitle}>
-            Story — Vehicle &amp; Driving Services, <span className={styles.heroHighlight}>Made Simple.</span>
+            About Pravaah — Vehicle &amp; Driving Services, <span className={styles.heroHighlight}>Made Simple.</span>
           </h1>
           <p className={styles.heroSubtitle}>
             See your latest safe dates early, spot hidden document traps, and keep your family&apos;s

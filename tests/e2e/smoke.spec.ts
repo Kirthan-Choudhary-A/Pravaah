@@ -7,7 +7,8 @@ const viewports = [
 ];
 
 const paths = [
-  { path: '/', label: 'story' },
+  { path: '/', label: 'dashboard' },
+  { path: '/overview', label: 'overview' },
   { path: '/plan', label: 'plan' },
   { path: '/simulate', label: 'simulate' },
   { path: '/sources', label: 'sources' },

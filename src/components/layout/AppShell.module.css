@@ -1,0 +1,313 @@
+/* Application shell: sidebar + workspace. Every page renders inside .content,
+   so widths and gutters are decided here and nowhere else. */
+
+.shell {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  min-height: 100vh;
+  background-color: var(--paper);
+}
+
+/* ---------- sidebar ---------- */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-4);
+  background-color: var(--paper-warm);
+  border-right: var(--border-neo);
+  overflow-y: auto;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-1);
+  color: var(--graphite);
+  text-decoration: none;
+}
+
+.brandName {
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.brandHindi {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  padding: 0 var(--space-2);
+  background-color: var(--accent-yellow);
+  border: var(--border-neo-thin);
+  border-radius: var(--radius-sm);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  flex: 1;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.navGroupLabel {
+  padding: 0 var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--iron);
+}
+
+.navLink {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--graphite);
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+}
+
+.navLink:hover {
+  background-color: var(--surface-hover);
+}
+
+.navLinkActive,
+.navLinkActive:hover {
+  background-color: var(--accent-yellow);
+  border-color: var(--graphite);
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebarFoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sideButton {
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-align: left;
+  color: var(--graphite);
+  background-color: var(--offwhite);
+  border: var(--border-neo-thin);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.sideButton:hover {
+  background-color: var(--surface-hover);
+}
+
+.navLink:focus-visible,
+.sideButton:focus-visible,
+.menuButton:focus-visible,
+.scenarioSelect:focus-visible,
+.brand:focus-visible {
+  outline: 3px solid var(--graphite);
+  outline-offset: 2px;
+}
+
+/* ---------- workspace ---------- */
+.workspace {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-6);
+  background-color: var(--paper);
+  border-bottom: var(--border-neo);
+}
+
+.topbarBrand {
+  display: none;
+  font-size: var(--font-size-md);
+  font-weight: 800;
+}
+
+.topbarTools {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.scenarioField {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.scenarioLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--iron);
+}
+
+.scenarioSelect {
+  padding: var(--space-1) var(--space-2);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--graphite);
+  background-color: var(--offwhite);
+  border: var(--border-neo-thin);
+  border-radius: var(--radius-md);
+}
+
+.simulatedChip {
+  padding: 2px var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  background-color: var(--accent-purple);
+  border: var(--border-neo-thin);
+  border-radius: var(--radius-sm);
+}
+
+.menuButton {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-2);
+  background-color: var(--offwhite);
+  border: var(--border-neo-thin);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.menuBar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background-color: var(--graphite);
+}
+
+/* One content width and one gutter for every page. */
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: 78rem;
+  padding: var(--space-6);
+  outline: none;
+}
+
+.statusBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-2) var(--space-6);
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+  background-color: var(--paper-warm);
+  border-top: var(--border-neo-thin);
+}
+
+.scrim {
+  display: none;
+}
+
+/* ---------- narrow screens: sidebar becomes a drawer ---------- */
+@media (max-width: 56rem) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 40;
+    width: min(18rem, 85vw);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition: transform 160ms ease-out, visibility 0s linear 160ms;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 160ms ease-out;
+  }
+
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    border: 0;
+    background-color: rgb(0 0 0 / 0.45);
+    cursor: pointer;
+  }
+
+  .menuButton {
+    display: flex;
+  }
+
+  .topbar {
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .content {
+    padding: var(--space-4);
+  }
+
+  .statusBar {
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .topbarBrand {
+    display: block;
+  }
+
+  .topbarTools {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .scenarioField {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .scenarioLabel {
+    display: none;
+  }
+
+  .scenarioSelect {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .simulatedChip {
+    flex: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .sidebarOpen {
+    transition: none;
+  }
+}

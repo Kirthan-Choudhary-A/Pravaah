@@ -20,6 +20,9 @@ Phased implementation roadmap for Pravaah (IMPACTX 2026, Challenge 09). Build on
 - [x] **Step 6: Metrics harness, judge demo guide & polish**
   - Reviewed and fixed: metric 1 is labelled a regression check and reports how many scenarios test ordering; metric 2 reports the first reading and the "right plate offered" figure separately (the latter is an upper bound); metric 3 adds an online-route-only strategy and a no-online scenario so route choice is separated from scheduling quality, and lists its assumptions; the runner no longer prints "VERIFIED".
 
+- [x] **Application shell and dashboard**
+  - Sidebar and top bar replace the slide-style header and footer; every page uses one content width and `PageHeader`; home is a dashboard (summary, licence runway, needs attention, next up, recommended route, household) and the long introduction moved to `/overview`; nested `<main>` landmarks removed; mobile uses a drawer.
+
 ## Open items
 
 1. **Rules verification pass (needs a person).** Read each official source in `docs/verification.md`, then flip `verified` per entry with the checker and date. Replace secondary sources with official ones. Then settle the NOC fee (currently unknown, `Estimate`) and the loan-termination fee (the state mirror shows "No Fee").

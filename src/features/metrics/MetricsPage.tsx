@@ -4,6 +4,7 @@ import {
   calculateAllMetrics,
   type AllMetricsReport,
 } from '../../utils/metricsCalculator';
+import { PageHeader } from '@components/layout/PageHeader';
 import styles from './MetricsPage.module.css';
 
 export const MetricsPage: React.FC = () => {
@@ -100,27 +101,14 @@ export const MetricsPage: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      {/* Header and Summary Strip */}
-      <section className={styles.headerStrip} aria-labelledby="metrics-heading">
-        <div className={styles.titleRow}>
-          <div className={styles.titleGroup}>
-            <div className={styles.badgeRow}>
-              <span className={styles.simulatedPill}>SIMULATED</span>
-              <span className={styles.subMeta}>
-                IMPACTX 2026 Challenge 09 • Engine v{report?.engineVersion ?? '0.2.0'}
-              </span>
-            </div>
-            <h1 id="metrics-heading" className={styles.title}>
-              Metrics: Challenge Benchmark Evaluation
-            </h1>
-            <p className={styles.subtitle}>
-              Measurement of Pravaah against the three challenge brief criteria:
-              dependency-ordering correctness, plate capture accuracy after read-back, and
-              licence renewals under scarce slots.
-            </p>
-          </div>
-
-          <div className={styles.actionRow}>
+      <PageHeader
+        id="metrics-heading"
+        title="Metrics"
+        description={`Pravaah measured against the three criteria in the brief. Simulated data, engine v${
+          report?.engineVersion ?? '0.2.0'
+        }. Read the notes on each result.`}
+        actions={
+          <>
             <Button
               variant="secondary"
               onClick={runEvaluation}
@@ -137,10 +125,11 @@ export const MetricsPage: React.FC = () => {
             >
               Download results (JSON)
             </Button>
-          </div>
-        </div>
+          </>
+        }
+      />
 
-        {/* Live Progress Indicator */}
+      {/* Live Progress Indicator */}
         {isComputing && (
           <div className={styles.progressContainer} role="status" aria-live="polite">
             <div className={styles.progressLabel}>
@@ -154,7 +143,7 @@ export const MetricsPage: React.FC = () => {
             </div>
           </div>
         )}
-      </section>
+
 
       {report && (
         <>
