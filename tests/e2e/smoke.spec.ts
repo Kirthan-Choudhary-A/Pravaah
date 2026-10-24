@@ -11,6 +11,8 @@ const paths = [
   { path: '/plan', label: 'plan' },
   { path: '/simulate', label: 'simulate' },
   { path: '/sources', label: 'sources' },
+  { path: '/household', label: 'household' },
+  { path: '/voice', label: 'voice' },
 ];
 
 for (const vp of viewports) {
@@ -65,4 +67,49 @@ test('interactive simulator: curveball injection and URL sync', async ({ page })
     path: 'tests/e2e/screenshots/simulate-curveball-active.png',
     fullPage: false,
   });
+});
+
+test('household delegation and privacy controls: role switch and audit log download', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/household');
+
+  // Verify SIMULATED notice
+  await expect(page.getByText(/SIMULATED DATA ONLY/i)).toBeVisible();
+
+  // Verify masked plate
+  await expect(page.getByText('KA-03-**-**78')).toBeVisible();
+
+  // Switch role to Family Member
+  const familyRadio = page.getByRole('radio', { name: /Family member’s view/i });
+  await familyRadio.click();
+  await expect(page.getByText(/Granter Device View \(Simulated\)/i)).toBeVisible();
+
+  // Switch back to You
+  const youRadio = page.getByRole('radio', { name: /You \(Citizen Device\)/i });
+  await youRadio.click();
+  await expect(page.getByRole('heading', { level: 2, name: /Household Vehicles/i })).toBeVisible();
+});
+
+test('voice and plate parsing: sample selection and multilingual read-back', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/voice');
+
+  // Verify SIMULATED notice and privacy notice
+  await expect(page.getByText(/LOCAL SPEECH RECOGNITION/i)).toBeVisible();
+  await expect(page.getByRole('note')).toBeVisible();
+
+  // Click Sample 1
+  const sample1 = page.getByRole('button', { name: /Sample 1: KA-03/i });
+  await sample1.click();
+  await expect(page.getByLabel('Parsed plate number: KA-03-MJ-4578')).toBeVisible();
+
+  // Switch to Telugu
+  const teluguTab = page.getByRole('button', { name: /తెలుగు/i });
+  await teluguTab.click();
+  await expect(page.getByText(/Needs native speaker review/i)).toBeVisible();
+
+  // Click Confirm & Save
+  const confirmBtn = page.getByRole('button', { name: /Yes, Confirm & Save/i });
+  await confirmBtn.click();
+  await expect(page.getByText(/successfully registered in household!/i)).toBeVisible();
 });

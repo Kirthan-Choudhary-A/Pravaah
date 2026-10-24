@@ -12,7 +12,7 @@ export interface EngineTask {
   readonly dependencyIds: readonly string[];
 }
 
-export type TaskLane = 'licence' | 'vehicle' | 'identity';
+export type TaskLane = 'licence' | 'vehicle' | 'identity' | 'household';
 
 export type RuleBasis = 'statute' | 'notification' | 'state-portal' | 'modelled';
 
@@ -289,4 +289,145 @@ export interface LicenceStageRow {
   readonly lateFeeAmount: number;
   readonly testRequired: boolean;
   readonly note: string;
+}
+
+// ---------------------------------------------------------------------------
+// Step 4: Privacy, Household Consent, Audit & Plate Parsing Types
+// ---------------------------------------------------------------------------
+
+export type ConsentScope = 'view' | 'apply' | 'register_new';
+
+export type ConsentStatus = 'none' | 'pending' | 'granted' | 'declined' | 'revoked' | 'expired';
+
+export interface Consent {
+  readonly id: string;
+  readonly grantorRole: string; // e.g. "Family member"
+  readonly granteeRole: string; // e.g. "You"
+  readonly vehicleIds: readonly string[];
+  readonly scopes: readonly ConsentScope[];
+  readonly until: number; // Day integer relative to timeline or epoch
+  readonly status: ConsentStatus;
+}
+
+export type AuditAction =
+  | 'request'
+  | 'grant'
+  | 'decline'
+  | 'revoke'
+  | 'expire'
+  | 'reveal'
+  | 'apply';
+
+export type AuditResult = 'allowed' | 'denied' | 'completed';
+
+export interface AuditEntry {
+  readonly id: string;
+  readonly at: number;
+  readonly actor: string;
+  readonly subject: string;
+  readonly field: string;
+  readonly action: AuditAction;
+  readonly purpose?: string;
+  readonly result: AuditResult;
+}
+
+export interface RevealSuccess {
+  readonly ok: true;
+  readonly value: string;
+  readonly expiresAt: number;
+  readonly auditEntry: AuditEntry;
+}
+
+export interface RevealFailure {
+  readonly ok: false;
+  readonly error: string;
+}
+
+export type RevealResult = RevealSuccess | RevealFailure;
+
+export interface TransitionSuccess {
+  readonly ok: true;
+  readonly consent: Consent;
+  readonly auditEntry: AuditEntry;
+}
+
+export interface TransitionFailure {
+  readonly ok: false;
+  readonly error: string;
+}
+
+export type TransitionResult = TransitionSuccess | TransitionFailure;
+
+export interface HouseholdRenewalItem {
+  readonly id: string;
+  readonly name: string;
+  readonly dueDate: number;
+  readonly duration: number;
+  readonly basis: RuleBasis;
+  readonly verified: boolean;
+  readonly why: string;
+  readonly fee?: number;
+}
+
+export interface HouseholdVehicle {
+  readonly id: string;
+  readonly plate: string;
+  readonly vehicleType: string;
+  readonly ownerRole: string;
+  readonly renewalItems: readonly HouseholdRenewalItem[];
+  readonly aadhaarDemo?: string;
+  readonly dlDemo?: string;
+  readonly engineDemo?: string;
+  readonly chassisDemo?: string;
+  readonly challansDemo?: readonly {
+    readonly id: string;
+    readonly amount: number;
+    readonly location: string;
+  }[];
+}
+
+export interface PlateFix {
+  readonly position: number;
+  readonly original: string;
+  readonly corrected: string;
+  readonly reason: string;
+}
+
+export interface ParsedPlate {
+  readonly raw: string;
+  readonly state: string;
+  readonly rto: string;
+  readonly series: string;
+  readonly number: string;
+  readonly formatted: string;
+  readonly format: 'standard' | 'delhi' | 'bh';
+  readonly fixes: readonly PlateFix[];
+  readonly isValid: boolean;
+  readonly error?: string;
+}
+
+export interface PlateParseResult {
+  readonly success: boolean;
+  readonly candidates: readonly ParsedPlate[];
+  readonly error?: string;
+}
+
+export interface ClassCheckResult {
+  readonly status: 'match' | 'mismatch' | 'unsupported' | 'unknown_pack';
+  readonly question?: string;
+  readonly detectedClass?: string;
+  readonly expectedClass?: string;
+  readonly note?: string;
+}
+
+export interface ReadBackSegment {
+  readonly text: string;
+  readonly kind: 'state' | 'rto' | 'series' | 'number' | 'prompt';
+}
+
+export interface ReadBackResult {
+  readonly language: 'en' | 'hi' | 'te' | 'kn';
+  readonly fullSpeech: string;
+  readonly segments: readonly ReadBackSegment[];
+  readonly confirmationPrompt: string;
 }

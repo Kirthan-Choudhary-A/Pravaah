@@ -56,3 +56,60 @@ export { calculateFees } from './fees/feeCalculator';
 export { compareOptions } from './options/optionComparator';
 export { applyEvent } from './options/events';
 export { diffPlans } from './options/diff';
+
+// Step 4 Types
+export type {
+  ConsentScope,
+  ConsentStatus,
+  Consent,
+  AuditAction,
+  AuditResult,
+  AuditEntry,
+  RevealSuccess,
+  RevealFailure,
+  RevealResult,
+  TransitionSuccess,
+  TransitionFailure,
+  TransitionResult,
+  HouseholdRenewalItem,
+  HouseholdVehicle,
+  PlateFix,
+  ParsedPlate,
+  PlateParseResult,
+  ClassCheckResult,
+  ReadBackSegment,
+  ReadBackResult,
+} from './model/types';
+
+// Step 4 Privacy
+export {
+  maskAadhaar,
+  maskDL,
+  maskChassis,
+  maskEngine,
+  maskPlate,
+  createConsentRequest,
+  grantConsent,
+  declineConsent,
+  revokeConsent,
+  evaluateConsentStatus,
+  canAccess,
+  reveal,
+  validatePurpose,
+  VALID_PURPOSES,
+  type ValidPurpose,
+  appendAudit,
+  filterAuditLog,
+  planHousehold,
+} from './privacy/index';
+
+// Step 4 Parse
+export {
+  parsePlate,
+  transcriptToCharacters,
+  checkPlateClass,
+  buildReadBack,
+  KNOWN_STATE_CODES,
+  type Dictionaries,
+  type ReadBackDictionaries,
+} from './parse/index';

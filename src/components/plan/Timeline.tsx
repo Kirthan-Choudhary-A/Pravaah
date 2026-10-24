@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import type { ScheduledTask, TaskLane, AbsenceWindow, TaskStatus } from '@engine/model/types';
 import { StatusTag } from '@components/ui/StatusTag';
 import { DataTable, type Column } from '@components/ui/DataTable';
@@ -13,12 +13,6 @@ export interface TimelineProps {
   readonly className?: string;
 }
 
-const LANES: readonly { key: TaskLane; label: string }[] = [
-  { key: 'licence', label: 'Licence Lane' },
-  { key: 'vehicle', label: 'Vehicle Lane' },
-  { key: 'identity', label: 'Identity Lane' },
-];
-
 export const Timeline: React.FC<TimelineProps> = ({
   tasks,
   absence,
@@ -28,6 +22,19 @@ export const Timeline: React.FC<TimelineProps> = ({
   className = '',
 }) => {
   const [viewMode, setViewMode] = useState<'timeline' | 'table'>('timeline');
+
+  const lanes = useMemo(() => {
+    const hasHousehold = tasks.some((t) => t.lane === 'household');
+    const list: { key: TaskLane; label: string }[] = [
+      { key: 'licence', label: 'Licence Lane' },
+      { key: 'vehicle', label: 'Vehicle Lane' },
+      { key: 'identity', label: 'Identity Lane' },
+    ];
+    if (hasHousehold) {
+      list.push({ key: 'household', label: 'Household (Family)' });
+    }
+    return list;
+  }, [tasks]);
 
   // Compute horizontal axis range
   const maxTaskDay =
@@ -197,7 +204,7 @@ export const Timeline: React.FC<TimelineProps> = ({
             </div>
 
             {/* Lane Rows */}
-            {LANES.map((lane) => {
+            {lanes.map((lane) => {
               const laneTasks = tasks.filter((t) => t.lane === lane.key);
 
               return (

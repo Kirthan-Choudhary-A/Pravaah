@@ -20,11 +20,25 @@ import type {
   Form35Decision,
   LicenceRouteDecision,
   PlanInput,
+  HouseholdVehicle,
+  Consent,
+  ConsentScope,
+  AuditEntry,
+  RevealResult,
 } from '@engine/model/types';
 import { planScenario } from '@engine/planner';
 import { compareOptions } from '@engine/options/optionComparator';
 import { diffPlans } from '@engine/options/diff';
 import { applyEvent } from '@engine/options/events';
+import {
+  createConsentRequest,
+  grantConsent,
+  declineConsent,
+  revokeConsent,
+  reveal,
+  appendAudit,
+  planHousehold,
+} from '@engine';
 import { loadScenario, loadMergedRulePack, loadSources } from '@data/index';
 import type { ScenarioId, SimulatorParameters, EventTypeKey, PlanContextValue } from './types';
 
@@ -39,6 +53,91 @@ const EVENT_FACTORIES: Record<EventTypeKey, PlanningEvent> = {
   formRejected: { type: 'formRejected', day: 10 },
   aadhaarEarly: { type: 'aadhaarEarly', day: 4 },
 };
+
+const INITIAL_HOUSEHOLD_VEHICLES: readonly HouseholdVehicle[] = [
+  {
+    id: 'veh-you-1',
+    plate: 'TS-09-EB-4471',
+    vehicleType: 'Car',
+    ownerRole: 'You',
+    renewalItems: [],
+    chassisDemo: 'DEMO-CHAS-994471',
+    engineDemo: 'DEMO-ENG-884471',
+  },
+  {
+    id: 'veh-family-1',
+    plate: 'KA-03-MJ-4578',
+    vehicleType: 'Two-Wheeler',
+    ownerRole: 'Family member',
+    renewalItems: [
+      {
+        id: 'item-puc-1',
+        name: 'PUC Certificate Renewal',
+        dueDate: 30,
+        duration: 1,
+        basis: 'statute',
+        verified: false,
+        why: 'PUC valid for 6 months under CMVR Rule 115',
+      },
+      {
+        id: 'item-ins-1',
+        name: 'Motor Third-Party Insurance',
+        dueDate: 90,
+        duration: 1,
+        basis: 'statute',
+        verified: false,
+        why: 'Mandatory motor third party insurance under Section 146 MV Act',
+      },
+    ],
+    aadhaarDemo: 'DEMO-0000-1234',
+    dlDemo: 'KA-03-2018-0004578',
+    chassisDemo: 'DEMO-CHAS-114578',
+    engineDemo: 'DEMO-ENG-224578',
+    challansDemo: [{ id: 'ch-01', amount: 500, location: 'MG Road, Bengaluru' }],
+  },
+];
+
+const INITIAL_CONSENTS: readonly Consent[] = [
+  {
+    id: 'consent-seed-1',
+    grantorRole: 'Family member',
+    granteeRole: 'You',
+    vehicleIds: ['veh-family-1', 'KA-03-MJ-4578'],
+    scopes: ['view'],
+    until: 1800000000000,
+    status: 'granted',
+  },
+];
+
+const INITIAL_AUDIT_LOG: readonly AuditEntry[] = [
+  {
+    id: 'audit-seed-1',
+    at: 1700000000000,
+    actor: 'Family member',
+    subject: 'You',
+    field: 'consent',
+    action: 'grant',
+    purpose: 'Initial demo consent granted for KA-03-MJ-4578',
+    result: 'allowed',
+  },
+];
+
+function loadFromStorage<T>(key: string, fallback: T): T {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? (JSON.parse(item) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveToStorage<T>(key: string, val: T): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch {
+    // ignore
+  }
+}
 
 function parseScenarioId(val: string | null): ScenarioId {
   if (val === 'B' || val === 'b') return 'B';
@@ -122,6 +221,45 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Announcement for accessibility
   const [announcement, setAnnouncement] = useState<string>('');
 
+  // Household & Privacy State
+  const [householdVehicles, setHouseholdVehicles] = useState<readonly HouseholdVehicle[]>(() =>
+    loadFromStorage('pravaah_household_vehicles', INITIAL_HOUSEHOLD_VEHICLES)
+  );
+
+  const [consents, setConsents] = useState<readonly Consent[]>(() =>
+    loadFromStorage('pravaah_consents', INITIAL_CONSENTS)
+  );
+
+  const [auditLog, setAuditLog] = useState<readonly AuditEntry[]>(() =>
+    loadFromStorage('pravaah_audit_log', INITIAL_AUDIT_LOG)
+  );
+
+  const [activeRole, setActiveRole] = useState<'You' | 'Family member'>('You');
+
+  const [revealedFields, setRevealedFields] = useState<
+    Record<string, { readonly value: string; readonly expiresAt: number }>
+  >({});
+
+  // Auto-expire revealed fields
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      setRevealedFields((prev) => {
+        let changed = false;
+        const next: Record<string, { readonly value: string; readonly expiresAt: number }> = {};
+        for (const [k, v] of Object.entries(prev)) {
+          if (v.expiresAt > now) {
+            next[k] = v;
+          } else {
+            changed = true;
+          }
+        }
+        return changed ? next : prev;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Keep track of previous plan for diffing
   const previousPlanRef = useRef<PlanResult | null>(null);
 
@@ -186,15 +324,40 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const plan = planScenario(input);
 
+    // If active consent has 'view' scope for family member's vehicle, add household tasks
+    const activeViewConsent = consents.find(
+      (c) => c.status === 'granted' && c.scopes.includes('view')
+    );
+
+    let combinedTasks = plan.tasks;
+    if (activeViewConsent) {
+      const familyVehicles = householdVehicles.filter((v) => v.ownerRole === 'Family member');
+      const householdTasks = planHousehold({
+        householdVehicles: familyVehicles,
+        consents,
+        now: 0,
+        pack: rulePack,
+      });
+
+      if (householdTasks.length > 0) {
+        combinedTasks = [...plan.tasks, ...householdTasks];
+      }
+    }
+
+    const finalPlan: PlanResult = {
+      ...plan,
+      tasks: combinedTasks,
+    };
+
     // Announce plan updates
-    const breaches = plan.checks.filter((c) => !c.passed).length;
-    const announceMsg = `Scenario ${scenarioId} planned: ${plan.tasks.length} tasks scheduled, finishing on Day ${plan.finish}. ${
+    const breaches = finalPlan.checks.filter((c) => !c.passed).length;
+    const announceMsg = `Scenario ${scenarioId} planned: ${finalPlan.tasks.length} tasks scheduled, finishing on Day ${finalPlan.finish}. ${
       breaches === 0 ? 'All modelled checks passed.' : `${breaches} modelled checks flagged.`
     }`;
     setAnnouncement(announceMsg);
 
-    return plan;
-  }, [effectiveScenario, rulePack, decisions, activeEvents, scenarioId]);
+    return finalPlan;
+  }, [effectiveScenario, rulePack, decisions, activeEvents, scenarioId, consents, householdVehicles]);
 
   // Options comparison
   const optionsComparison = useMemo<readonly OptionComparison[]>(() => {
@@ -274,6 +437,200 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSelectedTaskId(null);
   }, [baseScenario]);
 
+  // Household & Privacy Actions
+  const handleRequestConsent = useCallback(
+    (params: {
+      grantorRole: string;
+      vehicleIds: string[];
+      scopes: ConsentScope[];
+      days?: number;
+    }) => {
+      const now = Date.now();
+      const until = now + (params.days ?? 30) * 86400000;
+      const res = createConsentRequest({
+        id: `consent-${Date.now()}`,
+        grantorRole: params.grantorRole,
+        granteeRole: activeRole,
+        vehicleIds: params.vehicleIds,
+        scopes: params.scopes,
+        until,
+        now,
+      });
+
+      if (!res.ok) {
+        return { ok: false, error: res.error };
+      }
+
+      setConsents((prev) => {
+        const next = [...prev, res.consent];
+        saveToStorage('pravaah_consents', next);
+        return next;
+      });
+
+      if (res.auditEntry) {
+        setAuditLog((prev) => {
+          const next = appendAudit(prev, res.auditEntry);
+          saveToStorage('pravaah_audit_log', next);
+          return next;
+        });
+      }
+
+      return { ok: true };
+    },
+    [activeRole]
+  );
+
+  const handleGrantConsentAction = useCallback(
+    (consentId: string, updatedScopes?: ConsentScope[]) => {
+      const target = consents.find((c) => c.id === consentId);
+      if (!target) return { ok: false, error: 'Consent request not found.' };
+
+      const now = Date.now();
+      const res = grantConsent(target, now, updatedScopes);
+      if (!res.ok) return { ok: false, error: res.error };
+
+      setConsents((prev) => {
+        const next = prev.map((c) => (c.id === consentId ? res.consent : c));
+        saveToStorage('pravaah_consents', next);
+        return next;
+      });
+
+      if (res.auditEntry) {
+        setAuditLog((prev) => {
+          const next = appendAudit(prev, res.auditEntry);
+          saveToStorage('pravaah_audit_log', next);
+          return next;
+        });
+      }
+
+      return { ok: true };
+    },
+    [consents]
+  );
+
+  const handleDeclineConsentAction = useCallback(
+    (consentId: string) => {
+      const target = consents.find((c) => c.id === consentId);
+      if (!target) return { ok: false, error: 'Consent request not found.' };
+
+      const now = Date.now();
+      const res = declineConsent(target, now);
+      if (!res.ok) return { ok: false, error: res.error };
+
+      setConsents((prev) => {
+        const next = prev.map((c) => (c.id === consentId ? res.consent : c));
+        saveToStorage('pravaah_consents', next);
+        return next;
+      });
+
+      if (res.auditEntry) {
+        setAuditLog((prev) => {
+          const next = appendAudit(prev, res.auditEntry);
+          saveToStorage('pravaah_audit_log', next);
+          return next;
+        });
+      }
+
+      return { ok: true };
+    },
+    [consents]
+  );
+
+  const handleRevokeConsentAction = useCallback(
+    (consentId: string) => {
+      const target = consents.find((c) => c.id === consentId);
+      if (!target) return { ok: false, error: 'Consent request not found.' };
+
+      const now = Date.now();
+      const res = revokeConsent(target, now);
+      if (!res.ok) return { ok: false, error: res.error };
+
+      setConsents((prev) => {
+        const next = prev.map((c) => (c.id === consentId ? res.consent : c));
+        saveToStorage('pravaah_consents', next);
+        return next;
+      });
+
+      if (res.auditEntry) {
+        setAuditLog((prev) => {
+          const next = appendAudit(prev, res.auditEntry);
+          saveToStorage('pravaah_audit_log', next);
+          return next;
+        });
+      }
+
+      return { ok: true };
+    },
+    [consents]
+  );
+
+  const handleRevealFieldAction = useCallback(
+    (params: {
+      field: string;
+      rawValue: string;
+      purpose: string;
+      consentId?: string;
+    }): RevealResult => {
+      const activeConsent =
+        (params.consentId ? consents.find((c) => c.id === params.consentId) : null) ||
+        consents.find((c) => c.status === 'granted') ||
+        null;
+
+      const now = Date.now();
+      const res = reveal({
+        field: params.field,
+        purpose: params.purpose,
+        actor: activeRole,
+        consent: activeConsent,
+        rawValue: params.rawValue,
+        now,
+        durationSeconds: 60,
+      });
+
+      if (res.ok) {
+        const fieldKey = `${params.field}-${params.rawValue}`;
+        setRevealedFields((prev) => ({
+          ...prev,
+          [fieldKey]: { value: res.value, expiresAt: res.expiresAt },
+        }));
+
+        setAuditLog((prev) => {
+          const next = appendAudit(prev, res.auditEntry);
+          saveToStorage('pravaah_audit_log', next);
+          return next;
+        });
+      }
+
+      return res;
+    },
+    [consents, activeRole]
+  );
+
+  const handleHideFieldAction = useCallback((field: string) => {
+    setRevealedFields((prev) => {
+      const next = { ...prev };
+      for (const k of Object.keys(next)) {
+        if (k.startsWith(field)) {
+          delete next[k];
+        }
+      }
+      return next;
+    });
+  }, []);
+
+  const handleAddVehicleAction = useCallback((vehicle: HouseholdVehicle) => {
+    setHouseholdVehicles((prev) => {
+      const next = [...prev, vehicle];
+      saveToStorage('pravaah_household_vehicles', next);
+      return next;
+    });
+  }, []);
+
+  const handleClearAuditLogAction = useCallback(() => {
+    setAuditLog([]);
+    saveToStorage('pravaah_audit_log', []);
+  }, []);
+
   const value: PlanContextValue = {
     scenarioId,
     scenario: effectiveScenario,
@@ -290,6 +647,13 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isDegraded: currentPlan.degradedMode,
     announcement,
 
+    // Household & Privacy State
+    householdVehicles,
+    consents,
+    auditLog,
+    activeRole,
+    revealedFields,
+
     setScenarioId: handleSetScenarioId,
     setForm35Decision: handleSetForm35Decision,
     setLicenceRouteDecision: handleSetLicenceRouteDecision,
@@ -298,6 +662,17 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
     toggleEvent: handleToggleEvent,
     resetToScenarioDefaults: handleResetToScenarioDefaults,
     selectTask: setSelectedTaskId,
+
+    // Household & Privacy Actions
+    setActiveRole,
+    requestConsent: handleRequestConsent,
+    grantConsentAction: handleGrantConsentAction,
+    declineConsentAction: handleDeclineConsentAction,
+    revokeConsentAction: handleRevokeConsentAction,
+    revealFieldAction: handleRevealFieldAction,
+    hideFieldAction: handleHideFieldAction,
+    addVehicleAction: handleAddVehicleAction,
+    clearAuditLogAction: handleClearAuditLogAction,
   };
 
   return (
