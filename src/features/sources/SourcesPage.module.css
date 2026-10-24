@@ -1,0 +1,195 @@
+.page {
+  padding: var(--space-6) 0 var(--space-12) 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.simulatedPill {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background-color: var(--status-unknown-bg);
+  color: var(--status-unknown);
+  border: 1px solid var(--stone);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.officialBadge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background-color: var(--offwhite);
+  color: var(--graphite);
+  border: 1px solid var(--stone);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.pageTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--charcoal);
+  margin: 0;
+  max-width: 720px;
+  line-height: 1.5;
+}
+
+.principlesList {
+  margin: var(--space-2) 0 0 var(--space-4);
+  padding: 0;
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  line-height: 1.6;
+}
+
+.sectionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.sectionMeta {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+}
+
+.monoCell {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+}
+
+.sourceTitle {
+  display: block;
+  font-weight: 600;
+  color: var(--graphite);
+}
+
+.sourcePublisher {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--iron);
+}
+
+.kindTag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: capitalize;
+  background-color: var(--offwhite);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--stone);
+}
+
+.sourceUrl {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--graphite);
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.verifiedTag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--status-safe);
+}
+
+.packCode {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  color: var(--graphite);
+}
+
+.packName {
+  font-weight: 600;
+  color: var(--graphite);
+}
+
+.packType {
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+}
+
+.packJurisdiction {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+}
+
+.unverifiedGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-3);
+}
+
+.unverifiedCard {
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.fieldTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.statutoryCitation {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--iron);
+}
+
+.auditStatus {
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  margin: 0;
+  line-height: 1.4;
+}

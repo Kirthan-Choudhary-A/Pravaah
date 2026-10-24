@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  background-color: var(--status-missed-bg);
+  border: 1px solid var(--status-missed);
+  border-radius: var(--radius-sm);
+  color: var(--status-missed);
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--status-missed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--status-missed);
+  margin: 0;
+}
+
+.message {
+  font-size: var(--font-size-sm);
+  color: var(--charcoal);
+  max-width: 440px;
+  margin: var(--space-2) 0 0 0;
+}
+
+.retryButton {
+  margin-top: var(--space-4);
+  background-color: var(--paper);
+  color: var(--status-missed);
+  border: 1px solid var(--status-missed);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.retryButton:hover {
+  background-color: var(--status-missed);
+  color: var(--paper);
+}

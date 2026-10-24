@@ -1,0 +1,60 @@
+.details {
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  background-color: var(--paper);
+  overflow: hidden;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--offwhite);
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  color: var(--graphite);
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--graphite);
+  outline-offset: -2px;
+}
+
+.summaryTitle {
+  font-size: var(--font-size-sm);
+}
+
+.metaGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.badge {
+  font-size: 0.6875rem;
+  font-family: var(--font-mono);
+  color: var(--iron);
+}
+
+.arrow {
+  font-size: 0.625rem;
+  color: var(--charcoal);
+  transition: transform 0.2s ease;
+}
+
+.details[open] .arrow {
+  transform: rotate(180deg);
+}
+
+.content {
+  padding: var(--space-4);
+  border-top: 1px solid var(--stone);
+  background-color: var(--paper);
+}

@@ -1,0 +1,49 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.sm {
+  font-size: 0.6875rem;
+  padding: 1px var(--space-1);
+}
+
+.md {
+  font-size: var(--font-size-xs);
+  padding: 2px var(--space-2);
+}
+
+.symbol {
+  font-size: 0.75em;
+  line-height: 1;
+}
+
+.safe {
+  color: var(--status-safe);
+  background-color: var(--status-safe-bg);
+  border: 1px solid rgba(46, 83, 40, 0.25);
+}
+
+.risk {
+  color: var(--status-risk);
+  background-color: var(--status-risk-bg);
+  border: 1px solid rgba(122, 75, 0, 0.25);
+}
+
+.missed {
+  color: var(--status-missed);
+  background-color: var(--status-missed-bg);
+  border: 1px solid rgba(150, 40, 40, 0.25);
+}
+
+.unknown {
+  color: var(--status-unknown);
+  background-color: var(--status-unknown-bg);
+  border: 1px solid rgba(82, 84, 78, 0.25);
+}

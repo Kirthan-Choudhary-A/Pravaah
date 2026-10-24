@@ -1,0 +1,88 @@
+.footer {
+  border-top: 1px solid var(--stone);
+  background-color: var(--offwhite);
+  padding: var(--space-6) var(--space-4);
+  margin-top: auto;
+}
+
+.inner {
+  max-width: var(--breakpoint-xl);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.mainInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.brandRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.brandName {
+  font-weight: 700;
+  color: var(--graphite);
+  font-size: var(--font-size-sm);
+}
+
+.brandTagline {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+}
+
+.notice {
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  margin: 0;
+  font-style: italic;
+}
+
+.linksRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+  border-top: 1px solid rgba(183, 176, 163, 0.4);
+  padding-top: var(--space-3);
+}
+
+.footerLink {
+  color: var(--graphite);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footerLink:hover {
+  color: var(--ink);
+}
+
+.divider {
+  color: var(--stone);
+}
+
+.challenge {
+  color: var(--iron);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .linksRow {
+    border-top: none;
+    padding-top: 0;
+  }
+}

@@ -1,21 +1,47 @@
 :root {
-  /* Core Palette */
+  /* Core Neutrals */
   --paper: #faf9f5;
   --offwhite: #f3f0e8;
   --graphite: #242522;
   --charcoal: #343531;
   --olive: #777965;
   --stone: #b7b0a3;
-  --iron: #858780;
+  --iron: #5a5c56; /* Refined to pass WCAG AA (4.5:1+) against --paper */
   --ink: #171815;
 
-  /* Status Accents (No blue, cyan, violet, purple, neon) */
-  --status-safe: #4a5d3e; /* Deep olive green */
-  --status-risk: #b58428; /* Ochre */
-  --status-missed: #a84232; /* Brick red */
-  --status-unknown: var(--iron);
+  /* Status Accents (Tested and guaranteed WCAG AA >= 4.5:1 on --paper) */
+  --status-safe: #2e5328; /* Deep olive green (Contrast ratio: ~8.8:1 on --paper) */
+  --status-safe-bg: #eaefe7; /* Subtle tinted background */
+  --status-risk: #7a4b00; /* Deep earthy ochre (Contrast ratio: ~7.1:1 on --paper) */
+  --status-risk-bg: #f7efe1; /* Subtle tinted background */
+  --status-missed: #962828; /* Brick red (Contrast ratio: ~7.6:1 on --paper) */
+  --status-missed-bg: #f9eaea; /* Subtle tinted background */
+  --status-unknown: #52544e; /* Balanced charcoal iron (Contrast ratio: ~7.3:1 on --paper) */
+  --status-unknown-bg: #eaeae8;
+
+  /* Link Type Stroke Patterns */
+  --link-needs-style: solid;
+  --link-unlocks-style: 8, 4; /* Long dash */
+  --link-reuses-style: 2, 4; /* Dotted */
+  --link-propagates-style: 6, 3, 2, 3; /* Dash-dot */
+  --link-invalidates-style: 4, 4; /* Dashed brick red with cross */
+
+  /* Typography */
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Fluid Type Scale using clamp() */
+  --font-size-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  --font-size-sm: clamp(0.875rem, 0.84rem + 0.2vw, 0.9375rem);
+  --font-size-base: clamp(1rem, 0.96rem + 0.25vw, 1.0625rem);
+  --font-size-md: clamp(1.125rem, 1.07rem + 0.35vw, 1.25rem);
+  --font-size-lg: clamp(1.25rem, 1.18rem + 0.45vw, 1.45rem);
+  --font-size-xl: clamp(1.5rem, 1.38rem + 0.65vw, 1.8rem);
+  --font-size-2xl: clamp(1.875rem, 1.7rem + 0.95vw, 2.25rem);
+  --font-size-3xl: clamp(2.25rem, 2.05rem + 1.2vw, 2.85rem);
 
   /* Spacing Scale */
+  --space-0-5: 0.125rem; /* 2px */
   --space-1: 0.25rem; /* 4px */
   --space-2: 0.5rem; /* 8px */
   --space-3: 0.75rem; /* 12px */
@@ -27,46 +53,40 @@
   --space-12: 3rem; /* 48px */
   --space-16: 4rem; /* 64px */
 
-  /* Fluid Type Scale using clamp() */
-  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);
-  --font-size-sm: clamp(0.875rem, 0.825rem + 0.25vw, 0.9375rem);
-  --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.0625rem);
-  --font-size-md: clamp(1.125rem, 1.05rem + 0.375vw, 1.25rem);
-  --font-size-lg: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-  --font-size-xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.875rem);
-  --font-size-2xl: clamp(1.875rem, 1.65rem + 1.125vw, 2.375rem);
-  --font-size-3xl: clamp(2.25rem, 1.95rem + 1.5vw, 3rem);
-
-  /* Radii (Small / Architectural) */
+  /* Radii (Clean, Architectural, 0–4px) */
   --radius-none: 0px;
   --radius-sm: 2px;
   --radius-md: 4px;
-  --radius-lg: 6px;
   --radius-full: 9999px;
 
-  /* Z-Index Layers */
+  /* Z-Index Hierarchy */
   --z-deep: -1;
   --z-base: 0;
   --z-surface: 10;
   --z-header: 100;
   --z-dropdown: 200;
-  --z-overlay: 500;
+  --z-panel: 500;
   --z-modal: 1000;
   --z-toast: 2000;
 
-  /* Breakpoints (Documented Values) */
+  /* Layout Breakpoints */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
-  --breakpoint-2xl: 1536px;
+  --breakpoint-2xl: 1440px;
 
-  /* Motion Durations & Easing */
-  --duration-instant: 100ms;
+  /* Restrained Motion */
   --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --duration-slow: 400ms;
+  --duration-normal: 200ms;
+  --duration-slow: 250ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --ease-in: cubic-bezier(0.3, 0, 1, 1);
-  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
 }

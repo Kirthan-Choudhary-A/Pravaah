@@ -1,0 +1,230 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-3);
+}
+
+.card {
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--graphite);
+}
+
+.cardSelected {
+  border: 2px solid var(--graphite);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cardRecommended {
+  border-top: 3px solid var(--status-safe);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.cardTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.badgesRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.rankBadge {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  background-color: var(--offwhite);
+  color: var(--charcoal);
+  border: 1px solid var(--stone);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.recommendedBadge {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  background-color: var(--status-safe-bg);
+  color: var(--status-safe);
+  border: 1px solid var(--status-safe);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.activePill {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  background-color: var(--graphite);
+  color: var(--paper);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.cardTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--graphite);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.metricsRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.metricLabel {
+  font-size: 0.625rem;
+  font-family: var(--font-mono);
+  color: var(--iron);
+  text-transform: uppercase;
+}
+
+.metricValue {
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.slackPos {
+  color: var(--status-safe);
+}
+
+.slackNeg {
+  color: var(--status-missed);
+}
+
+.tradeOffBox {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tradeOffLabel {
+  font-size: 0.6875rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--charcoal);
+  text-transform: uppercase;
+}
+
+.tradeOffText {
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.fallbackLine {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.unverifiedBox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: var(--status-risk-bg);
+  border: 1px dashed rgba(122, 75, 0, 0.35);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.unverifiedImpactText {
+  font-size: 0.6875rem;
+  color: var(--status-risk);
+  font-style: italic;
+}
+
+.cardFooter {
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+.selectBtn {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--stone);
+  background-color: var(--paper);
+  color: var(--graphite);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.selectBtn:hover:not(:disabled) {
+  background-color: var(--graphite);
+  color: var(--paper);
+  border-color: var(--graphite);
+}
+
+.selectBtnActive {
+  background-color: var(--status-safe-bg);
+  border-color: var(--status-safe);
+  color: var(--status-safe);
+  cursor: default;
+}

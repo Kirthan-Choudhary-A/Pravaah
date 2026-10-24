@@ -1,0 +1,65 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--graphite);
+}
+
+.valueDisplay {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--ink);
+  background-color: var(--offwhite);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--stone);
+}
+
+.unit {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+  margin-left: 2px;
+}
+
+.input {
+  width: 100%;
+  accent-color: var(--graphite);
+  cursor: pointer;
+  margin: var(--space-1) 0;
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--graphite);
+  outline-offset: 2px;
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rangeLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  font-family: var(--font-mono);
+  color: var(--iron);
+}
+
+.description {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+  margin: var(--space-1) 0 0 0;
+}

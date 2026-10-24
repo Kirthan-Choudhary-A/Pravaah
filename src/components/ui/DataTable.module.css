@@ -1,0 +1,80 @@
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  background-color: var(--paper);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+}
+
+.caption {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--charcoal);
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--offwhite);
+  border-bottom: 1px solid var(--stone);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.th {
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--font-size-xs);
+  color: var(--graphite);
+  background-color: var(--offwhite);
+  border-bottom: 1px solid var(--stone);
+  white-space: nowrap;
+}
+
+.td {
+  padding: var(--space-2) var(--space-4);
+  color: var(--charcoal);
+  border-bottom: 1px solid rgba(183, 176, 163, 0.4);
+  vertical-align: middle;
+}
+
+tr:last-child .td {
+  border-bottom: none;
+}
+
+.clickableRow {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.clickableRow:hover {
+  background-color: var(--offwhite);
+}
+
+.clickableRow:focus-visible {
+  outline: 2px solid var(--graphite);
+  outline-offset: -2px;
+}
+
+.emptyCell {
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--iron);
+  font-style: italic;
+}

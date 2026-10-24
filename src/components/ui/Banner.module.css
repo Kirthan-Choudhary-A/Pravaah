@@ -1,0 +1,86 @@
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--stone);
+  background-color: var(--offwhite);
+  line-height: 1.5;
+}
+
+.iconCol {
+  font-size: var(--font-size-base);
+  line-height: 1.2;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.description {
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+}
+
+.actionCol {
+  flex-shrink: 0;
+}
+
+/* Variants */
+.info {
+  background-color: var(--offwhite);
+  border-color: var(--stone);
+  color: var(--charcoal);
+}
+
+.info .iconCol {
+  color: var(--charcoal);
+}
+
+.warning {
+  background-color: var(--status-risk-bg);
+  border-color: var(--status-risk);
+  color: var(--status-risk);
+}
+
+.warning .title {
+  color: var(--status-risk);
+}
+
+.warning .description {
+  color: var(--charcoal);
+}
+
+.error {
+  background-color: var(--status-missed-bg);
+  border-color: var(--status-missed);
+  color: var(--status-missed);
+}
+
+.error .title {
+  color: var(--status-missed);
+}
+
+.error .description {
+  color: var(--charcoal);
+}
+
+.degraded {
+  background-color: var(--status-risk-bg);
+  border: 2px dashed var(--status-risk);
+}
+
+.degraded .title {
+  color: var(--status-risk);
+}

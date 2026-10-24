@@ -1,0 +1,128 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+}
+
+.scoreBadge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  color: var(--graphite);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.item {
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.itemFailed {
+  border-left: 3px solid var(--status-risk);
+  background-color: var(--offwhite);
+}
+
+.itemPassed {
+  border-left: 3px solid var(--status-safe);
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.checkTitleGroup {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.checkId {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--iron);
+}
+
+.checkTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.explanation {
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.remedyBox {
+  background-color: var(--status-risk-bg);
+  border: 1px solid rgba(122, 75, 0, 0.25);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.remedyLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--status-risk);
+  text-transform: uppercase;
+}
+
+.remedyText {
+  font-size: var(--font-size-xs);
+  color: var(--status-risk);
+  margin: 0;
+}

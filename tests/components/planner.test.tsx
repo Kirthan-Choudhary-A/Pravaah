@@ -1,0 +1,68 @@
+import { describe, it, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { routes } from '@app/routes';
+
+describe('Planner and Simulator Integration', () => {
+  it('renders Planner with simulated notice, timeline, and checks', async () => {
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/plan'],
+    });
+
+    render(<RouterProvider router={router} />);
+
+    // SIMULATED badge exists
+    expect(screen.getAllByText('SIMULATED')[0]).toBeInTheDocument();
+
+    // Check headings
+    expect(screen.getByRole('heading', { name: /planner/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /unified schedule & critical path/i })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /dependency graph/i })).toBeInTheDocument();
+
+    // Toggle to Table view in Timeline
+    const tableBtn = screen.getByRole('button', { name: /view as table/i });
+    fireEvent.click(tableBtn);
+    expect(screen.getByRole('table', { name: /tasks schedule & deadlines/i })).toBeInTheDocument();
+  });
+
+  it('renders Simulator with scenario picker and allows curveball injection', async () => {
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/simulate'],
+    });
+
+    render(<RouterProvider router={router} />);
+
+    // Simulator title
+    expect(
+      screen.getByRole('heading', { name: /plan simulator & curveball engine/i })
+    ).toBeInTheDocument();
+
+    // Curveball buttons exist
+    const slotDelayBtn = screen.getByRole('button', {
+      name: /rto slot queue delayed/i,
+    });
+    expect(slotDelayBtn).toBeInTheDocument();
+
+    // Inject curveball
+    fireEvent.click(slotDelayBtn);
+    expect(slotDelayBtn).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('renders Sources page with rule packs and official citations', () => {
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/sources'],
+    });
+
+    render(<RouterProvider router={router} />);
+
+    expect(
+      screen.getByRole('heading', { name: /official legal sources & rule packs/i })
+    ).toBeInTheDocument();
+
+    // Rule packs table
+    expect(screen.getByText('Union of India (Central MV Act & CMVR)')).toBeInTheDocument();
+    expect(screen.getByText('Karnataka Transport Department')).toBeInTheDocument();
+  });
+});

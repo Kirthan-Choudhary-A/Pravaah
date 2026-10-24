@@ -1,0 +1,23 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.official {
+  background-color: var(--offwhite);
+  color: var(--charcoal);
+  border: 1px solid var(--stone);
+}
+
+.modelled {
+  background-color: var(--status-risk-bg);
+  color: var(--status-risk);
+  border: 1px dashed rgba(122, 75, 0, 0.4);
+  font-style: italic;
+}

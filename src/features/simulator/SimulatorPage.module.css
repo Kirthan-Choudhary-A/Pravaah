@@ -1,0 +1,233 @@
+.page {
+  padding: var(--space-6) 0 var(--space-12) 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.headerTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.simulatedPill {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background-color: var(--status-unknown-bg);
+  color: var(--status-unknown);
+  border: 1px solid var(--stone);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.interactiveBadge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background-color: var(--status-safe-bg);
+  color: var(--status-safe);
+  border: 1px solid var(--status-safe);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.pageTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--charcoal);
+  margin: 0;
+  max-width: 680px;
+  line-height: 1.5;
+}
+
+.controlBox {
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.diffSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--font-size-xs);
+}
+
+.diffSummary p {
+  margin: 0;
+}
+
+.controlsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (min-width: 840px) {
+  .controlsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.controlColumn {
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.columnHeading {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--graphite);
+  margin: 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--stone);
+}
+
+.controlsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.decisionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.controlLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--charcoal);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.decisionHint {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+  margin: var(--space-1) 0 0 0;
+  line-height: 1.4;
+}
+
+.curveballsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.eventButtonsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.eventButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.eventButton:hover {
+  background-color: var(--paper);
+  border-color: var(--graphite);
+}
+
+.eventButton:focus-visible {
+  outline: 2px solid var(--graphite);
+  outline-offset: 1px;
+}
+
+.eventButtonActive {
+  background-color: var(--status-risk-bg);
+  border: 1.5px solid var(--status-risk);
+}
+
+.eventButtonActive .eventBtnLabel {
+  color: var(--status-risk);
+  font-weight: 700;
+}
+
+.eventBtnLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--graphite);
+}
+
+.eventBtnDesc {
+  font-size: 0.6875rem;
+  color: var(--iron);
+}
+
+.sectionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.sectionMeta {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+}

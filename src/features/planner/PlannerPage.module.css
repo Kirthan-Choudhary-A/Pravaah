@@ -1,0 +1,146 @@
+.page {
+  padding: var(--space-6) 0 var(--space-12) 0;
+}
+
+.summaryStrip {
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-5);
+}
+
+.summaryTopRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.simulatedPill {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background-color: var(--status-unknown-bg);
+  color: var(--status-unknown);
+  border: 1px solid var(--stone);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.scenarioBadge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background-color: var(--graphite);
+  color: var(--paper);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.degradedBadge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background-color: var(--status-risk-bg);
+  color: var(--status-risk);
+  border: 1px dashed var(--status-risk);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.pageTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--graphite);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.moveDescription {
+  font-size: var(--font-size-sm);
+  color: var(--charcoal);
+  margin: var(--space-1) 0 0 0;
+}
+
+.quickMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--space-2);
+}
+
+.metricCard {
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  display: flex;
+  flex-direction: column;
+}
+
+.metricLabel {
+  font-size: 0.625rem;
+  font-family: var(--font-mono);
+  color: var(--iron);
+  text-transform: uppercase;
+}
+
+.metricValue {
+  font-size: var(--font-size-md);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--graphite);
+  margin: 2px 0;
+}
+
+.metricSub {
+  font-size: 0.6875rem;
+  color: var(--iron);
+}
+
+.sectionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.sectionMeta {
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+}
+
+@media (min-width: 900px) {
+  .summaryTopRow {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .quickMetrics {
+    flex-shrink: 0;
+    min-width: 480px;
+  }
+}

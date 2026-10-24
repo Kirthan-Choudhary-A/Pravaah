@@ -1,0 +1,14 @@
+.mark {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 4px;
+  background-color: var(--status-risk-bg);
+  color: var(--status-risk);
+  border: 1px solid rgba(122, 75, 0, 0.35);
+  border-radius: 2px;
+  vertical-align: middle;
+}

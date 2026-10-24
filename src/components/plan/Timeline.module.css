@@ -1,0 +1,407 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  flex-wrap: wrap;
+}
+
+.legendTitle {
+  font-weight: 600;
+  color: var(--graphite);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legendSafeSymbol {
+  color: var(--status-safe);
+}
+
+.legendRiskSymbol {
+  color: var(--status-risk);
+}
+
+.legendMissedSymbol {
+  color: var(--status-missed);
+}
+
+.legendAbsenceBox {
+  width: 14px;
+  height: 10px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(183, 176, 163, 0.4),
+    rgba(183, 176, 163, 0.4) 3px,
+    transparent 3px,
+    transparent 6px
+  );
+  border: 1px solid var(--stone);
+  border-radius: 2px;
+}
+
+.viewToggleGroup {
+  display: flex;
+  gap: 2px;
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+
+.viewBtn {
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  color: var(--charcoal);
+  padding: var(--space-1) var(--space-3);
+  border-radius: calc(var(--radius-sm) - 2px);
+  cursor: pointer;
+}
+
+.viewBtnActive {
+  background-color: var(--graphite);
+  color: var(--paper);
+  font-weight: 600;
+}
+
+/* Scroll area */
+.scrollContainer {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  background-color: var(--paper);
+  position: relative;
+}
+
+.scrollContainer:focus-visible {
+  outline: 2px solid var(--graphite);
+  outline-offset: -2px;
+}
+
+.gridBoard {
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+}
+
+.axisRow {
+  display: flex;
+  height: 38px;
+  background-color: var(--offwhite);
+  border-bottom: 1px solid var(--stone);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.laneLabelCorner {
+  width: 140px;
+  min-width: 140px;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--graphite);
+  border-right: 1px solid var(--stone);
+  background-color: var(--offwhite);
+  position: sticky;
+  left: 0;
+  z-index: 3;
+}
+
+.axisTrack {
+  position: relative;
+  height: 100%;
+}
+
+.axisTick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateX(-50%);
+}
+
+.tickLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--iron);
+  padding-top: 4px;
+}
+
+.axisTickToday .tickLabel {
+  font-weight: 700;
+  color: var(--graphite);
+}
+
+.tickLine {
+  width: 1px;
+  height: 6px;
+  background-color: var(--stone);
+  align-self: center;
+}
+
+/* Lane rows */
+.laneRow {
+  display: flex;
+  min-height: 84px;
+  border-bottom: 1px solid var(--stone);
+  position: relative;
+}
+
+.laneRow:last-child {
+  border-bottom: none;
+}
+
+.laneHeader {
+  width: 140px;
+  min-width: 140px;
+  padding: var(--space-3);
+  border-right: 1px solid var(--stone);
+  background-color: var(--paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.02);
+}
+
+.laneName {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--graphite);
+}
+
+.laneTaskCount {
+  font-size: 0.6875rem;
+  color: var(--iron);
+}
+
+.laneTrack {
+  position: relative;
+  flex: 1;
+  min-height: 84px;
+  padding: var(--space-2) 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: var(--space-2);
+}
+
+/* Absence */
+.absenceOverlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(183, 176, 163, 0.25),
+    rgba(183, 176, 163, 0.25) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  border-left: 2px dashed var(--stone);
+  border-right: 2px dashed var(--stone);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.absenceTag {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 0.625rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--iron);
+  background-color: var(--paper);
+  padding: 1px 4px;
+  border-radius: 2px;
+  border: 1px solid var(--stone);
+}
+
+/* Slot queue */
+.slotQueueLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--status-risk);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.slotQueueTag {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  font-size: 0.625rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--status-risk);
+  background-color: var(--status-risk-bg);
+  padding: 1px 4px;
+  border-radius: 2px;
+  border: 1px solid var(--status-risk);
+  white-space: nowrap;
+}
+
+/* Task bars */
+.taskBar {
+  position: absolute;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-2);
+  cursor: pointer;
+  z-index: 2;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+  overflow: hidden;
+  text-align: left;
+}
+
+.taskBar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  z-index: 4;
+}
+
+.taskBar:focus-visible {
+  outline: 3px solid var(--graphite);
+  outline-offset: 2px;
+  z-index: 5;
+}
+
+.taskBarSelected {
+  outline: 3px solid var(--graphite);
+  outline-offset: 2px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+}
+
+.taskBarSymbol {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.taskBarName {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+/* Status variants */
+.status_safe {
+  background-color: var(--status-safe-bg);
+  border: 1px solid var(--status-safe);
+  color: var(--status-safe);
+}
+
+.status_risk {
+  background-color: var(--status-risk-bg);
+  border: 1px solid var(--status-risk);
+  color: var(--status-risk);
+}
+
+.status_missed {
+  background-color: var(--status-missed-bg);
+  border: 1px solid var(--status-missed);
+  color: var(--status-missed);
+}
+
+.status_unknown {
+  background-color: var(--status-unknown-bg);
+  border: 1px solid var(--status-unknown);
+  color: var(--status-unknown);
+}
+
+/* LSD Tick */
+.lsdTick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--graphite);
+  opacity: 0.7;
+}
+
+/* Table view helpers */
+.tableTaskName {
+  display: block;
+  font-weight: 600;
+  color: var(--graphite);
+}
+
+.tableTaskId {
+  display: block;
+  font-size: 0.6875rem;
+  font-family: var(--font-mono);
+  color: var(--iron);
+}
+
+.lanePill {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  background-color: var(--offwhite);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--stone);
+}
+
+.monoCell {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+}
+
+.slackPos {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--status-safe);
+}
+
+.slackNeg {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--status-missed);
+}
