@@ -1,0 +1,44 @@
+.magneticWrapper {
+  display: inline-block;
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.magneticBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background-color: var(--graphite);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(36, 37, 34, 0.12);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.magneticBtn:hover {
+  background-color: var(--ink);
+}
+
+.secondary {
+  background-color: var(--parchment);
+  color: var(--graphite);
+  border-color: var(--parchment-deep);
+}
+
+.secondary:hover {
+  background-color: var(--parchment-deep);
+  color: var(--ink);
+}
+
+.magneticBtn:focus-visible {
+  outline: 2px solid var(--graphite);
+  outline-offset: 3px;
+}

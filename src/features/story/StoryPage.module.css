@@ -1,0 +1,454 @@
+.storyPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  width: 100%;
+  padding-bottom: var(--space-16);
+  box-sizing: border-box;
+}
+
+/* ============================================================== */
+/* 1. HERO SECTION */
+/* ============================================================== */
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-top: var(--space-4);
+  width: 100%;
+}
+
+.heroIntro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 760px;
+}
+
+.simulatedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--charcoal);
+  letter-spacing: 0.05em;
+  align-self: flex-start;
+}
+
+.heroHeadline {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.heroSubline {
+  font-size: var(--font-size-lg);
+  color: var(--charcoal);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.heroCtaGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+.secondaryCtaBtn {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--charcoal);
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.secondaryCtaBtn:hover {
+  background-color: var(--paper);
+  border-color: var(--graphite);
+}
+
+/* ============================================================== */
+/* 2. THE PROBLEM LIST (TYPOGRAPHIC LIST) */
+/* ============================================================== */
+.problemSection {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--space-8);
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--stone);
+}
+
+@media (max-width: 768px) {
+  .problemSection {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
+.sectionLead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sectionTag {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--iron);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.problemList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.problemItem {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  color: var(--charcoal);
+}
+
+.problemNumber {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--status-risk);
+}
+
+.problemText {
+  line-height: 1.5;
+}
+
+/* ============================================================== */
+/* 3. HOW THE PLAN WORKS (8 STEPS) */
+/* ============================================================== */
+.howItWorksSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--stone);
+}
+
+.stepsWalkthroughGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .stepsWalkthroughGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.stepCard {
+  padding: var(--space-4);
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  transition: all 0.2s ease;
+}
+
+.stepCardActive {
+  background-color: var(--offwhite);
+  border-color: var(--graphite);
+  border-left-width: 4px;
+}
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepIndex {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--iron);
+}
+
+.stepName {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--graphite);
+}
+
+.stepDesc {
+  font-size: var(--font-size-sm);
+  color: var(--charcoal);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.planPreviewCard {
+  position: sticky;
+  top: 80px;
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.planPreviewTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--graphite);
+}
+
+.miniScheduleList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.miniScheduleItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2);
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}
+
+/* ============================================================== */
+/* 4. THE ADDRESS-PROOF TRAP */
+/* ============================================================== */
+.trapSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--stone);
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .trapSection {
+    grid-template-columns: 1fr;
+  }
+}
+
+.trapLines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.trapLine {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3);
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.trapLineNumber {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--status-missed);
+  font-size: var(--font-size-sm);
+}
+
+.trapDiagramCard {
+  background-color: var(--status-missed-bg);
+  border: 1px solid var(--status-missed);
+  border-radius: var(--radius-sm);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+  text-align: center;
+}
+
+.trapDiagramNodes {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nodeBox {
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.invalidatesLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--status-missed);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.invalidatesArrow {
+  border-top: 2px dashed var(--status-missed);
+  width: 60px;
+  margin: 4px 0;
+}
+
+/* ============================================================== */
+/* 5. HOW IT'S BUILT (SCENE C SECTION) */
+/* ============================================================== */
+.architectureSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--stone);
+}
+
+/* ============================================================== */
+/* 6. HONEST BY DESIGN */
+/* ============================================================== */
+.honestSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--stone);
+}
+
+.honestGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+
+.honestCard {
+  padding: var(--space-4);
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.honestCardTitle {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--graphite);
+}
+
+.honestCardText {
+  font-size: var(--font-size-sm);
+  color: var(--charcoal);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================================== */
+/* 7. CLOSING CTA */
+/* ============================================================== */
+.closingSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding: var(--space-10) var(--space-4);
+  background-color: var(--offwhite);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-4);
+}
+
+.closingTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.closingSubline {
+  font-size: var(--font-size-base);
+  color: var(--charcoal);
+  max-width: 600px;
+  margin: 0;
+}
+
+.closingNavLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.closingNavLink {
+  color: var(--graphite);
+  text-decoration: underline;
+}
+
+.closingNavLink:hover {
+  color: var(--ink);
+}

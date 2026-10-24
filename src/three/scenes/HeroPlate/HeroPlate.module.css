@@ -1,0 +1,124 @@
+.heroScrollWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.stickyContainer {
+  position: relative;
+  width: 100%;
+  height: 75vh;
+  min-height: 480px;
+  max-height: 720px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.canvasArea {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.annotationsOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-6);
+  z-index: 10;
+}
+
+.annotationCard {
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  max-width: 320px;
+  box-shadow: 0 4px 12px rgba(36, 37, 34, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.annotationStep {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--iron);
+  letter-spacing: 0.05em;
+}
+
+.annotationText {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--graphite);
+}
+
+.annotationTop {
+  align-self: flex-start;
+}
+
+.annotationMiddle {
+  align-self: center;
+}
+
+.annotationBottom {
+  align-self: flex-end;
+}
+
+/* Fallback container styles */
+.fallbackContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4);
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.fallbackPlateWrapper,
+.fallbackCardWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.fallbackPlateSvg {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(36, 37, 34, 0.12));
+}
+
+.fallbackCardSvg {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(36, 37, 34, 0.1));
+}
+
+.fallbackAnnotations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.annotationItem {
+  background-color: var(--paper);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, Suspense } from 'react';
 import { usePlan } from '@state/index';
 import { Container } from '@components/layout/Container';
 import { Stack } from '@components/layout/Stack';
 import { Banner } from '@components/ui/Banner';
+import { SegmentedControl } from '@components/ui/SegmentedControl';
 import { Timeline } from '@components/plan/Timeline';
 import { DependencyGraph } from '@components/plan/DependencyGraph';
 import { LSDComparisonCards } from '@components/plan/LSDComparisonCards';
@@ -12,6 +13,10 @@ import { FeesTable } from '@components/plan/FeesTable';
 import { TaskDetailPanel } from '@components/plan/TaskDetailPanel';
 import styles from './PlannerPage.module.css';
 
+const PlanLandscape = React.lazy(() =>
+  import('@three/scenes/PlanLandscape/PlanLandscape').then((m) => ({ default: m.PlanLandscape }))
+);
+
 export const PlannerPage: React.FC = () => {
   const {
     scenarioId,
@@ -19,6 +24,7 @@ export const PlannerPage: React.FC = () => {
     rulePack,
     sources,
     currentPlan,
+    planDiff,
     optionsComparison,
     decisions,
     selectedTaskId,
@@ -27,7 +33,10 @@ export const PlannerPage: React.FC = () => {
     selectTask,
   } = usePlan();
 
+  const [viewDimension, setViewDimension] = useState<'2d' | '3d'>('2d');
+
   const passedChecks = currentPlan.checks.filter((c) => c.passed).length;
+  const licenceTask = currentPlan.tasks.find((t) => t.id === 'task-licence-renewal');
 
   return (
     <div className={styles.page}>
@@ -97,23 +106,63 @@ export const PlannerPage: React.FC = () => {
             </Banner>
           )}
 
-          {/* Timeline View */}
+          {/* Timeline View & 3D Landscape Toggle */}
           <section aria-labelledby="timeline-heading" className={styles.sectionContainer}>
-            <div className={styles.sectionHeader}>
-              <h2 id="timeline-heading" className={styles.sectionTitle}>
-                Unified Schedule & Critical Path
-              </h2>
-              <span className={styles.sectionMeta}>
-                Day 0 is Today. Time intervals shown as half-open [start, end).
-              </span>
+            <div className={styles.sectionHeader} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+              <div>
+                <h2 id="timeline-heading" className={styles.sectionTitle}>
+                  Unified Schedule &amp; Critical Path
+                </h2>
+                <span className={styles.sectionMeta}>
+                  Day 0 is Today. Time intervals shown as half-open [start, end).
+                </span>
+              </div>
+              <SegmentedControl<'2d' | '3d'>
+                label="Schedule View Dimension"
+                value={viewDimension}
+                onChange={setViewDimension}
+                options={[
+                  { value: '2d', label: '2D Timeline' },
+                  { value: '3d', label: '3D Landscape' },
+                ]}
+                size="sm"
+              />
             </div>
-            <Timeline
-              tasks={currentPlan.tasks}
-              absence={scenario.absence}
-              primarySlotQueue={scenario.primarySlotQueue}
-              selectedTaskId={selectedTaskId}
-              onSelectTask={selectTask}
-            />
+
+            {viewDimension === '2d' ? (
+              <Timeline
+                tasks={currentPlan.tasks}
+                absence={scenario.absence}
+                primarySlotQueue={scenario.primarySlotQueue}
+                selectedTaskId={selectedTaskId}
+                onSelectTask={selectTask}
+              />
+            ) : (
+              <Suspense
+                fallback={
+                  <div style={{ padding: 'var(--space-6)', textAlign: 'center', backgroundColor: 'var(--offwhite)', border: '1px solid var(--stone)', borderRadius: 'var(--radius-sm)' }}>
+                    Loading 3D plan landscape…
+                  </div>
+                }
+              >
+                <PlanLandscape
+                  tasks={currentPlan.tasks}
+                  links={currentPlan.links}
+                  absence={scenario.absence}
+                  primarySlotQueue={scenario.primarySlotQueue}
+                  finishDay={currentPlan.finish}
+                  finishingTask={currentPlan.finishingTask}
+                  licenceStatus={licenceTask?.status || 'Safe'}
+                  diffCaption={
+                    planDiff.tasksAdded.length > 0
+                      ? `${planDiff.tasksAdded.length} tasks added by curveball event`
+                      : null
+                  }
+                  selectedTaskId={selectedTaskId}
+                  onSelectTask={selectTask}
+                />
+              </Suspense>
+            )}
           </section>
 
           {/* Dependency Graph */}
