@@ -8,6 +8,7 @@ import { DemoGuidePanel } from '@components/demo/DemoGuidePanel';
 import { Sidebar } from '@components/layout/Sidebar';
 import { Topbar } from '@components/layout/Topbar';
 import { SkipLink } from '@components/layout/SkipLink';
+import { AssistantPanel } from '@features/assistant/AssistantPanel';
 import styles from '@components/layout/AppShell.module.css';
 
 const SCENARIO_IDS = ['A', 'B', 'C'] as const;
@@ -78,6 +79,7 @@ export const Layout: React.FC = () => {
       </div>
 
       <DemoGuidePanel isOpen={demoGuideOpen} onClose={() => setDemoGuideOpen(false)} />
+      <AssistantPanel />
     </div>
   );
 };
