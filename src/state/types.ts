@@ -85,4 +85,5 @@ export interface PlanContextValue {
   readonly hideFieldAction: (field: string) => void;
   readonly addVehicleAction: (vehicle: HouseholdVehicle) => void;
   readonly clearAuditLogAction: () => void;
+  readonly resetDemoAction: () => void;
 }

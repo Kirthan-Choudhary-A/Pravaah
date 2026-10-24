@@ -1,15 +1,23 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { HeroPlate } from '@three/scenes/HeroPlate/HeroPlate';
-import { ArchitectureStack } from '@three/scenes/ArchitectureStack/ArchitectureStack';
+import { HeroPlateFallback } from '@three/scenes/HeroPlate/HeroPlateFallback';
 import { MagneticButton } from '@components/ui/MagneticButton';
 import { loadScenario, loadSources } from '@data';
 import type { SourceEntry } from '@engine';
 import { useDeviceCapabilities } from '@hooks/useDeviceCapabilities';
 import styles from './StoryPage.module.css';
+
+const HeroPlate = lazy(() =>
+  import('@three/scenes/HeroPlate/HeroPlate').then((m) => ({ default: m.HeroPlate }))
+);
+const ArchitectureStack = lazy(() =>
+  import('@three/scenes/ArchitectureStack/ArchitectureStack').then((m) => ({
+    default: m.ArchitectureStack,
+  }))
+);
 
 if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
   gsap.registerPlugin(ScrollTrigger);
@@ -189,7 +197,9 @@ export const StoryPage: React.FC = () => {
           className={styles.heroVisual}
           aria-label="Interactive 3D Registration Plate and Licence Card"
         >
-          <HeroPlate />
+          <Suspense fallback={<HeroPlateFallback expiryDaysBefore={daysRemaining} />}>
+            <HeroPlate />
+          </Suspense>
         </div>
       </section>
 
@@ -386,7 +396,9 @@ export const StoryPage: React.FC = () => {
           </p>
         </div>
 
-        <ArchitectureStack />
+        <Suspense fallback={<div style={{ minHeight: '360px', background: 'var(--paper-warm)' }} />}>
+          <ArchitectureStack />
+        </Suspense>
       </section>
 
       {/* 6. HONEST BY DESIGN (SOURCE / UNVERIFIED STATS) */}
@@ -466,6 +478,9 @@ export const StoryPage: React.FC = () => {
             </MagneticButton>
             <MagneticButton href="/voice" variant="secondary">
               Plate Parser & Voice
+            </MagneticButton>
+            <MagneticButton href="/metrics" variant="secondary">
+              Benchmark Metrics
             </MagneticButton>
           </div>
         </div>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#242522" />
     <title>Pravaah (प्रवाह) — Vehicle &amp; Driving Services Made Simple</title>
     <meta name="description" content="One ordered assistant for a citizen's driving licence, their vehicles, and family vehicles. Calculates Latest Safe Dates, compares blocked options, and preserves privacy." />
 
@@ -18,6 +19,17 @@
     <meta name="twitter:title" content="Pravaah (प्रवाह) — Vehicle &amp; Driving Services Made Simple" />
     <meta name="twitter:description" content="One ordered assistant for a citizen's driving licence, their vehicles, and family vehicles. Prototype on simulated data." />
     <meta name="twitter:image" content="/assets/posters/hero-plate-card.png" />
+
+    <script>
+      // Restore path if redirected from 404.html (GitHub Pages SPA)
+      (function () {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

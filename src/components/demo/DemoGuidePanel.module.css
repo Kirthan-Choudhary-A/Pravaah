@@ -1,0 +1,181 @@
+.demoPanel {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  width: 380px;
+  max-width: calc(100vw - var(--space-6));
+  background-color: var(--paper);
+  border: 1px solid var(--graphite);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(36, 37, 34, 0.22);
+  z-index: 990;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  font-family: var(--font-sans);
+  color: var(--ink);
+  animation: slideInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--stone);
+  padding-bottom: var(--space-2);
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stepBadge {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--sage);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--graphite);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.closeButton:hover {
+  background-color: var(--parchment);
+  color: var(--ink);
+}
+
+.stepTitle {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.narration {
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.takeawayBox {
+  background-color: var(--paper-warm);
+  border-left: 3px solid var(--sage);
+  padding: var(--space-2) var(--space-3);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.6875rem;
+  color: var(--ink);
+}
+
+.takeawayBox strong {
+  color: var(--sage);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.navRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--parchment-deep);
+}
+
+.stepCounter {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+  font-weight: 600;
+}
+
+.btnGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.actionBtn {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--stone);
+  cursor: pointer;
+  background-color: var(--paper-warm);
+  color: var(--ink);
+  transition: all 0.15s ease;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background-color: var(--stone);
+}
+
+.actionBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.primaryBtn {
+  background-color: var(--graphite);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.primaryBtn:hover:not(:disabled) {
+  background-color: var(--ink);
+}
+
+.keyboardHints {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--iron);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .demoPanel {
+    bottom: var(--space-2);
+    right: var(--space-2);
+    left: var(--space-2);
+    width: auto;
+  }
+}

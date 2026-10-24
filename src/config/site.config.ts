@@ -15,5 +15,6 @@ export const SITE_CONFIG = {
     { path: '/household', label: 'Household' },
     { path: '/voice', label: 'Voice' },
     { path: '/sources', label: 'Sources' },
+    { path: '/metrics', label: 'Metrics' },
   ] as const satisfies readonly NavRoute[],
 } as const;

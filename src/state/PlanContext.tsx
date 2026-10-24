@@ -631,6 +631,32 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
     saveToStorage('pravaah_audit_log', []);
   }, []);
 
+  const handleResetDemoAction = useCallback(() => {
+    try {
+      localStorage.removeItem('pravaah_household_vehicles');
+      localStorage.removeItem('pravaah_consents');
+      localStorage.removeItem('pravaah_audit_log');
+    } catch {
+      // ignore
+    }
+    setHouseholdVehicles(INITIAL_HOUSEHOLD_VEHICLES);
+    setConsents(INITIAL_CONSENTS);
+    setAuditLog(INITIAL_AUDIT_LOG);
+    setRevealedFields({});
+    setActiveRole('You');
+    handleResetToScenarioDefaults();
+    setSearchParams({ scenario: 'A' });
+    setAnnouncement('Demo reset to Scenario A defaults. Consents and audit log cleared.');
+  }, [handleResetToScenarioDefaults, setSearchParams]);
+
+  useEffect(() => {
+    const handleResetEvent = () => {
+      handleResetDemoAction();
+    };
+    window.addEventListener('pravaah:reset-demo', handleResetEvent);
+    return () => window.removeEventListener('pravaah:reset-demo', handleResetEvent);
+  }, [handleResetDemoAction]);
+
   const value: PlanContextValue = {
     scenarioId,
     scenario: effectiveScenario,
@@ -673,6 +699,7 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
     hideFieldAction: handleHideFieldAction,
     addVehicleAction: handleAddVehicleAction,
     clearAuditLogAction: handleClearAuditLogAction,
+    resetDemoAction: handleResetDemoAction,
   };
 
   return (

@@ -6,9 +6,16 @@ import styles from './MobileMenu.module.css';
 export interface MobileMenuProps {
   readonly isOpen: boolean;
   readonly onClose: () => void;
+  readonly onOpenDemoGuide?: () => void;
+  readonly onResetDemo?: () => void;
 }
 
-export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
+export const MobileMenu: React.FC<MobileMenuProps> = ({
+  isOpen,
+  onClose,
+  onOpenDemoGuide,
+  onResetDemo,
+}) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstFocusableRef = useRef<HTMLButtonElement>(null);
 
@@ -109,6 +116,47 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
             </NavLink>
           ))}
         </nav>
+
+        <div style={{ padding: '0 0 var(--space-4) 0', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+          {onOpenDemoGuide && (
+            <button
+              type="button"
+              onClick={onOpenDemoGuide}
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: 'var(--font-size-sm)',
+                fontWeight: 600,
+                padding: 'var(--space-2) var(--space-4)',
+                backgroundColor: 'var(--paper-warm)',
+                border: '1px solid var(--graphite)',
+                borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer',
+                textAlign: 'left',
+              }}
+            >
+              Demo Guide Walkthrough
+            </button>
+          )}
+          {onResetDemo && (
+            <button
+              type="button"
+              onClick={onResetDemo}
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--font-size-xs)',
+                padding: 'var(--space-2) var(--space-4)',
+                backgroundColor: 'transparent',
+                border: '1px solid var(--stone)',
+                borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer',
+                textAlign: 'left',
+                color: 'var(--graphite)',
+              }}
+            >
+              Reset Demo (Scenario A Defaults)
+            </button>
+          )}
+        </div>
 
         <div className={styles.footer}>
           <span className={styles.simulatedPill}>SIMULATED</span>
