@@ -212,6 +212,14 @@ export const AssistantPanel: React.FC = () => {
           </header>
 
           <div ref={listRef} className={styles.list} aria-live="polite" aria-relevant="additions">
+            {unavailable && (
+              <p className={styles.notice} role="status">
+                {health === 'offline'
+                  ? 'The assistant server is not reachable. Run the app with its API (npm run dev, or deploy with the /api folder).'
+                  : 'The assistant is not set up yet. Add GROQ_API_KEYS to the server environment, then reload.'}
+              </p>
+            )}
+
             {bubbles.length === 0 && (
               <div className={styles.welcome}>
                 <p>
@@ -226,14 +234,6 @@ export const AssistantPanel: React.FC = () => {
                   ))}
                 </div>
               </div>
-            )}
-
-            {unavailable && (
-              <p className={styles.notice} role="status">
-                {health === 'offline'
-                  ? 'The assistant server is not reachable. Run the app with its API (npm run dev, or deploy with the /api folder).'
-                  : 'The assistant is not set up yet. Add GROQ_API_KEYS to the server environment, then reload.'}
-              </p>
             )}
 
             {bubbles.map((b) => (

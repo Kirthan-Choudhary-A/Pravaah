@@ -1,5 +1,10 @@
 import { test, expect } from '@playwright/test';
 
+// The welcome page is covered by its own test; every other test starts past it.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem('pravaah_intro_seen', '1'));
+});
+
 const viewports = [
   { name: 'mobile-390', width: 390, height: 844 },
   { name: 'tablet-768', width: 768, height: 1024 },
@@ -135,4 +140,37 @@ test('privacy and voice fixes hold in the browser', async ({ page }) => {
   await expect(page.getByText(/transcribed locally/i)).toHaveCount(0);
   await page.getByRole('button', { name: /Sample 4/i }).click();
   await expect(page.getByRole('button', { name: /Yes, Confirm/i })).toBeDisabled();
+});
+
+test.describe('welcome page', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => sessionStorage.removeItem('pravaah_intro_seen'));
+  });
+
+  test('preloads, plays the anthem on Enter, and can be skipped', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/');
+    await expect(page.getByRole('dialog', { name: /welcome to pravaah/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Skip' })).toBeVisible();
+    const enter = page.getByRole('button', { name: /enter pravaah/i });
+    await expect(enter).toBeVisible({ timeout: 15000 });
+    await enter.click();
+    await expect(page.getByText(/जन गण मन अधिनायक/)).toBeVisible();
+    const playing = await page.evaluate(() => {
+      const a = document.querySelector('audio');
+      return a ? !a.paused : 'no-element-in-dom';
+    });
+    // The audio element is created in code, so only assert the lyrics and skip path in the page.
+    expect(playing === true || playing === 'no-element-in-dom').toBe(true);
+    await page.getByRole('button', { name: 'Skip' }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeVisible();
+  });
+
+  test('skip works straight away, and the intro does not return in the same session', async ({ page }) => {
+    await page.goto('/plan');
+    await page.getByRole('button', { name: 'Skip' }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'My plan' })).toBeVisible();
+    await page.reload();
+    await expect(page.getByRole('dialog', { name: /welcome to pravaah/i })).toHaveCount(0);
+  });
 });

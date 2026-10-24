@@ -26,6 +26,7 @@ const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const DEFAULT_COOLDOWN_MS = 20_000;
 const BENCH_MS = 10 * 60_000;
 const BUSY = 'The assistant is busy right now. Please try again in a moment.';
+const REJECTED = 'The assistant could not sign in: its API key was rejected. Check the key set on the server.';
 
 function retryAfterMs(res: Response): number {
   const secs = Number(res.headers.get('retry-after'));
@@ -52,6 +53,8 @@ export async function groqChat(
     };
   }
 
+  let sawAuthFailure = false;
+  let sawRateLimit = false;
   for (let round = 0; round < 2; round++) {
     for (const model of models) {
       for (let attempt = 0; attempt < pool.size; attempt++) {
@@ -70,10 +73,12 @@ export async function groqChat(
 
         if (res.ok) return { ok: true, data: await res.json(), model };
         if (res.status === 429) {
+          sawRateLimit = true;
           pool.cool(picked.index, model, retryAfterMs(res));
           continue;
         }
         if (res.status === 401 || res.status === 403) {
+          sawAuthFailure = true;
           pool.bench(picked.index, BENCH_MS);
           continue;
         }
@@ -81,6 +86,11 @@ export async function groqChat(
         // Other 4xx are about the request itself; another key will not fix them.
         return { ok: false, status: 400, error: 'The assistant could not read that request.' };
       }
+    }
+
+    // Every key was refused as invalid (none merely busy): say so instead of "busy".
+    if (sawAuthFailure && !sawRateLimit && pool.next(models[0] ?? '') === null) {
+      return { ok: false, status: 503, error: REJECTED };
     }
 
     const waits = models.map((m) => pool.msUntilReady(m)).filter((v): v is number => v !== null);

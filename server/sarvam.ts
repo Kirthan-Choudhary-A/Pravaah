@@ -36,6 +36,8 @@ async function call<T>(
       error: 'Language services are not set up yet: no Sarvam API key is configured on the server.',
     };
   }
+  let sawAuthFailure = false;
+  let sawRateLimit = false;
   for (let attempt = 0; attempt < pool.size * 2; attempt++) {
     const picked = pool.next('sarvam');
     if (!picked) break;
@@ -52,16 +54,21 @@ async function call<T>(
         : { ok: false, status: 502, error: 'The language service returned an unexpected answer.' };
     }
     if (res.status === 429) {
+      sawRateLimit = true;
       const secs = Number(res.headers.get('retry-after'));
       pool.cool(picked.index, 'sarvam', Number.isFinite(secs) && secs > 0 ? secs * 1000 : 15_000);
       continue;
     }
     if (res.status === 401 || res.status === 403) {
+      sawAuthFailure = true;
       pool.bench(picked.index, 10 * 60_000);
       continue;
     }
     if (res.status >= 500) continue;
     return { ok: false, status: 400, error: 'The language service could not process that request.' };
+  }
+  if (sawAuthFailure && !sawRateLimit) {
+    return { ok: false, status: 503, error: 'The language service could not sign in: its API key was rejected. Check the key set on the server.' };
   }
   return { ok: false, status: 503, error: 'The language service is busy. Please try again in a moment.' };
 }

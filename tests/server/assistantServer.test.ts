@@ -113,6 +113,12 @@ describe('Groq failover keeps the flow going', () => {
     }
   });
 
+  it('tells the operator when every key is rejected, instead of saying busy', async () => {
+    const { deps } = fakeDeps(() => status(401));
+    const r = await groqChat(new KeyPool(['bad1', 'bad2']), ['m'], payload, deps);
+    expect(!r.ok && r.error).toMatch(/key was rejected/i);
+  });
+
   it('rotates over network errors and 5xx', async () => {
     let n = 0;
     const { deps } = fakeDeps(() => (++n === 1 ? status(502) : ok({ ok: 1 })));
@@ -129,6 +135,18 @@ describe('Groq failover keeps the flow going', () => {
   it('explains plainly when no key is configured', async () => {
     const r = await groqChat(new KeyPool([]), ['m'], payload);
     expect(!r.ok && r.error).toMatch(/not set up/i);
+  });
+});
+
+describe('Sarvam', () => {
+  it('rotates past a rate-limited key and reports rejected keys honestly', async () => {
+    const { translate } = await import('../../server/sarvam');
+    const good = fakeDeps((key) => (key === 's1' ? status(429) : ok({ translated_text: 'नमस्ते' })));
+    const r = await translate(new KeyPool(['s1', 's2']), 'hello', 'en-IN', 'hi-IN', good.deps);
+    expect(r.ok && r.data).toBe('नमस्ते');
+    const bad = fakeDeps(() => status(403));
+    const r2 = await translate(new KeyPool(['x']), 'hello', 'en-IN', 'hi-IN', bad.deps);
+    expect(!r2.ok && r2.error).toMatch(/key was rejected/i);
   });
 });
 
