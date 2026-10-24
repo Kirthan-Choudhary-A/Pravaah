@@ -126,7 +126,7 @@ export const IntroGate: React.FC<IntroGateProps> = ({ children }) => {
 
     void Promise.all([
       guard(document.fonts?.ready ?? Promise.resolve()),
-      guard(import('@three/scenes/CadVehicle/CadVehicleScene')),
+      guard(import('@three/scenes/CadVehicle/CadVehicleViewer')),
       guard(audioReady),
       guard(fetch('/api/health')),
     ]).then(() => {

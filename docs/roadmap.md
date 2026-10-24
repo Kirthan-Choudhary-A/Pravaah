@@ -25,7 +25,7 @@ Phased implementation roadmap for Pravaah (IMPACTX 2026, Challenge 09). Build on
   - Sidebar and top bar replace the slide-style header and footer; every page uses one content width and `PageHeader`; home is a dashboard (summary, licence runway, needs attention, next up, recommended route, household) and the long introduction moved to `/overview`; nested `<main>` landmarks removed; mobile uses a drawer.
 
 - [x] **Premium classic redesign, assistant, welcome page**
-  - Ivory, navy and brass design system; CAD-style 3D two-wheeler (lit PBR parts with edge lines, dimension labels, drag to turn) on the Dashboard and About pages; the old plate, architecture and plan-landscape scenes were removed.
+  - Ivory, navy and brass design system; a detailed CAD-style café-racer built in code (tyres with tread, cast wheels, drilled discs, coil-over springs, finned engine, chain, curved frame) with Rendered, Clay, Wireframe and Blueprint modes, dimension labels, turntable and drag to turn on the Dashboard and About pages; the old plate, architecture and plan-landscape scenes were removed.
   - Welcome page: real preloading with progress, the public-domain Armed Forces Orchestra rendition of the anthem on Enter, lyrics, Skip at every stage.
   - Assistant: Groq chat with live plan tools, key rotation and model fallback on the server, Sarvam translation, speech to text and text to speech in seven languages.
   - Fixed along the way: canvases that never redrew, dependency-graph links that never drew (global svg width cap), graph blank inside collapsed sections, about 40 CSS classes that components used but no stylesheet defined.

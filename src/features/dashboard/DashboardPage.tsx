@@ -7,8 +7,8 @@ import { Banner } from '@components/ui/Banner';
 import { Button } from '@components/ui/Button';
 import styles from './DashboardPage.module.css';
 
-const CadVehicleScene = lazy(() =>
-  import('@three/scenes/CadVehicle/CadVehicleScene').then((m) => ({ default: m.CadVehicleScene }))
+const CadVehicleViewer = lazy(() =>
+  import('@three/scenes/CadVehicle/CadVehicleViewer').then((m) => ({ default: m.CadVehicleViewer }))
 );
 
 const ROUTE_TEXT = {
@@ -81,7 +81,7 @@ export const DashboardPage: React.FC = () => {
         </div>
         <div className={styles.heroScene}>
           <Suspense fallback={<div className={styles.sceneLoading}>Preparing 3D model…</div>}>
-            <CadVehicleScene solid={1} />
+            <CadVehicleViewer />
           </Suspense>
         </div>
       </section>

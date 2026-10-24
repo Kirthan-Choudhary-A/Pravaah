@@ -7,8 +7,8 @@ import { PageHeader } from '@components/layout/PageHeader';
 import { StatusTag } from '@components/ui/StatusTag';
 import styles from './StoryPage.module.css';
 
-const CadVehicleScene = lazy(() =>
-  import('@three/scenes/CadVehicle/CadVehicleScene').then((m) => ({ default: m.CadVehicleScene }))
+const CadVehicleViewer = lazy(() =>
+  import('@three/scenes/CadVehicle/CadVehicleViewer').then((m) => ({ default: m.CadVehicleViewer }))
 );
 
 const PROBLEMS = [
@@ -122,7 +122,7 @@ export const StoryPage: React.FC = () => {
       <section className={styles.hero} aria-label="Two-wheeler model">
         <div className={styles.heroScene}>
           <Suspense fallback={<div className={styles.loading}>Preparing 3D model…</div>}>
-            <CadVehicleScene solid={1} />
+            <CadVehicleViewer zoomable />
           </Suspense>
         </div>
         <p className={styles.caption}>

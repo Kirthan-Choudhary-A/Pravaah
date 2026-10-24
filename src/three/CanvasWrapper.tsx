@@ -21,6 +21,8 @@ export interface CanvasWrapperProps {
     readonly far?: number;
   };
   readonly ariaLabel?: string;
+  /** Soft shadow maps from the key light. */
+  readonly shadows?: boolean;
   readonly style?: React.CSSProperties;
   readonly className?: string;
 }
@@ -31,6 +33,7 @@ export const CanvasWrapper: React.FC<CanvasWrapperProps> = ({
   tier: propTier,
   camera = { position: [0, 0, 5], fov: 35, near: 0.1, far: 50 },
   ariaLabel = 'Interactive 3D visualization',
+  shadows = false,
   style,
   className = '',
 }) => {
@@ -73,7 +76,7 @@ export const CanvasWrapper: React.FC<CanvasWrapperProps> = ({
   }
 
   // DPR configuration: [1, 1.75] for full, [1, 1.25] for lite
-  const dpr: [number, number] = effectiveTier === 'full' ? [1, 1.75] : [1, 1.25];
+  const dpr: [number, number] = effectiveTier === 'full' ? [1, 2] : [1, 1.25];
 
   return (
     <div
@@ -92,6 +95,7 @@ export const CanvasWrapper: React.FC<CanvasWrapperProps> = ({
     >
       <Suspense fallback={<QuietLoader />}>
         <Canvas
+          shadows={shadows ? 'percentage' : false}
           // 'always' while visible: scenes animate with useFrame. 'demand' left them frozen or blank.
           frameloop={isIntersecting ? 'always' : 'never'}
           dpr={dpr}

@@ -31,7 +31,7 @@
 }
 
 .heroScene {
-  height: clamp(18rem, 42vw, 26rem);
+  height: clamp(22rem, 46vw, 36rem);
   overflow: hidden;
   background: #0b1220;
   border: 1px solid rgba(226, 194, 125, 0.4);
