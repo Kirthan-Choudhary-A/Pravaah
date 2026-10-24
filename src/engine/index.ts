@@ -47,7 +47,14 @@ export type {
 // Core Planning & Relations
 export { planScenario } from './planner';
 export { buildTasks } from './model/buildTasks';
-export { buildLinks, taskRelations, type TaskRelations } from './graph/links';
+export {
+  assertAcyclic,
+  buildLinks,
+  findCycle,
+  taskRelations,
+  type RelationItem,
+  type TaskRelations,
+} from './graph/links';
 export { schedulePlan, computeBeta } from './schedule/scheduler';
 export { runChecks, licenceStages } from './checks/complianceChecks';
 export { calculateFees } from './fees/feeCalculator';

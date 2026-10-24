@@ -5,7 +5,7 @@
 
 import type { PlanInput, PlanResult } from './model/types';
 import { buildTasks } from './model/buildTasks';
-import { buildLinks } from './graph/links';
+import { assertAcyclic, buildLinks } from './graph/links';
 import { schedulePlan } from './schedule/scheduler';
 import { runChecks } from './checks/complianceChecks';
 import { calculateFees } from './fees/feeCalculator';
@@ -23,6 +23,7 @@ export function planScenario(input: PlanInput): PlanResult {
 
   // 2. Build dependency links
   const links = buildLinks(rawTasks, events);
+  assertAcyclic(rawTasks, links);
 
   // 3. Schedule tasks (forward pass, LSD, critical path, binding constraint)
   const scheduled = schedulePlan(rawTasks, links, scenario, decisions, {

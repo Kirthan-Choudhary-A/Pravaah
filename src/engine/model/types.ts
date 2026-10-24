@@ -116,6 +116,11 @@ export interface Link {
   readonly to: string;
   readonly type: LinkType;
   readonly reason: string;
+  readonly basis: RuleBasis;
+  readonly sourceIds: readonly string[];
+  readonly verified: boolean;
+  /** Always-visible consequence of breaking this link's order, e.g. an invalidation. */
+  readonly warning?: string;
 }
 
 export interface Task {
@@ -310,13 +315,7 @@ export interface Consent {
 }
 
 export type AuditAction =
-  | 'request'
-  | 'grant'
-  | 'decline'
-  | 'revoke'
-  | 'expire'
-  | 'reveal'
-  | 'apply';
+  'request' | 'grant' | 'decline' | 'revoke' | 'expire' | 'reveal' | 'apply';
 
 export type AuditResult = 'allowed' | 'denied' | 'completed';
 

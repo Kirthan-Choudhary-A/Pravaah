@@ -14,6 +14,7 @@ import type {
   BindingConstraint,
   PlanningEvent,
 } from '../model/types';
+import { ORDERING_LINK_TYPES } from '../graph/links';
 
 export interface ScheduleOptions {
   readonly onlineBufferDays?: number;
@@ -60,12 +61,7 @@ export function schedulePlan(
   }
 
   for (const l of links) {
-    if (
-      l.type === 'needs' ||
-      l.type === 'unlocks' ||
-      l.type === 'reuses' ||
-      l.type === 'propagates'
-    ) {
+    if (ORDERING_LINK_TYPES.has(l.type)) {
       hardPredecessors[l.to]?.push(l.from);
       hardSuccessors[l.from]?.push(l.to);
     }

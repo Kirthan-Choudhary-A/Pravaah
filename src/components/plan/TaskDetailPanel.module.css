@@ -271,3 +271,11 @@
   text-decoration: underline;
   word-break: break-all;
 }
+
+.relationWarning {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--status-missed);
+  margin: 0;
+  line-height: 1.4;
+}

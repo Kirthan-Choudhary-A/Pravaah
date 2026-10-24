@@ -1,11 +1,36 @@
 import React, { useMemo } from 'react';
 import type { PlanResult, SourceEntry } from '@engine/model/types';
-import { taskRelations } from '@engine/graph/links';
+import { taskRelations, type TaskRelations } from '@engine/graph/links';
 import { Panel } from '@components/ui/Panel';
 import { StatusTag } from '@components/ui/StatusTag';
 import { BasisTag } from '@components/ui/BasisTag';
 import { UnverifiedMark } from '@components/ui/UnverifiedMark';
 import styles from './TaskDetailPanel.module.css';
+
+type RelationKey = Exclude<keyof TaskRelations, 'taskId' | 'taskName'>;
+
+const RELATION_GROUPS: readonly {
+  readonly key: RelationKey;
+  readonly heading: string;
+  readonly label: string;
+  readonly warn?: boolean;
+}[] = [
+  { key: 'needs', heading: 'Needs first', label: '◀── [needs]' },
+  { key: 'unlockedBy', heading: 'Unlocked by', label: '◀── [unlocks]' },
+  { key: 'reuses', heading: 'Reuses documents from', label: '◀── [reuses]' },
+  { key: 'propagatesFrom', heading: 'Receives data from', label: '◀── [propagates]' },
+  { key: 'neededBy', heading: 'Needed by', label: '[needs] ──▶' },
+  { key: 'unlocks', heading: 'Unlocks', label: '[unlocks] ──▶' },
+  { key: 'reusedBy', heading: 'Documents reused by', label: '[reuses] ──▶' },
+  { key: 'propagatesTo', heading: 'Passes data to', label: '[propagates] ──▶' },
+  { key: 'invalidatedBy', heading: 'At risk from', label: '◀── ✕ [invalidates]', warn: true },
+  {
+    key: 'invalidates',
+    heading: 'Invalidates if done too early',
+    label: '✕ [invalidates] ──▶',
+    warn: true,
+  },
+];
 
 export interface TaskDetailPanelProps {
   readonly plan: PlanResult;
@@ -113,101 +138,52 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({
           </div>
         </div>
 
-        {/* Upstream Pre-requisites */}
-        {relations && relations.needs.length > 0 && (
-          <div className={styles.section}>
-            <h4 className={styles.sectionHeading}>Pre-requisites ({relations.needs.length})</h4>
-            <ul className={styles.relationsList}>
-              {relations.needs.map((item) => (
-                <li key={item.id} className={styles.relationItem}>
-                  <button
-                    type="button"
-                    className={styles.relationTargetBtn}
-                    onClick={() => onSelectTask(item.id)}
-                  >
-                    {item.name}
-                  </button>
-                  <p className={styles.relationReason}>{item.reason}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Downstream Unlocks & Reuses */}
-        {relations && (relations.unlocks.length > 0 || relations.reuses.length > 0) && (
-          <div className={styles.section}>
-            <h4 className={styles.sectionHeading}>Unlocks & Reuses</h4>
-            <ul className={styles.relationsList}>
-              {relations.unlocks.map((item) => (
-                <li key={item.id} className={styles.relationItem}>
-                  <div className={styles.relationTypeLabel}>── [unlocks] ──▶</div>
-                  <button
-                    type="button"
-                    className={styles.relationTargetBtn}
-                    onClick={() => onSelectTask(item.id)}
-                  >
-                    {item.name}
-                  </button>
-                  <p className={styles.relationReason}>{item.reason}</p>
-                </li>
-              ))}
-              {relations.reuses.map((item) => (
-                <li key={item.id} className={styles.relationItem}>
-                  <div className={styles.relationTypeLabel}>── [reuses] ──▶</div>
-                  <button
-                    type="button"
-                    className={styles.relationTargetBtn}
-                    onClick={() => onSelectTask(item.id)}
-                  >
-                    {item.name}
-                  </button>
-                  <p className={styles.relationReason}>{item.reason}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Downstream Invalidation & Propagation Warnings */}
-        {relations && (relations.invalidates.length > 0 || relations.propagatesTo.length > 0) && (
-          <div className={styles.section}>
-            <h4 className={`${styles.sectionHeading ?? ''} ${styles.warningHeading ?? ''}`}>
-              Consequences & Invalidation
-            </h4>
-            <ul className={styles.relationsList}>
-              {relations.invalidates.map((item) => (
-                <li
-                  key={item.id}
-                  className={`${styles.relationItem ?? ''} ${styles.itemInvalidates ?? ''}`}
+        {/* Dependencies, both directions, every link type */}
+        {relations &&
+          RELATION_GROUPS.map((g) => {
+            const items = relations[g.key];
+            if (items.length === 0) return null;
+            return (
+              <div key={g.key} className={styles.section}>
+                <h4
+                  className={`${styles.sectionHeading ?? ''} ${
+                    g.warn ? (styles.warningHeading ?? '') : ''
+                  }`.trim()}
                 >
-                  <div className={styles.invalidatesBadge}>✕ Invalidates</div>
-                  <button
-                    type="button"
-                    className={styles.relationTargetBtn}
-                    onClick={() => onSelectTask(item.id)}
-                  >
-                    {item.name}
-                  </button>
-                  <p className={styles.relationReason}>{item.reason}</p>
-                </li>
-              ))}
-              {relations.propagatesTo.map((item) => (
-                <li key={item.id} className={styles.relationItem}>
-                  <div className={styles.relationTypeLabel}>── [propagates to] ──▶</div>
-                  <button
-                    type="button"
-                    className={styles.relationTargetBtn}
-                    onClick={() => onSelectTask(item.id)}
-                  >
-                    {item.name}
-                  </button>
-                  <p className={styles.relationReason}>{item.reason}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+                  {g.heading} ({items.length})
+                </h4>
+                <ul className={styles.relationsList}>
+                  {items.map((item) => (
+                    <li
+                      key={`${g.key}-${item.id}`}
+                      className={`${styles.relationItem ?? ''} ${
+                        g.warn ? (styles.itemInvalidates ?? '') : ''
+                      }`.trim()}
+                    >
+                      <div className={styles.relationTypeLabel}>{g.label}</div>
+                      <button
+                        type="button"
+                        className={styles.relationTargetBtn}
+                        onClick={() => onSelectTask(item.id)}
+                      >
+                        {item.name}
+                      </button>
+                      <p className={styles.relationReason}>{item.reason}</p>
+                      {item.warning && (
+                        <p className={styles.relationWarning} role="note">
+                          ⚠ {item.warning}
+                        </p>
+                      )}
+                      <div className={styles.basisGroup}>
+                        <BasisTag basis={item.basis} />
+                        {!item.verified && <UnverifiedMark />}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
 
         {/* Cited Legal Sources */}
         {task.sourceIds && task.sourceIds.length > 0 && (

@@ -275,3 +275,35 @@
   margin: 0;
   line-height: 1.4;
 }
+
+.edgeDetail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  background-color: var(--offwhite);
+}
+
+.edgeDetailTitle {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--graphite);
+}
+
+.edgeWarning {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--status-missed);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.linkMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
