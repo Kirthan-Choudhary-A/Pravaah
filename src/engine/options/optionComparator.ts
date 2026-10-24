@@ -58,6 +58,14 @@ export function compareOptions(input: PlanInput): OptionComparison[] {
       isSlow: true,
     });
 
+    // A lapsed licence means driving illegally, so it outranks every other consideration.
+    const lapseDays = (plan: typeof expectedPlan): number => {
+      const dl = plan.tasks.find((t) => t.id === 'task-licence-renewal');
+      return dl ? Math.max(0, dl.end - input.scenario.licenceExpiryDay) : 0;
+    };
+    const licenceLapseDays = lapseDays(expectedPlan);
+    const slowLicenceLapseDays = lapseDays(slowPlan);
+
     // Compute metrics
     const deadlineBreaches = expectedPlan.tasks.filter((t) => t.status === 'Missed').length;
     const slowDeadlineBreaches = slowPlan.tasks.filter((t) => t.status === 'Missed').length;
@@ -137,6 +145,8 @@ export function compareOptions(input: PlanInput): OptionComparison[] {
       ...(unverifiedRuleImpact ? { unverifiedRuleImpact } : {}),
       extraStepsCount,
       visitCount,
+      licenceLapseDays,
+      slowLicenceLapseDays,
       deadlineBreaches,
       slowDeadlineBreaches,
       unknownStepsCount,
@@ -145,6 +155,7 @@ export function compareOptions(input: PlanInput): OptionComparison[] {
   }
 
   // Multi-criteria sorting
+  // 0. licence lapse days (expected, then slow case)
   // 1. deadline breaches
   // 2. slow-case breaches
   // 3. unknown steps
@@ -155,6 +166,9 @@ export function compareOptions(input: PlanInput): OptionComparison[] {
   // 8. official fees
   // 9. number of visits
   comparisons.sort((a, b) => {
+    if (a.licenceLapseDays !== b.licenceLapseDays) return a.licenceLapseDays - b.licenceLapseDays;
+    if (a.slowLicenceLapseDays !== b.slowLicenceLapseDays)
+      return a.slowLicenceLapseDays - b.slowLicenceLapseDays;
     if (a.deadlineBreaches !== b.deadlineBreaches) return a.deadlineBreaches - b.deadlineBreaches;
     if (a.slowDeadlineBreaches !== b.slowDeadlineBreaches)
       return a.slowDeadlineBreaches - b.slowDeadlineBreaches;

@@ -37,9 +37,9 @@ describe('Engine: Forward Pass Scheduling', () => {
     const result = schedulePlan(tasks, links, scenarioA, decisions);
 
     const reReg = result.tasks.find((t) => t.id === 'task-re-registration-form27')!;
-    // Owner is away days 12–25, so visit must start at Day 25
-    expect(reReg.start).toBe(25);
-    expect(reReg.end).toBe(25 + reReg.duration);
+    // Owner is away days 12–25 inclusive, so the visit starts on Day 26
+    expect(reReg.start).toBe(26);
+    expect(reReg.end).toBe(26 + reReg.duration);
   });
 
   it('matches plan finish to the maximum end of all tasks', () => {

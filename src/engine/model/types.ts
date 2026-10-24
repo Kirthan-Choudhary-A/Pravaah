@@ -264,6 +264,9 @@ export interface OptionComparison {
   readonly unverifiedRuleImpact?: string;
   readonly extraStepsCount: number;
   readonly visitCount: number;
+  /** Days the licence renewal finishes after expiry (0 = renewed in time). Ranked first. */
+  readonly licenceLapseDays: number;
+  readonly slowLicenceLapseDays: number;
   readonly deadlineBreaches: number;
   readonly slowDeadlineBreaches: number;
   readonly unknownStepsCount: number;

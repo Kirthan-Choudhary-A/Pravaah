@@ -223,7 +223,7 @@ export const Timeline: React.FC<TimelineProps> = ({
                           left: `${absence.start * dayWidth}px`,
                           width: `${(absence.end - absence.start) * dayWidth}px`,
                         }}
-                        title={`Absence window: Day ${absence.start} to Day ${absence.end}`}
+                        title={`Owner away: Day ${absence.start} to Day ${absence.end - 1}`}
                       >
                         <span className={styles.absenceTag}>Absence</span>
                       </div>

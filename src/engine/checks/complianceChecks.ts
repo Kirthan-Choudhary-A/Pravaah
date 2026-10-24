@@ -223,7 +223,7 @@ export function runChecks(
     if (t.start >= absenceStart && t.start < absenceEnd) {
       allVisitsInTown = false;
       visitViolations.push(
-        `${t.name} scheduled on Day ${t.start} during scheduled absence (Days ${absenceStart}–${absenceEnd})`
+        `${t.name} scheduled on Day ${t.start} during scheduled absence (Days ${absenceStart}–${absenceEnd - 1})`
       );
     }
   }

@@ -10,6 +10,7 @@ export const vehicleMoveSchema = z.object({
   movedOnDay: z.number(),
 });
 
+/** Half-open [start, end): the owner is away on days start..end-1 and back on `end`. */
 export const absenceWindowSchema = z.object({
   start: z.number(),
   end: z.number(),

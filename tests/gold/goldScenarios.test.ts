@@ -82,7 +82,7 @@ describe('Gold Scenario Test Suite (GS-01 to GS-11)', () => {
     expect(aadhaar.start).toBeGreaterThanOrEqual(noc.end);
 
     const reReg = plan.tasks.find((t) => t.id === 'task-re-registration-form27')!;
-    expect(reReg.start).toBe(25); // exactly after owner returns on day 25
+    expect(reReg.start).toBe(26); // the day after the owner's last away day (25)
 
     for (const c of plan.checks) {
       expect(c.passed).toBe(true);
@@ -167,7 +167,9 @@ describe('Gold Scenario Test Suite (GS-01 to GS-11)', () => {
     expect(taskMap.has('task-bank-consent-form28')).toBe(true);
     expect(taskMap.has('task-close-loan-new-rc')).toBe(true);
 
-    expect(afterPlan.finish).toBe(39);
+    // Hand check: rejection 0-5, bank consent 5-12, NOC 12-22, visit 26 (owner back), registration 26-30,
+    // loan closure on the new RC 30-40.
+    expect(afterPlan.finish).toBe(40);
   });
 
   // GS-05: Scenario C (Unknown Sikkim jurisdiction)
@@ -402,11 +404,11 @@ describe('Gold Scenario Test Suite (GS-01 to GS-11)', () => {
       events: [{ type: 'tripExtended', additionalDays: 7 }],
     });
 
-    // Original trip days 12-25 + 7 = 12-32.
-    // Visit starts on Day 32 + 4 days duration = Day 36
+    // Original trip days 12-25 + 7 = away through day 32, back on day 33.
+    // Visit starts on Day 33 + 4 days duration = Day 37
     const reReg = plan.tasks.find((t) => t.id === 'task-re-registration-form27')!;
-    expect(reReg.start).toBe(32);
-    expect(reReg.end).toBe(36);
+    expect(reReg.start).toBe(33);
+    expect(reReg.end).toBe(37);
 
     const inTownCheck = plan.checks.find((c) => c.id === 'check-owner-in-town')!;
     expect(inTownCheck.passed).toBe(true);

@@ -1,7 +1,7 @@
 /**
  * Metrics Calculator
  * Evaluates the three challenge brief metrics:
- * 1. Dependency-ordering correctness (GS-01 to GS-11 gold plans)
+ * 1. Dependency-ordering correctness (gold plans in src/data/gold/goldPlans.ts)
  * 2. Plate capture accuracy after read-back (87 typed transcripts)
  * 3. Renewals under scarce slots (1,000 deterministic seeded cases vs naive baseline)
  */
@@ -55,6 +55,10 @@ export interface Metric1Result {
   readonly passedCount: number;
   readonly totalCount: number;
   readonly passRate: number;
+  /** Scenarios that check task ordering/finish (the rest check plates, consent or voice). */
+  readonly orderingTotal: number;
+  readonly orderingPassed: number;
+  readonly disclaimer: string;
   readonly scenarioResults: readonly ScenarioCheckResult[];
 }
 
@@ -73,8 +77,11 @@ export interface Metric2Result {
   readonly totalTranscripts: number;
   readonly firstPassCorrect: number;
   readonly firstPassAccuracy: number;
+  /** The right plate was among the readings offered (the user taps it). An upper bound. */
   readonly readBackCorrect: number;
   readonly readBackAccuracy: number;
+  /** First reading wrong, so the read-back would be wrong and the user must catch it. */
+  readonly wrongFirstReading: number;
   readonly disclaimer: string;
   readonly failures: readonly TranscriptFailure[];
 }
@@ -88,9 +95,21 @@ export interface HistogramBin {
   readonly naivePercent: number;
 }
 
+export interface StrategyResult {
+  readonly label: string;
+  readonly note: string;
+  readonly completedBeforeLSDPercent: number;
+  readonly renewedBeforeExpiryPercent: number;
+  readonly avgSlackDays: number;
+}
+
 export interface Metric3Result {
   readonly name: string;
   readonly description: string;
+  /** Assumptions the result depends on, shown next to the numbers. */
+  readonly assumptions: readonly string[];
+  /** Strategies that separate route choice from scheduling quality. */
+  readonly additional: readonly StrategyResult[];
   readonly seed: number;
   readonly sampleSize: number;
   readonly parameterRanges: {
@@ -395,9 +414,15 @@ export function evaluateMetric1(): Metric1Result {
   return {
     name: 'Dependency-Ordering Correctness',
     description:
-      'Verification of 11 statutory and disruption scenarios against exact causal DAG constraints.',
+      'Checks each gold scenario against its required and forbidden orderings and expected outcomes.',
     passedCount,
     totalCount: GOLD_PLANS.length,
+    orderingTotal: GOLD_PLANS.filter((g) => !g.customCheck).length,
+    orderingPassed: scenarioResults.filter(
+      (r) => r.passed && !GOLD_PLANS.find((g) => g.id === r.id)?.customCheck
+    ).length,
+    disclaimer:
+      'Regression check, not independent validation. Required orderings use the engine\'s own links and several expected finish days were set from engine output. GS-06 to GS-08 check plates, consent and voice, not task order. Recompute the gold plans from the sources before citing this as ordering correctness.',
     passRate: Math.round((passedCount / GOLD_PLANS.length) * 100),
     scenarioResults,
   };
@@ -476,8 +501,9 @@ export function evaluateMetric2(): Metric2Result {
     firstPassAccuracy: Math.round((firstPassCorrect / total) * 1000) / 10,
     readBackCorrect,
     readBackAccuracy: Math.round((readBackCorrect / total) * 1000) / 10,
+    wrongFirstReading: total - firstPassCorrect,
     disclaimer:
-      'Measured on a typed transcript set, not live audio. Live speech accuracy is not measured yet.',
+      'Typed transcripts written alongside the parser, not live audio; live speech accuracy is not measured. (a) is the first reading read back. (b) counts the right plate among the readings offered and assumes the user taps it, so it is an upper bound with no user-error model.',
     failures,
   };
 }
@@ -497,6 +523,25 @@ export function evaluateMetric3(): Metric3Result {
   let naiveLSDCount = 0;
   let naiveExpiryCount = 0;
   let naiveSlackSum = 0;
+
+  // Strategies that separate the effect of picking the online route from scheduling quality.
+  const extra = {
+    informedOnline: { lsd: 0, expiry: 0, slack: 0 },
+    noOnline: { lsd: 0, expiry: 0, slack: 0 },
+  };
+  const tally = (
+    acc: { lsd: number; expiry: number; slack: number },
+    plan: ReturnType<typeof planScenario>,
+    expiry: number
+  ) => {
+    const dl = plan.tasks.find((t) => t.id === 'task-licence-renewal' || t.lane === 'licence');
+    const start = dl?.start ?? 0;
+    const end = dl?.end ?? 0;
+    const lsd = dl?.lsd ?? 0;
+    acc.slack += lsd - start;
+    if (start <= lsd && end <= expiry) acc.lsd++;
+    if (end <= expiry) acc.expiry++;
+  };
 
   const histogramBins = [
     { label: 'Missed (< 0)', range: '< 0 days', pravaahCount: 0, naiveCount: 0 },
@@ -560,6 +605,31 @@ export function evaluateMetric3(): Metric3Result {
     else if (pSlack <= 14) histogramBins[2]!.pravaahCount++;
     else histogramBins[3]!.pravaahCount++;
 
+    // 1b. Informed user who just takes the online route (no option ranking)
+    tally(
+      extra.informedOnline,
+      planScenario({
+        scenario: caseScenario,
+        mergedPack: packKA,
+        decisions: { form35: 'wait', licenceRoute: 'online' },
+        events,
+      }),
+      licenceExpiry
+    );
+
+    // 1c. Pravaah when online renewal is not available: best of the in-person options
+    const inPerson = options.find((o) => o.decisions.licenceRoute !== 'online');
+    tally(
+      extra.noOnline,
+      planScenario({
+        scenario: caseScenario,
+        mergedPack: packKA,
+        decisions: inPerson?.decisions ?? { form35: 'wait', licenceRoute: 'rto-visit' },
+        events,
+      }),
+      licenceExpiry
+    );
+
     // 2. Naive Baseline Plan (visits RTO for licence, waits for Form 35)
     const nPlan = planScenario({
       scenario: caseScenario,
@@ -601,7 +671,28 @@ export function evaluateMetric3(): Metric3Result {
   return {
     name: 'Renewals Under Scarce Slots',
     description:
-      'Comparison of Pravaah route-comparison vs. naive baseline across 1,000 randomized compliance timelines.',
+      'Seeded simulation of 1,000 randomized timelines. The naive baseline always books the RTO slot, so most of its gap to Pravaah is the online route; the extra rows separate that out.',
+    assumptions: [
+      'Online renewal is assumed available with an assumed 5-day processing time (Karnataka pack flag, unverified).',
+      'Slot queues, trips, expiry days and disruptions are drawn from the stated ranges with a fixed seed.',
+      'Limits are Pravaah\'s own latest safe dates, so this measures plans against the engine\'s model, not real RTOs.',
+    ],
+    additional: [
+      {
+        label: 'Informed user: online route, wait for Form 35',
+        note: 'No option ranking. Shows what route choice alone gives.',
+        completedBeforeLSDPercent: Math.round((extra.informedOnline.lsd / sampleSize) * 1000) / 10,
+        renewedBeforeExpiryPercent: Math.round((extra.informedOnline.expiry / sampleSize) * 1000) / 10,
+        avgSlackDays: Math.round((extra.informedOnline.slack / sampleSize) * 10) / 10,
+      },
+      {
+        label: 'Pravaah when online renewal is unavailable',
+        note: 'Best in-person option only. Shows scheduling quality without the online route.',
+        completedBeforeLSDPercent: Math.round((extra.noOnline.lsd / sampleSize) * 1000) / 10,
+        renewedBeforeExpiryPercent: Math.round((extra.noOnline.expiry / sampleSize) * 1000) / 10,
+        avgSlackDays: Math.round((extra.noOnline.slack / sampleSize) * 10) / 10,
+      },
+    ],
     seed,
     sampleSize,
     parameterRanges: {
@@ -627,7 +718,7 @@ export function evaluateMetric3(): Metric3Result {
 export function calculateAllMetrics(
   onProgress?: (step: number, total: number, label: string) => void
 ): AllMetricsReport {
-  onProgress?.(1, 3, 'Evaluating dependency ordering across GS-01 to GS-11...');
+  onProgress?.(1, 3, `Evaluating ${GOLD_PLANS.length} gold scenarios...`);
   const metric1 = evaluateMetric1();
 
   onProgress?.(2, 3, 'Running plate capture accuracy on 87 typed transcripts...');

@@ -22,6 +22,24 @@ describe('Engine: Option Comparison and Ranking', () => {
     expect(winner.slowPlan.finish).toBe(37);
   });
 
+  it('never ranks a plan that lets the licence lapse above one that does not', () => {
+    // Expiry on day 7 with a 40-day queue: only the online route renews in time.
+    const comparisons = compareOptions({
+      scenario: { ...scenarioA, licenceExpiryDay: 7, primarySlotQueue: 40 },
+      mergedPack: packKA,
+      decisions: { form35: 'resolve', licenceRoute: 'online' },
+    });
+    const winner = comparisons[0]!;
+    expect(winner.licenceLapseDays).toBe(0);
+    expect(winner.decisions.licenceRoute).toBe('online');
+    const lapsing = comparisons.filter((c) => c.licenceLapseDays > 0);
+    expect(lapsing.length).toBeGreaterThan(0);
+    for (const c of lapsing) expect(c.rank).toBeGreaterThan(winner.rank);
+    // Ranked list never has a lapsing plan before a non-lapsing one.
+    const lapses = comparisons.map((c) => c.licenceLapseDays);
+    expect(lapses).toEqual([...lapses].sort((a, b) => a - b));
+  });
+
   it('generates up to 3 plain-English reasons, one trade-off, and one fallback', () => {
     const comparisons = compareOptions({
       scenario: scenarioA,

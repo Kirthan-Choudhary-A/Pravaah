@@ -189,6 +189,11 @@ export const MetricsPage: React.FC = () => {
               </div>
             </div>
 
+            <div className={styles.disclaimerBanner} role="note">
+              <strong>Methodology Notice:</strong> {report.metric1.disclaimer} Ordering and finish
+              checks: {report.metric1.orderingPassed} of {report.metric1.orderingTotal} pass.
+            </div>
+
             <div className={styles.tableWrapper}>
               <table
                 className={styles.dataTable}
@@ -283,11 +288,12 @@ export const MetricsPage: React.FC = () => {
                   {report.metric2.readBackAccuracy}%
                 </span>
                 <span className={styles.statLabel}>
-                  (b) After Read-Back Confirmation
+                  (b) Right plate offered (user taps it, upper bound)
                 </span>
                 <span className={styles.statSub}>
                   {report.metric2.readBackCorrect} of{' '}
-                  {report.metric2.totalTranscripts} offered among candidates
+                  {report.metric2.totalTranscripts} among the readings offered. First reading wrong in{' '}
+                  {report.metric2.wrongFirstReading}.
                 </span>
               </div>
             </div>
@@ -355,6 +361,15 @@ export const MetricsPage: React.FC = () => {
               </div>
             </div>
 
+            <div className={styles.disclaimerBanner} role="note">
+              <strong>Assumptions:</strong>
+              <ul style={{ margin: 0, paddingLeft: 'var(--space-4)' }}>
+                {report.metric3.assumptions.map((a) => (
+                  <li key={a}>{a}</li>
+                ))}
+              </ul>
+            </div>
+
             <div className={styles.comparisonGrid}>
               <div className={`${styles.comparisonCard} ${styles.cardFeatured}`}>
                 <div className={styles.comparisonHeader}>
@@ -407,6 +422,36 @@ export const MetricsPage: React.FC = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className={styles.tableWrapper}>
+              <table className={styles.dataTable} aria-label="What the gap between Pravaah and the naive baseline is made of">
+                <caption style={{ textAlign: 'left', fontWeight: 700, padding: 'var(--space-2) 0' }}>
+                  What the gap is made of
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Strategy</th>
+                    <th scope="col">Completed on or before LSD</th>
+                    <th scope="col">Renewed before expiry</th>
+                    <th scope="col">Average slack</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.metric3.additional.map((a) => (
+                    <tr key={a.label}>
+                      <td>
+                        {a.label}
+                        <br />
+                        <small>{a.note}</small>
+                      </td>
+                      <td>{a.completedBeforeLSDPercent}%</td>
+                      <td>{a.renewedBeforeExpiryPercent}%</td>
+                      <td>{a.avgSlackDays} days</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
             {/* SVG Bar Chart for Slack Distribution */}

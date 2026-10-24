@@ -23,7 +23,8 @@ console.log(`\nAll metrics computed in ${duration}ms.\n`);
 // -----------------------------------------------------------------------------
 console.log('------------------------------------------------------------');
 console.log('METRIC 1: DEPENDENCY-ORDERING CORRECTNESS');
-console.log(`Summary: ${report.metric1.passedCount} of ${report.metric1.totalCount} scenarios match their gold plan (${report.metric1.passRate}%)`);
+console.log(`Summary: ${report.metric1.passedCount} of ${report.metric1.totalCount} scenarios match their gold plan (${report.metric1.passRate}%); ${report.metric1.orderingPassed} of ${report.metric1.orderingTotal} are ordering/finish checks`);
+console.log(`Note: ${report.metric1.disclaimer}`);
 console.log('------------------------------------------------------------');
 
 console.table(
@@ -45,7 +46,8 @@ console.log(`Note: ${report.metric2.disclaimer}`);
 console.log('------------------------------------------------------------');
 console.log(`Total Typed Transcripts : ${report.metric2.totalTranscripts}`);
 console.log(`(a) First-Pass Accuracy  : ${report.metric2.firstPassCorrect}/${report.metric2.totalTranscripts} (${report.metric2.firstPassAccuracy}%)`);
-console.log(`(b) After Read-Back      : ${report.metric2.readBackCorrect}/${report.metric2.totalTranscripts} (${report.metric2.readBackAccuracy}%)`);
+console.log(`(b) Right plate offered  : ${report.metric2.readBackCorrect}/${report.metric2.totalTranscripts} (${report.metric2.readBackAccuracy}%)  [assumes the user taps it; upper bound]`);
+console.log(`    First reading wrong  : ${report.metric2.wrongFirstReading} (user must catch these at read-back)`);
 
 if (report.metric2.failures.length > 0) {
   console.log(`\nFailures (${report.metric2.failures.length}):`);
@@ -69,6 +71,7 @@ console.log('\n------------------------------------------------------------');
 console.log('METRIC 3: RENEWALS UNDER SCARCE SLOTS');
 console.log(`Sample: ${report.metric3.sampleSize} seeded cases | Seed: ${report.metric3.seed}`);
 console.log(`Ranges: Queue ${report.metric3.parameterRanges.slotQueueDays}, Expiry ${report.metric3.parameterRanges.licenceExpiryDays}`);
+for (const a of report.metric3.assumptions) console.log(`Assumption: ${a}`);
 console.log('------------------------------------------------------------');
 
 console.table([
@@ -86,6 +89,16 @@ console.table([
   },
 ]);
 
+console.log('\nWhat the gap is made of:');
+console.table(
+  report.metric3.additional.map((a) => ({
+    Strategy: a.label,
+    'Completed <= LSD (%)': `${a.completedBeforeLSDPercent}%`,
+    'Renewed Before Expiry (%)': `${a.renewedBeforeExpiryPercent}%`,
+    'Avg Slack (Days)': `${a.avgSlackDays}d`,
+  }))
+);
+
 console.log('\nLicence Slack Distribution:');
 console.table(
   report.metric3.histogram.map((h) => ({
@@ -97,5 +110,5 @@ console.table(
 );
 
 console.log('\n============================================================');
-console.log('  EVALUATION COMPLETE • ALL SIMULATED METRICS VERIFIED');
+console.log('  EVALUATION COMPLETE • simulated data, results as measured above');
 console.log('============================================================\n');

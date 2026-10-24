@@ -46,8 +46,8 @@ describe('Engine: Plan Diffing', () => {
 
     const reRegShift = diff.startEndShifts['task-re-registration-form27'];
     expect(reRegShift).toBeDefined();
-    // Shift from Day 25 to Day 28 -> +3 days
-    expect(reRegShift?.startDiff).toBe(3);
+    // Owner is back on Day 26; the 28-day queue moves the visit from Day 26 to Day 28 -> +2 days
+    expect(reRegShift?.startDiff).toBe(2);
     expect(diff.finishChange).toBe(1); // from 31 to 32
   });
 });
