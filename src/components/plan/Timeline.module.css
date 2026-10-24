@@ -11,9 +11,10 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-3) var(--space-4);
   background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  border: var(--border-neo);
+  box-shadow: var(--shadow-sm);
   border-radius: var(--radius-sm);
 }
 
@@ -22,86 +23,111 @@
   align-items: center;
   gap: var(--space-3);
   font-size: var(--font-size-xs);
-  color: var(--charcoal);
+  color: #000000;
   flex-wrap: wrap;
 }
 
 .legendTitle {
-  font-weight: 600;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  font-weight: 700;
 }
 
 .legendSafeSymbol {
-  color: var(--status-safe);
+  display: inline-block;
+  padding: 1px 6px;
+  background-color: var(--accent-green);
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
+  border-radius: 2px;
+  font-weight: 800;
 }
 
 .legendRiskSymbol {
-  color: var(--status-risk);
+  display: inline-block;
+  padding: 1px 6px;
+  background-color: var(--accent-yellow);
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
+  border-radius: 2px;
+  font-weight: 800;
 }
 
 .legendMissedSymbol {
-  color: var(--status-missed);
+  display: inline-block;
+  padding: 1px 6px;
+  background-color: var(--accent-coral);
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
+  border-radius: 2px;
+  font-weight: 800;
 }
 
 .legendAbsenceBox {
-  width: 14px;
-  height: 10px;
+  width: 16px;
+  height: 12px;
   background: repeating-linear-gradient(
     45deg,
-    rgba(183, 176, 163, 0.4),
-    rgba(183, 176, 163, 0.4) 3px,
+    #000000,
+    #000000 3px,
     transparent 3px,
     transparent 6px
   );
-  border: 1px solid var(--stone);
+  border: 1.5px solid #000000;
   border-radius: 2px;
 }
 
 .viewToggleGroup {
   display: flex;
-  gap: 2px;
-  background-color: var(--paper);
-  border: 1px solid var(--stone);
+  gap: 4px;
+  background-color: var(--paper-warm);
+  border: 1.5px solid #000000;
   border-radius: var(--radius-sm);
   padding: 2px;
 }
 
 .viewBtn {
-  border: none;
+  border: 1.5px solid transparent;
   background: transparent;
   font-size: var(--font-size-xs);
   font-family: var(--font-sans);
-  font-weight: 500;
-  color: var(--charcoal);
-  padding: var(--space-1) var(--space-3);
-  border-radius: calc(var(--radius-sm) - 2px);
+  font-weight: 700;
+  color: #000000;
+  padding: 4px 10px;
+  border-radius: 2px;
   cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
 }
 
 .viewBtnActive {
-  background-color: var(--graphite);
-  color: var(--paper);
-  font-weight: 600;
+  background-color: var(--accent-yellow);
+  color: #000000;
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
+  font-weight: 800;
 }
 
 /* Scroll area */
 .scrollContainer {
   width: 100%;
   overflow-x: auto;
-  border: 1px solid var(--stone);
+  border: var(--border-neo);
   border-radius: var(--radius-sm);
-  background-color: var(--paper);
+  background-color: var(--offwhite);
+  box-shadow: var(--shadow-md);
   position: relative;
 }
 
 .scrollContainer:focus-visible {
-  outline: 2px solid var(--graphite);
+  outline: 3px solid #000000;
   outline-offset: -2px;
 }
 
@@ -113,24 +139,24 @@
 
 .axisRow {
   display: flex;
-  height: 38px;
-  background-color: var(--offwhite);
-  border-bottom: 1px solid var(--stone);
+  height: 42px;
+  background-color: var(--paper-warm);
+  border-bottom: 2px solid #000000;
   position: sticky;
   top: 0;
   z-index: 2;
 }
 
 .laneLabelCorner {
-  width: 140px;
-  min-width: 140px;
+  width: 150px;
+  min-width: 150px;
   padding: var(--space-2) var(--space-3);
   font-size: var(--font-size-xs);
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
-  color: var(--graphite);
-  border-right: 1px solid var(--stone);
-  background-color: var(--offwhite);
+  color: #000000;
+  border-right: 2px solid #000000;
+  background-color: var(--accent-yellow);
   position: sticky;
   left: 0;
   z-index: 3;
@@ -154,27 +180,32 @@
 .tickLabel {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  color: var(--iron);
+  color: #000000;
+  font-weight: 700;
   padding-top: 4px;
 }
 
 .axisTickToday .tickLabel {
-  font-weight: 700;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
+  background-color: var(--accent-yellow);
+  padding: 0 4px;
+  border: 1px solid #000000;
+  border-radius: 2px;
 }
 
 .tickLine {
-  width: 1px;
-  height: 6px;
-  background-color: var(--stone);
+  width: 2px;
+  height: 8px;
+  background-color: #000000;
   align-self: center;
 }
 
 /* Lane rows */
 .laneRow {
   display: flex;
-  min-height: 84px;
-  border-bottom: 1px solid var(--stone);
+  min-height: 88px;
+  border-bottom: 2px solid #000000;
   position: relative;
 }
 
@@ -183,35 +214,37 @@
 }
 
 .laneHeader {
-  width: 140px;
-  min-width: 140px;
+  width: 150px;
+  min-width: 150px;
   padding: var(--space-3);
-  border-right: 1px solid var(--stone);
-  background-color: var(--paper);
+  border-right: 2px solid #000000;
+  background-color: var(--paper-warm);
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: sticky;
   left: 0;
   z-index: 2;
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.02);
+  box-shadow: 2px 0 0px #000000;
 }
 
 .laneName {
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
+  text-transform: uppercase;
 }
 
 .laneTaskCount {
   font-size: 0.6875rem;
-  color: var(--iron);
+  color: var(--olive);
+  font-weight: 600;
 }
 
 .laneTrack {
   position: relative;
   flex: 1;
-  min-height: 84px;
+  min-height: 88px;
   padding: var(--space-2) 0;
   display: flex;
   flex-wrap: wrap;
@@ -226,13 +259,13 @@
   bottom: 0;
   background: repeating-linear-gradient(
     45deg,
-    rgba(183, 176, 163, 0.25),
-    rgba(183, 176, 163, 0.25) 6px,
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.12) 6px,
     transparent 6px,
     transparent 12px
   );
-  border-left: 2px dashed var(--stone);
-  border-right: 2px dashed var(--stone);
+  border-left: 2px dashed #000000;
+  border-right: 2px dashed #000000;
   pointer-events: none;
   z-index: 1;
 }
@@ -243,12 +276,13 @@
   left: 4px;
   font-size: 0.625rem;
   font-family: var(--font-mono);
-  font-weight: 600;
-  color: var(--iron);
-  background-color: var(--paper);
-  padding: 1px 4px;
+  font-weight: 800;
+  color: #000000;
+  background-color: var(--accent-yellow);
+  padding: 2px 6px;
   border-radius: 2px;
-  border: 1px solid var(--stone);
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
 }
 
 /* Slot queue */
@@ -256,8 +290,8 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background-color: var(--status-risk);
+  width: 3px;
+  background-color: #000000;
   z-index: 1;
   pointer-events: none;
 }
@@ -268,60 +302,62 @@
   left: 4px;
   font-size: 0.625rem;
   font-family: var(--font-mono);
-  font-weight: 700;
-  color: var(--status-risk);
-  background-color: var(--status-risk-bg);
-  padding: 1px 4px;
+  font-weight: 800;
+  color: #000000;
+  background-color: var(--accent-coral);
+  padding: 2px 6px;
   border-radius: 2px;
-  border: 1px solid var(--status-risk);
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
   white-space: nowrap;
 }
 
 /* Task bars */
 .taskBar {
   position: absolute;
-  height: 44px;
+  height: 48px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
-  gap: var(--space-1);
-  padding: 0 var(--space-2);
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
   cursor: pointer;
   z-index: 2;
-  transition:
-    transform 0.1s ease,
-    box-shadow 0.1s ease;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+  transition: all var(--duration-fast) var(--ease-standard);
   overflow: hidden;
   text-align: left;
 }
 
 .taskBar:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #000000;
   z-index: 4;
 }
 
 .taskBar:focus-visible {
-  outline: 3px solid var(--graphite);
+  outline: 3px solid #000000;
   outline-offset: 2px;
   z-index: 5;
 }
 
 .taskBarSelected {
-  outline: 3px solid var(--graphite);
+  outline: 3px solid #000000;
   outline-offset: 2px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 4px 4px 0px #000000;
   z-index: 5;
 }
 
 .taskBarSymbol {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   flex-shrink: 0;
+  font-weight: 800;
 }
 
 .taskBarName {
   font-size: var(--font-size-xs);
-  font-weight: 600;
+  font-weight: 800;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -330,27 +366,23 @@
 
 /* Status variants */
 .status_safe {
-  background-color: var(--status-safe-bg);
-  border: 1px solid var(--status-safe);
-  color: var(--status-safe);
+  background-color: var(--accent-green);
+  color: #000000;
 }
 
 .status_risk {
-  background-color: var(--status-risk-bg);
-  border: 1px solid var(--status-risk);
-  color: var(--status-risk);
+  background-color: var(--accent-yellow);
+  color: #000000;
 }
 
 .status_missed {
-  background-color: var(--status-missed-bg);
-  border: 1px solid var(--status-missed);
-  color: var(--status-missed);
+  background-color: var(--accent-coral);
+  color: #000000;
 }
 
 .status_unknown {
-  background-color: var(--status-unknown-bg);
-  border: 1px solid var(--status-unknown);
-  color: var(--status-unknown);
+  background-color: #e2e8f0;
+  color: #000000;
 }
 
 /* LSD Tick */
@@ -358,50 +390,52 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background-color: var(--graphite);
-  opacity: 0.7;
+  width: 3px;
+  background-color: #000000;
+  opacity: 0.8;
 }
 
 /* Table view helpers */
 .tableTaskName {
   display: block;
-  font-weight: 600;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
 }
 
 .tableTaskId {
   display: block;
   font-size: 0.6875rem;
   font-family: var(--font-mono);
-  color: var(--iron);
+  color: var(--olive);
 }
 
 .lanePill {
   font-family: var(--font-mono);
   font-size: 0.75rem;
+  font-weight: 700;
   text-transform: capitalize;
-  background-color: var(--offwhite);
+  background-color: var(--paper-warm);
   padding: 2px 6px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--stone);
+  border: 1.5px solid #000000;
 }
 
 .monoCell {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
+  font-weight: 700;
 }
 
 .slackPos {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--status-safe);
+  font-weight: 800;
+  color: #047857;
 }
 
 .slackNeg {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
-  font-weight: 700;
-  color: var(--status-missed);
+  font-weight: 800;
+  color: #b91c1c;
 }

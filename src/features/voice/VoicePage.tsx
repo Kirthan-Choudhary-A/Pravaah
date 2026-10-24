@@ -249,14 +249,15 @@ export const VoicePage: React.FC = () => {
         {/* Header Section */}
         <div className={styles.headerSection}>
           <div className={styles.titleRow}>
-            <h1>Voice & Typed Plate Entry</h1>
+            <h1>Voice &amp; Typed Plate Entry — Plate Assistant</h1>
             <div className={styles.simulatedBadge}>
               <span aria-hidden="true">🎙️</span> LOCAL SPEECH RECOGNITION
             </div>
           </div>
           <p className="page-description">
-            Spoken or typed registration plate entry with phonetic look-alike auto-correction,
-            Delhi series class mismatch detection, and multilingual phoneme read-back.
+            Type or speak your vehicle number in English, Hindi, Telugu, or Kannada. We auto-correct
+            voice typos (like &ldquo;oh&rdquo; for &ldquo;zero&rdquo;), verify the state registration series, and read it back
+            to you.
           </p>
 
           <div className={styles.privacyNotice} role="note">

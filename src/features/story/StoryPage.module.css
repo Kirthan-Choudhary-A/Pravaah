@@ -1,454 +1,755 @@
 .storyPage {
   display: flex;
   flex-direction: column;
-  gap: var(--space-12);
+  gap: var(--space-10);
   width: 100%;
   padding-bottom: var(--space-16);
   box-sizing: border-box;
 }
 
 /* ============================================================== */
-/* 1. HERO SECTION */
+/* TOP BANNER                                                     */
+/* ============================================================== */
+.topBadgeBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 8px 16px;
+  background-color: var(--accent-yellow);
+  border: var(--border-neo);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-sm);
+  flex-wrap: wrap;
+}
+
+.simulatedPill {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  background-color: #000000;
+  color: #ffffff;
+  border-radius: var(--radius-sm);
+}
+
+.topBadgeText {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: #000000;
+}
+
+/* ============================================================== */
+/* 1. HERO SECTION                                                */
 /* ============================================================== */
 .heroSection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  padding-top: var(--space-4);
-  width: 100%;
-}
-
-.heroIntro {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  max-width: 760px;
-}
-
-.simulatedBadge {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: var(--space-8);
   align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-1) var(--space-2);
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-sm);
+  padding: var(--space-6) 0;
+}
+
+@media (max-width: 990px) {
+  .heroSection {
+    grid-template-columns: 1fr;
+  }
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.kicker {
+  display: inline-block;
   font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--charcoal);
-  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background-color: var(--accent-blue);
+  color: #000000;
+  padding: 3px 10px;
+  border: 1.5px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+  border-radius: var(--radius-sm);
   align-self: flex-start;
 }
 
-.heroHeadline {
+.heroTitle {
   font-size: var(--font-size-3xl);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--graphite);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #000000;
   margin: 0;
 }
 
-.heroSubline {
-  font-size: var(--font-size-lg);
-  color: var(--charcoal);
+.heroHighlight {
+  background-color: var(--accent-yellow);
+  padding: 0 4px;
+  border-bottom: 3px solid #000000;
+}
+
+.heroSubtitle {
+  font-size: var(--font-size-md);
+  color: #121212;
   line-height: 1.5;
   margin: 0;
+  font-weight: 500;
 }
 
-.heroCtaGroup {
+.heroActions {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   flex-wrap: wrap;
   margin-top: var(--space-2);
 }
 
-.secondaryCtaBtn {
-  font-family: var(--font-sans);
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  color: var(--charcoal);
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
-  padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  display: inline-flex;
+.heroProofRow {
+  display: flex;
   align-items: center;
+  gap: var(--space-4);
+  background-color: var(--offwhite);
+  border: var(--border-neo);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.proofItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.proofItem strong {
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.proofItem span {
+  font-size: 0.75rem;
+  color: var(--olive);
+  font-weight: 600;
+}
+
+.proofDivider {
+  width: 2px;
+  height: 28px;
+  background-color: #000000;
+}
+
+.heroVisual {
+  width: 100%;
+  min-height: 380px;
+  background-color: var(--offwhite);
+  border: var(--border-neo-thick);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ============================================================== */
+/* INTERACTIVE SCENARIO QUICK TESTER                              */
+/* ============================================================== */
+.quickSandboxSection {
+  background-color: #ffffff;
+  border: var(--border-neo-thick);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.quickSandboxHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-2);
 }
 
-.secondaryCtaBtn:hover {
+.quickSandboxTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  color: #000000;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scenarioButtons {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.scenarioTabBtn {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  padding: 8px 14px;
   background-color: var(--paper);
-  border-color: var(--graphite);
+  border: 2px solid #000000;
+  border-radius: var(--radius-sm);
+  box-shadow: 2px 2px 0px #000000;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.scenarioTabBtn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000000;
+}
+
+.scenarioTabBtnActive {
+  background-color: var(--accent-yellow) !important;
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+}
+
+.scenarioLiveGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.scenarioLiveCard {
+  background-color: var(--paper-warm);
+  border: 2px solid #000000;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+.scenarioLiveLabel {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: var(--olive);
+  text-transform: uppercase;
+}
+
+.scenarioLiveValue {
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  color: #000000;
+}
+
+.scenarioLiveSub {
+  font-size: 0.75rem;
+  color: #121212;
+  font-weight: 600;
 }
 
 /* ============================================================== */
-/* 2. THE PROBLEM LIST (TYPOGRAPHIC LIST) */
+/* 2. THE PROBLEM (SIMPLE & PUNCHY)                               */
 /* ============================================================== */
 .problemSection {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: var(--space-8);
-  padding: var(--space-8) 0;
-  border-top: 1px solid var(--stone);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-6) 0;
 }
 
-@media (max-width: 768px) {
-  .problemSection {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
-}
-
-.sectionLead {
+.sectionHeader {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-}
-
-.sectionTag {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: 700;
-  color: var(--iron);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
 }
 
 .sectionTitle {
   font-size: var(--font-size-2xl);
-  font-weight: 700;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
   margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.sectionSubtitle {
+  font-size: var(--font-size-base);
+  color: #121212;
+  margin: 0;
+  font-weight: 500;
+  max-width: 700px;
 }
 
 .problemList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .problemItem {
-  display: grid;
-  grid-template-columns: 36px 1fr;
-  gap: var(--space-3);
-  padding: var(--space-3);
   background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  border: var(--border-neo);
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-base);
-  color: var(--charcoal);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  gap: var(--space-3);
+  transition: all var(--duration-fast) var(--ease-standard);
 }
 
-.problemNumber {
+.problemItem:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-md);
+  border-color: #000000;
+}
+
+.problemIndex {
   font-family: var(--font-mono);
-  font-weight: 700;
-  color: var(--status-risk);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  background-color: var(--accent-coral);
+  color: #000000;
+  padding: 4px 8px;
+  border: 1.5px solid #000000;
+  border-radius: var(--radius-sm);
+  box-shadow: 1.5px 1.5px 0px #000000;
+  height: fit-content;
 }
 
-.problemText {
+.problemHeading {
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  color: #000000;
+  margin: 0 0 6px 0;
+}
+
+.problemDesc {
+  font-size: var(--font-size-xs);
+  color: #121212;
   line-height: 1.5;
+  margin: 0;
+  font-weight: 500;
 }
 
 /* ============================================================== */
-/* 3. HOW THE PLAN WORKS (8 STEPS) */
+/* 3. HOW THE PLAN WORKS (WALKTHROUGH)                            */
 /* ============================================================== */
-.howItWorksSection {
+.walkthroughSection {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  padding: var(--space-8) 0;
-  border-top: 1px solid var(--stone);
+  padding: var(--space-6) 0;
 }
 
-.stepsWalkthroughGrid {
+.walkthroughGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-8);
-  align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
 }
 
-@media (max-width: 860px) {
-  .stepsWalkthroughGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.stepsList {
+.walkthroughCard {
+  background-color: var(--offwhite);
+  border: var(--border-neo);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  transition: all var(--duration-fast) var(--ease-standard);
+  position: relative;
 }
 
-.stepCard {
-  padding: var(--space-4);
-  background-color: var(--paper);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-sm);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  transition: all 0.2s ease;
+.walkthroughCard:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-md);
 }
 
-.stepCardActive {
-  background-color: var(--offwhite);
-  border-color: var(--graphite);
-  border-left-width: 4px;
-}
-
-.stepHeader {
+.walkthroughCardTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.stepIndex {
+.walkthroughNum {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
-  font-weight: 700;
-  color: var(--iron);
+  font-weight: 800;
+  background-color: var(--accent-yellow);
+  color: #000000;
+  padding: 2px 8px;
+  border: 1.5px solid #000000;
+  border-radius: 2px;
+  box-shadow: 1.5px 1.5px 0px #000000;
 }
 
-.stepName {
+.walkthroughRule {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #000000;
+  background-color: var(--accent-blue);
+  padding: 2px 6px;
+  border: 1px solid #000000;
+  border-radius: 2px;
+}
+
+.walkthroughCardTitle {
   font-size: var(--font-size-base);
-  font-weight: 700;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
+  margin: 0;
+  line-height: 1.3;
 }
 
-.stepDesc {
-  font-size: var(--font-size-sm);
-  color: var(--charcoal);
+.walkthroughCardBody {
+  font-size: var(--font-size-xs);
+  color: #121212;
   margin: 0;
   line-height: 1.5;
+  font-weight: 500;
 }
 
-.planPreviewCard {
-  position: sticky;
-  top: 80px;
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-sm);
-  padding: var(--space-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.planPreviewTitle {
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  color: var(--graphite);
-}
-
-.miniScheduleList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.miniScheduleItem {
-  display: flex;
+.cardBadge {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--space-2);
-  background-color: var(--paper);
-  border: 1px solid var(--stone);
+  gap: 6px;
+  padding: 4px 8px;
+  background-color: var(--paper-warm);
+  border: 1.5px solid #000000;
+  box-shadow: 1.5px 1.5px 0px #000000;
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #000000;
+  margin-top: auto;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid #000000;
+}
+
+.dotSafe {
+  background-color: var(--accent-green);
+}
+
+.dotRisk {
+  background-color: var(--accent-yellow);
+}
+
+.dotMissed {
+  background-color: var(--accent-coral);
 }
 
 /* ============================================================== */
-/* 4. THE ADDRESS-PROOF TRAP */
+/* 4. THE ADDRESS-PROOF TRAP (FEATURED CAUTION BLOCK)             */
 /* ============================================================== */
 .trapSection {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-8);
-  padding: var(--space-8) 0;
-  border-top: 1px solid var(--stone);
-  align-items: center;
-}
-
-@media (max-width: 860px) {
-  .trapSection {
-    grid-template-columns: 1fr;
-  }
-}
-
-.trapLines {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.trapLine {
-  display: flex;
-  gap: var(--space-3);
-  align-items: flex-start;
-  padding: var(--space-3);
-  background-color: var(--paper);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
-  line-height: 1.5;
-}
-
-.trapLineNumber {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: var(--status-missed);
-  font-size: var(--font-size-sm);
-}
-
-.trapDiagramCard {
-  background-color: var(--status-missed-bg);
-  border: 1px solid var(--status-missed);
-  border-radius: var(--radius-sm);
-  padding: var(--space-6);
+  background-color: #fff1f2;
+  border: var(--border-neo-thick);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-md);
+  padding: var(--space-8);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  align-items: center;
-  text-align: center;
 }
 
-.trapDiagramNodes {
+.trapContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.trapBadgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.trapWarningTag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 800;
+  background-color: var(--accent-coral);
+  color: #ffffff;
+  padding: 3px 10px;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+  border-radius: var(--radius-sm);
+}
+
+.trapRuleTag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 800;
+  background-color: var(--accent-yellow);
+  color: #000000;
+  padding: 3px 10px;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+  border-radius: var(--radius-sm);
+}
+
+.trapTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: #000000;
+  margin: 0;
+}
+
+.trapExplanation {
+  font-size: var(--font-size-sm);
+  color: #121212;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 500;
+  max-width: 800px;
+}
+
+.trapDiagram {
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.nodeBox {
-  padding: var(--space-2) var(--space-3);
-  background-color: var(--paper);
-  border: 1px solid var(--stone);
+.diagramNode {
+  background-color: var(--paper-warm);
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+  min-width: 160px;
+}
+
+.diagramNodeAlert {
+  background-color: var(--accent-coral) !important;
+  color: #ffffff;
+}
+
+.diagramNodeAlert strong {
+  color: #ffffff !important;
+}
+
+.diagramNodeAlert small {
+  color: #fef08a !important;
   font-weight: 700;
 }
 
-.invalidatesLink {
+.nodeKind {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.diagramNodeAlert .nodeKind {
+  color: #ffffff;
+}
+
+.diagramNode strong {
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  color: #000000;
+}
+
+.diagramNode small {
+  font-size: 0.6875rem;
+  color: var(--olive);
+}
+
+.diagramArrow {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: var(--status-missed);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 700;
+  font-weight: 800;
+  color: #000000;
 }
 
-.invalidatesArrow {
-  border-top: 2px dashed var(--status-missed);
-  width: 60px;
-  margin: 4px 0;
+.arrowLine {
+  width: 40px;
+  height: 2px;
+  background-color: #000000;
+  position: relative;
+}
+
+.arrowLine::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid #000000;
 }
 
 /* ============================================================== */
-/* 5. HOW IT'S BUILT (SCENE C SECTION) */
+/* 5. ARCHITECTURE & HONEST DESIGN                                */
 /* ============================================================== */
-.architectureSection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  padding: var(--space-8) 0;
-  border-top: 1px solid var(--stone);
-}
-
-/* ============================================================== */
-/* 6. HONEST BY DESIGN */
-/* ============================================================== */
+.architectureSection,
 .honestSection {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  padding: var(--space-8) 0;
-  border-top: 1px solid var(--stone);
+  padding: var(--space-4) 0;
 }
 
-.honestGrid {
+.statGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--space-4);
 }
 
-.honestCard {
-  padding: var(--space-4);
+.statCard {
   background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  border: var(--border-neo);
+  box-shadow: var(--shadow-sm);
   border-radius: var(--radius-sm);
+  padding: var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
+  transition: all var(--duration-fast) var(--ease-standard);
 }
 
-.honestCardTitle {
-  font-size: var(--font-size-base);
-  font-weight: 700;
-  color: var(--graphite);
+.statCard:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-md);
 }
 
-.honestCardText {
-  font-size: var(--font-size-sm);
-  color: var(--charcoal);
+.statValue {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: #000000;
+}
+
+.statLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  color: #000000;
+  text-transform: uppercase;
+}
+
+.statDesc {
+  font-size: 0.75rem;
+  color: #121212;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.honestLinkRow {
+  display: flex;
+}
+
+.honestLink {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  color: #000000;
+  background-color: var(--accent-yellow);
+  padding: 8px 16px;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.honestLink:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px #000000;
 }
 
 /* ============================================================== */
-/* 7. CLOSING CTA */
+/* 7. CLOSING CTA                                                 */
 /* ============================================================== */
-.closingSection {
+.ctaSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.ctaCard {
+  background-color: var(--accent-yellow);
+  border: var(--border-neo-thick);
+  box-shadow: var(--shadow-xl);
+  border-radius: var(--radius-md);
+  padding: var(--space-10) var(--space-6);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: var(--space-4);
-  padding: var(--space-10) var(--space-4);
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-md);
-  margin-top: var(--space-4);
 }
 
-.closingTitle {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
-  color: var(--graphite);
+.ctaTitle {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: #000000;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
-.closingSubline {
+.ctaSubtitle {
   font-size: var(--font-size-base);
-  color: var(--charcoal);
-  max-width: 600px;
+  color: #121212;
   margin: 0;
-}
-
-.closingNavLinks {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: var(--space-3);
-  font-size: var(--font-size-sm);
+  max-width: 650px;
+  line-height: 1.5;
   font-weight: 600;
 }
 
-.closingNavLink {
-  color: var(--graphite);
-  text-decoration: underline;
+.ctaButtonGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-3);
 }
 
-.closingNavLink:hover {
-  color: var(--ink);
+.storyFooter {
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--olive);
+  font-weight: 600;
+  padding-top: var(--space-4);
 }

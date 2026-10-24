@@ -8,53 +8,58 @@
 .header {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .title {
   font-size: var(--font-size-sm);
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--graphite);
+  color: #000000;
   margin: 0;
 }
 
 .subtitle {
   font-size: var(--font-size-xs);
-  color: var(--iron);
+  color: #121212;
+  font-weight: 500;
 }
 
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .card {
-  background-color: var(--paper);
-  border: 1px solid var(--stone);
+  background-color: var(--offwhite);
+  border: var(--border-neo);
   border-radius: var(--radius-sm);
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+  box-shadow: var(--shadow-md);
+  transition: all var(--duration-fast) var(--ease-standard);
+  position: relative;
 }
 
 .card:hover {
-  border-color: var(--graphite);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lg);
+  border-color: #000000;
 }
 
 .cardSelected {
-  border: 2px solid var(--graphite);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  border: var(--border-neo-thick);
+  box-shadow: var(--shadow-lg);
+  outline: 2px solid #000000;
 }
 
 .cardRecommended {
-  border-top: 3px solid var(--status-safe);
+  border-top: 6px solid var(--accent-green);
 }
 
 .cardHeader {
@@ -80,151 +85,142 @@
 .rankBadge {
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  font-weight: 700;
-  background-color: var(--offwhite);
-  color: var(--charcoal);
-  border: 1px solid var(--stone);
-  padding: 1px 4px;
+  font-weight: 800;
+  background-color: var(--accent-blue);
+  color: #000000;
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
+  padding: 2px 6px;
   border-radius: 2px;
 }
 
 .recommendedBadge {
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  font-weight: 700;
-  background-color: var(--status-safe-bg);
-  color: var(--status-safe);
-  border: 1px solid var(--status-safe);
-  padding: 1px 4px;
+  font-weight: 800;
+  background-color: var(--accent-green);
+  color: #000000;
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
+  padding: 2px 6px;
   border-radius: 2px;
 }
 
-.activePill {
+.selectedBadge {
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  font-weight: 700;
-  background-color: var(--graphite);
-  color: var(--paper);
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
+  font-weight: 800;
+  background-color: var(--accent-yellow);
+  color: #000000;
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
+  padding: 2px 6px;
+  border-radius: 2px;
 }
 
-.cardTitle {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--graphite);
+.cardName {
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  color: #000000;
   margin: 0;
-  line-height: 1.3;
 }
 
-.metricsRow {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.routeTypeTag {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: #121212;
+  font-weight: 600;
+}
+
+.lsdHighlight {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--space-3);
+  background-color: var(--paper-warm);
+  border: 1.5px solid #000000;
+  border-radius: var(--radius-sm);
+  box-shadow: 2px 2px 0px #000000;
+}
+
+.lsdLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: #000000;
+  text-transform: uppercase;
+}
+
+.lsdValue {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  color: #000000;
+}
+
+.detailsList {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-2);
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-sm);
-  padding: var(--space-2);
-}
-
-.metric {
-  display: flex;
-  flex-direction: column;
-}
-
-.metricLabel {
-  font-size: 0.625rem;
-  font-family: var(--font-mono);
-  color: var(--iron);
-  text-transform: uppercase;
-}
-
-.metricValue {
   font-size: var(--font-size-xs);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: var(--ink);
+  color: #121212;
 }
 
-.slackPos {
-  color: var(--status-safe);
-}
-
-.slackNeg {
-  color: var(--status-missed);
-}
-
-.tradeOffBox {
+.detailRow {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.tradeOffLabel {
-  font-size: 0.6875rem;
-  font-family: var(--font-mono);
+.detailKey {
+  color: var(--olive);
   font-weight: 600;
-  color: var(--charcoal);
-  text-transform: uppercase;
 }
 
-.tradeOffText {
+.detailVal {
+  font-weight: 700;
+  color: #000000;
+}
+
+.rationale {
   font-size: var(--font-size-xs);
-  color: var(--charcoal);
-  margin: 0;
+  color: #121212;
   line-height: 1.4;
+  margin: 0;
+  padding: var(--space-2);
+  background-color: #f1f5f9;
+  border: 1px solid #000000;
+  border-radius: var(--radius-sm);
 }
 
-.fallbackLine {
-  font-size: var(--font-size-xs);
-  color: var(--iron);
-  margin: 0;
-  line-height: 1.4;
-}
-
-.unverifiedBox {
+.cardActions {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  background-color: var(--status-risk-bg);
-  border: 1px dashed rgba(122, 75, 0, 0.35);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-}
-
-.unverifiedImpactText {
-  font-size: 0.6875rem;
-  color: var(--status-risk);
-  font-style: italic;
-}
-
-.cardFooter {
+  justify-content: space-between;
   margin-top: auto;
   padding-top: var(--space-2);
 }
 
 .selectBtn {
-  width: 100%;
-  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-sans);
   font-size: var(--font-size-xs);
-  font-weight: 600;
+  font-weight: 800;
+  padding: 6px 14px;
+  background-color: var(--accent-yellow);
+  color: #000000;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--stone);
-  background-color: var(--paper);
-  color: var(--graphite);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) var(--ease-standard);
 }
 
 .selectBtn:hover:not(:disabled) {
-  background-color: var(--graphite);
-  color: var(--paper);
-  border-color: var(--graphite);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000000;
 }
 
-.selectBtnActive {
-  background-color: var(--status-safe-bg);
-  border-color: var(--status-safe);
-  color: var(--status-safe);
+.selectBtn:disabled {
+  background-color: var(--accent-green);
+  color: #000000;
   cursor: default;
 }

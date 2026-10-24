@@ -52,12 +52,12 @@ export const PlannerPage: React.FC = () => {
                   {isDegraded && <span className={styles.degradedBadge}>DEGRADED MODE</span>}
                 </div>
                 <h1 id="planner-heading" className={styles.pageTitle}>
-                  Planner — {scenario.name}
+                  Planner — Smart Transport Roadmap — {scenario.name}
                 </h1>
                 <p className={styles.moveDescription}>
-                  Move: {scenario.move.fromRTO} ({scenario.move.fromState}) ──▶{' '}
+                  Moving: {scenario.move.fromRTO} ({scenario.move.fromState}) ──▶{' '}
                   {scenario.move.toRTO} ({scenario.move.toState}) • Vehicle:{' '}
-                  {scenario.move.vehicleType} {scenario.move.isBHSeries ? '(BH Series)' : ''}
+                  {scenario.move.vehicleType} {scenario.move.isBHSeries ? '(BH Series Plate)' : ''}
                 </p>
               </div>
 
@@ -70,7 +70,7 @@ export const PlannerPage: React.FC = () => {
                 <div className={styles.metricCard}>
                   <span className={styles.metricLabel}>Tasks</span>
                   <span className={styles.metricValue}>{currentPlan.tasks.length}</span>
-                  <span className={styles.metricSub}>Scheduled</span>
+                  <span className={styles.metricSub}>Steps Scheduled</span>
                 </div>
                 <div className={styles.metricCard}>
                   <span className={styles.metricLabel}>Compliance</span>
@@ -80,9 +80,9 @@ export const PlannerPage: React.FC = () => {
                   <span className={styles.metricSub}>Checks Passed</span>
                 </div>
                 <div className={styles.metricCard}>
-                  <span className={styles.metricLabel}>Selected Route</span>
+                  <span className={styles.metricLabel}>Selected Path</span>
                   <span className={styles.metricValue}>{decisions.licenceRoute}</span>
-                  <span className={styles.metricSub}>Modelled Path</span>
+                  <span className={styles.metricSub}>Active Choice</span>
                 </div>
               </div>
             </div>
@@ -92,16 +92,12 @@ export const PlannerPage: React.FC = () => {
           {isDegraded && (
             <Banner
               variant="degraded"
-              title={`Degraded Mode Active: Destination State (${scenario.move.toState}) Rules Unknown`}
+              title={`⚠️ Notice: Destination State (${scenario.move.toState}) Rules Unconfirmed`}
             >
               <p>
                 No verified state rule pack is registered for {scenario.move.toState}. Central rules
-                in the registry are used but remain unverified, and state-specific fees, road tax,
-                and local procedures cannot be modelled without confirmation.
-              </p>
-              <p>
-                <strong>Rules unknown – confirm with the local RTO.</strong> Official fee amounts
-                are suppressed to prevent misinformation.
+                are used with safety buffers, but state-specific road tax or local procedures should
+                be confirmed with your local RTO.
               </p>
             </Banner>
           )}
@@ -114,16 +110,16 @@ export const PlannerPage: React.FC = () => {
                   Unified Schedule &amp; Critical Path
                 </h2>
                 <span className={styles.sectionMeta}>
-                  Day 0 is Today. Time intervals shown as half-open [start, end).
+                  Day 0 is Today. Follow this roadmap to finish all paperwork without late penalties.
                 </span>
               </div>
               <SegmentedControl<'2d' | '3d'>
-                label="Schedule View Dimension"
+                label="View Style"
                 value={viewDimension}
                 onChange={setViewDimension}
                 options={[
-                  { value: '2d', label: '2D Timeline' },
-                  { value: '3d', label: '3D Landscape' },
+                  { value: '2d', label: '2D Calendar' },
+                  { value: '3d', label: '3D Visualizer' },
                 ]}
                 size="sm"
               />

@@ -1,9 +1,10 @@
 .tableContainer {
   width: 100%;
   overflow-x: auto;
-  border: 1px solid var(--stone);
+  border: var(--border-neo);
   border-radius: var(--radius-sm);
-  background-color: var(--paper);
+  background-color: var(--offwhite);
+  box-shadow: var(--shadow-md);
 }
 
 .table {
@@ -15,14 +16,14 @@
 
 .caption {
   font-size: var(--font-size-xs);
-  font-weight: 600;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--charcoal);
+  color: #000000;
   text-align: left;
   padding: var(--space-3) var(--space-4);
-  background-color: var(--offwhite);
-  border-bottom: 1px solid var(--stone);
+  background-color: var(--accent-yellow);
+  border-bottom: var(--border-neo);
 }
 
 .srOnly {
@@ -37,20 +38,22 @@
 }
 
 .th {
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
   font-family: var(--font-sans);
-  font-weight: 600;
+  font-weight: 800;
   font-size: var(--font-size-xs);
-  color: var(--graphite);
-  background-color: var(--offwhite);
-  border-bottom: 1px solid var(--stone);
+  color: #000000;
+  background-color: var(--paper-warm);
+  border-bottom: var(--border-neo);
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .td {
-  padding: var(--space-2) var(--space-4);
-  color: var(--charcoal);
-  border-bottom: 1px solid rgba(183, 176, 163, 0.4);
+  padding: var(--space-3) var(--space-4);
+  color: #121212;
+  border-bottom: 1.5px solid #000000;
   vertical-align: middle;
 }
 
@@ -60,15 +63,15 @@ tr:last-child .td {
 
 .clickableRow {
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color var(--duration-fast) var(--ease-standard);
 }
 
 .clickableRow:hover {
-  background-color: var(--offwhite);
+  background-color: #fef9c3;
 }
 
 .clickableRow:focus-visible {
-  outline: 2px solid var(--graphite);
+  outline: 3px solid #000000;
   outline-offset: -2px;
 }
 

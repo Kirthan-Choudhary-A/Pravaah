@@ -11,9 +11,22 @@
 @import './reset.css';
 @import './typography.css';
 
+::selection {
+  background-color: var(--accent-yellow);
+  color: #000000;
+}
+
 :focus-visible {
-  outline: 2px solid var(--graphite);
+  outline: 3px solid #000000;
   outline-offset: 2px;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--graphite);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -23,12 +36,13 @@
 }
 
 .site-header {
-  border-bottom: 1px solid var(--stone);
+  border-bottom: var(--border-neo-thick);
   background-color: var(--offwhite);
   padding: var(--space-4) var(--space-6);
   position: sticky;
   top: 0;
   z-index: var(--z-header);
+  box-shadow: 0 4px 0px #000000;
 }
 
 .site-nav {
@@ -43,37 +57,44 @@
 
 .brand-title {
   font-size: var(--font-size-md);
-  font-weight: 700;
+  font-weight: 800;
   color: var(--graphite);
   letter-spacing: -0.01em;
 }
 
 .nav-links {
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-3);
   flex-wrap: wrap;
 }
 
 .nav-link {
   font-size: var(--font-size-sm);
+  font-weight: 700;
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
   color: var(--charcoal);
-  border: 1px solid transparent;
+  border: var(--border-neo-thin);
+  background-color: var(--offwhite);
+  box-shadow: var(--shadow-sm);
   transition:
-    background-color var(--duration-fast) var(--ease-standard),
-    border-color var(--duration-fast) var(--ease-standard);
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+  text-decoration: none;
 }
 
 .nav-link:hover {
-  background-color: var(--paper);
-  border-color: var(--stone);
+  background-color: var(--accent-yellow);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-md);
 }
 
 .nav-link.active {
-  background-color: var(--graphite);
-  color: var(--paper);
-  font-weight: 500;
+  background-color: var(--accent-yellow);
+  color: var(--graphite);
+  box-shadow: var(--shadow-md);
+  border: var(--border-neo-thin);
 }
 
 .site-main {
@@ -84,20 +105,22 @@
   padding: var(--space-8) var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-6);
 }
 
 .page-description {
   color: var(--iron);
   font-size: var(--font-size-md);
   max-width: 65ch;
+  line-height: 1.5;
 }
 
 .site-footer {
-  border-top: 1px solid var(--stone);
+  border-top: var(--border-neo-thick);
   background-color: var(--offwhite);
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-6) var(--space-6);
   text-align: center;
   font-size: var(--font-size-xs);
   color: var(--iron);
+  box-shadow: 0 -4px 0px #000000;
 }

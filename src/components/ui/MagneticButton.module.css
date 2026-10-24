@@ -9,36 +9,47 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-6);
-  background-color: var(--graphite);
-  color: var(--paper);
-  border: 1px solid var(--ink);
+  padding: 12px 24px;
+  background-color: var(--accent-yellow);
+  color: #000000;
+  border: var(--border-neo-thick);
   border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   font-size: var(--font-size-base);
-  font-weight: 600;
+  font-weight: 800;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(36, 37, 34, 0.12);
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  box-shadow: var(--shadow-md);
+  transition: all var(--duration-fast) var(--ease-standard);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .magneticBtn:hover {
-  background-color: var(--ink);
+  background-color: #ffd000;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.magneticBtn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-active);
 }
 
 .secondary {
-  background-color: var(--parchment);
-  color: var(--graphite);
-  border-color: var(--parchment-deep);
+  background-color: var(--offwhite);
+  color: #000000;
+  border: var(--border-neo-thick);
+  box-shadow: var(--shadow-md);
 }
 
 .secondary:hover {
-  background-color: var(--parchment-deep);
-  color: var(--ink);
+  background-color: var(--paper-warm);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .magneticBtn:focus-visible {
-  outline: 2px solid var(--graphite);
+  outline: 3px solid #000000;
   outline-offset: 3px;
 }

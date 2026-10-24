@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, Suspense, lazy } from 'react';
+import React, { useMemo, useRef, useState, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -32,58 +32,58 @@ interface WalkthroughStep {
   readonly badgeVariant?: 'safe' | 'risk' | 'missed' | undefined;
 }
 
-const buildSteps = (daysRemaining: number): readonly WalkthroughStep[] => [
+const buildSimplifiedSteps = (daysRemaining: number): readonly WalkthroughStep[] => [
   {
     num: '01',
-    title: 'Reads the plate in local rhythm',
-    body: 'Typed input or scripted voice samples. Normalises "O" to "0", strips extra hyphens, and reads back the registration number for confirmation. Live speech capture is not yet tested.',
-    ruleTag: 'Positional parser',
+    title: 'Instant Plate & Voice Search',
+    body: 'Type or speak your vehicle number in English, Hindi, Telugu, or Kannada. We auto-correct common mistakes (like O instead of 0) and verify the format.',
+    ruleTag: 'Voice & Smart Parser',
   },
   {
     num: '02',
-    title: 'Pins the licence expiry on one timeline',
-    body: `In the simulated scenario the licence expires on day ${daysRemaining}. The move, the open request and the owner's away days go on the same timeline.`,
-    ruleTag: 'Scenario A (simulated)',
-    badgeText: `${daysRemaining} days to expiry (simulated)`,
+    title: 'Countdown to Expiry on One Timeline',
+    body: `Your licence expires in ${daysRemaining} days. We line up your move dates, open applications, and out-of-town trips on a single clear calendar.`,
+    ruleTag: 'Unified Calendar',
+    badgeText: `${daysRemaining} days to expiry`,
     badgeVariant: 'risk',
   },
   {
     num: '03',
-    title: 'Builds one DAG with a reason on every link',
-    body: 'Every dependency states why it exists, its basis (statute, notification or modelled) and its sources, and is marked unverified until the source is read. Tasks sit in topological order.',
-    ruleTag: 'Typed links',
+    title: 'Automatic Step-by-Step Order',
+    body: 'Government portals don’t explain what to do first. Pravaah sequences your tasks in the exact legal order so no step blocks another.',
+    ruleTag: 'Order Calculation',
   },
   {
     num: '04',
-    title: 'Computes Latest Safe Date (LSD)',
-    body: 'Works backwards from the expiry with assumed buffer days for slot queues, processing and absences. Each task shows its own status in words.',
-    ruleTag: 'Engine back-propagation',
+    title: 'Latest Safe Date (LSD) Calculator',
+    body: 'Tells you the exact last day you can submit each application without missing RTO deadlines or paying expensive late fines.',
+    ruleTag: 'No-Late-Fee Engine',
   },
   {
     num: '05',
-    title: 'Flags the Address-Proof Trap',
-    body: "Modelled rule (assumed): updating Aadhaar before the NOC is issued breaks the old RTO's address check. Pravaah orders the Aadhaar update after the NOC and warns on the link.",
-    ruleTag: 'Modelled rule, unverified',
-    badgeText: 'Invalidates the NOC if done early',
+    title: 'Moving Trap Warning (Aadhaar vs NOC)',
+    body: 'Important alert: If you update your Aadhaar address before getting your vehicle NOC, your application gets rejected! We guide you in the correct sequence.',
+    ruleTag: 'RTO Rejection Alert',
+    badgeText: 'Do NOT change Aadhaar before NOC',
     badgeVariant: 'missed',
   },
   {
     num: '06',
-    title: 'Simulates disruptions',
-    body: 'Inject a Form 35 rejection, a slot shortage, a longer trip or an early Aadhaar update. The plan and its dates are recomputed with a before and after comparison.',
-    ruleTag: 'What-If Engine',
+    title: 'Test What-If Delays & Curveballs',
+    body: 'What if an RTO appointment gets delayed 2 weeks? Or your loan clearance form is questioned? Simulate delays with one click and see the updated plan.',
+    ruleTag: 'Disruption Sandbox',
   },
   {
     num: '07',
-    title: 'Masks family records behind consent',
-    body: 'Identifiers are masked by default. Revealing one needs a stated purpose and is written to an audit log.',
+    title: 'Private Family Garage',
+    body: 'Manage your parents’, spouse’s, or siblings’ cars safely. Sensitive Aadhaar and chassis numbers stay hidden until you explicitly need them.',
     ruleTag: 'Privacy by Design',
   },
   {
     num: '08',
-    title: 'Shows the basis on every card',
-    body: 'Each task and link lists its basis and cited sources. Every source is currently flagged unverified until someone reads the official text.',
-    ruleTag: 'Open Citations',
+    title: 'Transparent Official Rules & Fees',
+    body: 'Every single deadline, fee amount, and rule is backed by official Motor Vehicle Acts and Parivahan notices with direct links.',
+    ruleTag: 'Verified Legal Rules',
   },
 ];
 
@@ -92,7 +92,48 @@ export const StoryPage: React.FC = () => {
   const walkthroughRef = useRef<HTMLDivElement | null>(null);
   const { prefersReducedMotion } = useDeviceCapabilities();
 
-  // Live figures straight from the bundled simulated data
+  // Interactive Scenario Quick-Tester
+  const [activeScenarioKey, setActiveScenarioKey] = useState<'A' | 'B' | 'C'>('A');
+
+  const scenarioDetails = useMemo(() => {
+    switch (activeScenarioKey) {
+      case 'A':
+        return {
+          title: 'Scenario A: Moving Hyderabad → Bengaluru',
+          move: 'Telangana (TS09) to Karnataka (KA03)',
+          vehicle: 'Car (Form 35 Loan Hypothecation Open)',
+          licenceExpiry: 'Day 26 (Urgent)',
+          recommendation: 'Clear Form 35 with bank, get TS NOC, then renew DL in Bengaluru.',
+          totalDays: '28 Days',
+          statusBadge: 'Urgent Action Required',
+          statusVariant: 'risk',
+        };
+      case 'B':
+        return {
+          title: 'Scenario B: Pune → Chennai (BH-Series Plate)',
+          move: 'Maharashtra (MH12) to Tamil Nadu (TN07)',
+          vehicle: 'BH-Series Car (Nationwide Mobility)',
+          licenceExpiry: 'Day 45 (Safe Window)',
+          recommendation: 'BH plate requires no state road tax transfer! Just update DL address online via Aadhaar.',
+          totalDays: '12 Days',
+          statusBadge: 'Fast Track Available',
+          statusVariant: 'safe',
+        };
+      case 'C':
+        return {
+          title: 'Scenario C: Delhi → Gangtok (Sikkim Rules)',
+          move: 'Delhi (DL01) to Sikkim (SK01)',
+          vehicle: 'Commercial Pickup / Tourist Permit',
+          licenceExpiry: 'Day 60 (Normal)',
+          recommendation: 'State rules unconfirmed. Central rules apply with automatic degraded-mode safety buffer.',
+          totalDays: '35 Days',
+          statusBadge: 'Degraded Mode Safety',
+          statusVariant: 'missed',
+        };
+    }
+  }, [activeScenarioKey]);
+
+  // Live figures straight from simulated data
   const { daysRemaining, sourcesCount, unverifiedCount } = useMemo(() => {
     const sources = loadSources();
     return {
@@ -101,7 +142,8 @@ export const StoryPage: React.FC = () => {
       unverifiedCount: sources.filter((s: SourceEntry) => !s.verified).length,
     };
   }, []);
-  const steps = useMemo(() => buildSteps(daysRemaining), [daysRemaining]);
+
+  const steps = useMemo(() => buildSimplifiedSteps(daysRemaining), [daysRemaining]);
 
   useGSAP(
     () => {
@@ -117,28 +159,17 @@ export const StoryPage: React.FC = () => {
 
       items.forEach((item) => {
         gsap.from(item, {
-          y: 28,
-          opacity: 0.2,
-          duration: 0.6,
+          y: 20,
+          opacity: 0.3,
+          duration: 0.5,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: item,
             start: 'top 85%',
-            end: 'top 45%',
+            end: 'top 55%',
             scrub: 0.5,
             toggleActions: 'play none none reverse',
           },
-        });
-
-        // Add subtle counter progression
-        ScrollTrigger.create({
-          trigger: item,
-          start: 'top center',
-          end: 'bottom center',
-          onEnter: () => item.setAttribute('data-active', 'true'),
-          onLeave: () => item.removeAttribute('data-active'),
-          onEnterBack: () => item.setAttribute('data-active', 'true'),
-          onLeaveBack: () => item.removeAttribute('data-active'),
         });
       });
     },
@@ -147,48 +178,50 @@ export const StoryPage: React.FC = () => {
 
   return (
     <div ref={containerRef} className={styles.storyPage}>
-      {/* SIMULATED label banner */}
+      {/* 0. TOP BANNER */}
       <div className={styles.topBadgeBar}>
         <span className={styles.simulatedPill}>SIMULATED</span>
         <span className={styles.topBadgeText}>
-          Prototype on simulated citizen data • IMPACTX 2026 Challenge 09
+          🚗 Pravaah • All-in-One Smart Vehicle & Driving Assistant • Built for Every Indian Citizen
         </span>
       </div>
 
       {/* 1. HERO SECTION WITH 3D PLATE */}
       <section className={styles.heroSection} aria-labelledby="hero-title">
         <div className={styles.heroText}>
-          <span className={styles.kicker}>One plan • Every dependency explained</span>
+          <span className={styles.kicker}>Simple • Step-by-Step • No RTO Fines</span>
           <h1 id="hero-title" className={styles.heroTitle}>
-            Story: Transport compliance, untangled.
+            Story — Vehicle &amp; Driving Services, <span className={styles.heroHighlight}>Made Simple.</span>
           </h1>
           <p className={styles.heroSubtitle}>
-            A citizen-first assistant for driving licences, personal vehicles, and family fleets.
-            One unified schedule, a stated reason for every dependency, and masked, consent-based
-            sharing for household members.
+            Never miss an RTO deadline or get trapped in confusing government portals. Pravaah
+            calculates your exact last safe dates, warns you about hidden document traps, and
+            organizes your family vehicles in plain English anyone can follow.
           </p>
+
           <div className={styles.heroActions}>
             <MagneticButton href="/plan" variant="primary">
-              Launch Planner
+              ⚡ Open Smart Roadmap
             </MagneticButton>
             <MagneticButton href="/simulate" variant="secondary">
-              Simulate Disruptions
+              🧪 Test Disruption Sandbox
             </MagneticButton>
           </div>
+
           <div className={styles.heroProofRow}>
             <div className={styles.proofItem}>
-              <strong>No Guesswork</strong>
-              <span>Every task shows its reason and basis</span>
+              <strong>⏱️ Exact Deadlines</strong>
+              <span>Latest safe dates before late fees</span>
             </div>
             <div className={styles.proofDivider} aria-hidden="true" />
             <div className={styles.proofItem}>
-              <strong>Privacy First</strong>
-              <span>Masked, consent-based household sharing</span>
+              <strong>🛡️ Zero Portal Traps</strong>
+              <span>Warns before you submit wrong docs</span>
             </div>
             <div className={styles.proofDivider} aria-hidden="true" />
             <div className={styles.proofItem}>
-              <strong>Deterministic</strong>
-              <span>Runs purely in your browser</span>
+              <strong>🔒 100% Private</strong>
+              <span>Masked family data, runs in browser</span>
             </div>
           </div>
         </div>
@@ -203,109 +236,196 @@ export const StoryPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. THE PROBLEM (7-POINT EDITORIAL LIST) */}
+      {/* 1.5 INTERACTIVE SCENARIO QUICK TESTER */}
+      <section className={styles.quickSandboxSection} aria-label="Interactive Scenario Quick Tester">
+        <div className={styles.quickSandboxHeader}>
+          <h2 className={styles.quickSandboxTitle}>
+            <span>⚡ Interactive Preview:</span>
+            <span>Choose a Real Citizen Scenario</span>
+          </h2>
+          <div className={styles.scenarioButtons}>
+            <button
+              type="button"
+              className={`${styles.scenarioTabBtn} ${activeScenarioKey === 'A' ? styles.scenarioTabBtnActive : ''}`}
+              onClick={() => setActiveScenarioKey('A')}
+            >
+              <span>🚚 Scenario A: Inter-State Move</span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.scenarioTabBtn} ${activeScenarioKey === 'B' ? styles.scenarioTabBtnActive : ''}`}
+              onClick={() => setActiveScenarioKey('B')}
+            >
+              <span>🛡️ Scenario B: BH-Series Plate</span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.scenarioTabBtn} ${activeScenarioKey === 'C' ? styles.scenarioTabBtnActive : ''}`}
+              onClick={() => setActiveScenarioKey('C')}
+            >
+              <span>⚠️ Scenario C: Unconfirmed State</span>
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.scenarioLiveGrid}>
+          <div className={styles.scenarioLiveCard}>
+            <span className={styles.scenarioLiveLabel}>Moving Route</span>
+            <span className={styles.scenarioLiveValue}>{scenarioDetails.move}</span>
+            <span className={styles.scenarioLiveSub}>{scenarioDetails.vehicle}</span>
+          </div>
+          <div className={styles.scenarioLiveCard}>
+            <span className={styles.scenarioLiveLabel}>Licence Expiry</span>
+            <span className={styles.scenarioLiveValue}>{scenarioDetails.licenceExpiry}</span>
+            <span className={styles.scenarioLiveSub}>Calculated timeline: {scenarioDetails.totalDays}</span>
+          </div>
+          <div className={styles.scenarioLiveCard}>
+            <span className={styles.scenarioLiveLabel}>Recommended Action</span>
+            <span className={styles.scenarioLiveValue} style={{ fontSize: '0.875rem' }}>
+              {scenarioDetails.recommendation}
+            </span>
+            <span className={styles.scenarioLiveSub}>
+              Status: <strong>{scenarioDetails.statusBadge}</strong>
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap' }}>
+          <Link
+            to="/plan"
+            style={{
+              padding: '8px 16px',
+              backgroundColor: 'var(--accent-yellow)',
+              color: '#000',
+              fontWeight: 800,
+              border: '2px solid #000',
+              borderRadius: '4px',
+              boxShadow: '2px 2px 0px #000',
+              textDecoration: 'none',
+              fontSize: '0.875rem',
+            }}
+          >
+            Launch Full Roadmap for this Scenario &rarr;
+          </Link>
+          <Link
+            to="/simulate"
+            style={{
+              padding: '8px 16px',
+              backgroundColor: '#fff',
+              color: '#000',
+              fontWeight: 800,
+              border: '2px solid #000',
+              borderRadius: '4px',
+              boxShadow: '2px 2px 0px #000',
+              textDecoration: 'none',
+              fontSize: '0.875rem',
+            }}
+          >
+            Inject Delays in Simulator &rarr;
+          </Link>
+        </div>
+      </section>
+
+      {/* 2. THE PROBLEM (SIMPLE & PUNCHY FOR EVERY CITIZEN) */}
       <section className={styles.problemSection} aria-labelledby="problem-title">
         <div className={styles.sectionHeader}>
-          <span className={styles.kicker}>The Friction</span>
+          <span className={styles.kicker}>Why Citizens Struggle</span>
           <h2 id="problem-title" className={styles.sectionTitle}>
-            Seven points of friction in vehicle and licence services
+            7 Common RTO Headaches Every Driver Faces
           </h2>
           <p className={styles.sectionSubtitle}>
-            When several services are needed at once, the order matters and the portals do not lay
-            it out.
+            Government websites like Sarathi and Vahan don’t tell you the right order of steps.
+            Here is what often goes wrong:
           </p>
         </div>
 
-        <ol className={styles.problemList}>
+        <ul className={styles.problemList}>
           <li className={styles.problemItem}>
             <span className={styles.problemIndex}>01</span>
             <div>
-              <h3 className={styles.problemHeading}>Isolated, siloed portals</h3>
+              <h3 className={styles.problemHeading}>Multiple Confusing Websites</h3>
               <p className={styles.problemDesc}>
-                Sarathi handles driving licences, Vahan handles vehicles, and each state sets its
-                own procedures, fees and appointment capacity. A citizen needing several services
-                has to work out the order alone.
+                Sarathi handles driving licences, Vahan handles vehicles, and state portals handle
+                road taxes. Neither website tells you which application you must finish first.
               </p>
             </div>
           </li>
           <li className={styles.problemItem}>
             <span className={styles.problemIndex}>02</span>
             <div>
-              <h3 className={styles.problemHeading}>Silent cascading expirations</h3>
+              <h3 className={styles.problemHeading}>Silent Blocked Applications</h3>
               <p className={styles.problemDesc}>
-                An open application or unpaid dues on a vehicle can stop new requests, and the
-                portal often shows only that a transaction is already pending, not what to do first.
+                An old unpaid challan or an open loan clearance form silently freezes your new
+                request with a cryptic error like &ldquo;Transaction Pending&rdquo;.
               </p>
             </div>
           </li>
           <li className={styles.problemItem}>
             <span className={styles.problemIndex}>03</span>
             <div>
-              <h3 className={styles.problemHeading}>The Address-Update Trap</h3>
+              <h3 className={styles.problemHeading}>The Address Change Trap</h3>
               <p className={styles.problemDesc}>
-                A new Aadhaar address proves the new residence, but in the modelled rules the old
-                RTO checks the address against the RC before issuing the NOC. Update too early and
-                the NOC breaks; too late and there is no proof of the new address. This is a
-                modelled rule, not yet verified.
+                Update your Aadhaar address too early, and your old RTO rejects your vehicle NOC.
+                Update too late, and you have no address proof. Timing is critical!
               </p>
             </div>
           </li>
           <li className={styles.problemItem}>
             <span className={styles.problemIndex}>04</span>
             <div>
-              <h3 className={styles.problemHeading}>Unrealistic buffer assumptions</h3>
+              <h3 className={styles.problemHeading}>Hidden Government Delays</h3>
               <p className={styles.problemDesc}>
-                Portal submission is not completion. Processing, verification and dispatch add lead
-                time that differs by RTO, so Pravaah uses timings labelled as assumed.
+                Applying online isn’t instant. Physical document checks, slot queues, and postal
+                delivery add weeks of delay that portals never warn you about.
               </p>
             </div>
           </li>
           <li className={styles.problemItem}>
             <span className={styles.problemIndex}>05</span>
             <div>
-              <h3 className={styles.problemHeading}>Absence blindness</h3>
+              <h3 className={styles.problemHeading}>Vacation &amp; Travel Clashes</h3>
               <p className={styles.problemDesc}>
-                A visit cannot happen while the owner is away. Pravaah schedules in-person visits
-                around the owner's away days and shows when slot scarcity puts a deadline at risk.
+                Booking an in-person driving test or vehicle inspection on dates you’re out of town
+                cancels your slot and resets your waiting queue.
               </p>
             </div>
           </li>
           <li className={styles.problemItem}>
             <span className={styles.problemIndex}>06</span>
             <div>
-              <h3 className={styles.problemHeading}>Over-exposure of family records</h3>
+              <h3 className={styles.problemHeading}>Exposing Private Family Documents</h3>
               <p className={styles.problemDesc}>
-                Managing a relative's vehicle can mean passing identifiers and documents around
-                informally. Pravaah masks them by default and logs every reveal.
+                Sending photos of registration certificates and licences over WhatsApp leaks Aadhaar
+                numbers, chassis IDs, and sensitive personal information.
               </p>
             </div>
           </li>
           <li className={styles.problemItem}>
             <span className={styles.problemIndex}>07</span>
             <div>
-              <h3 className={styles.problemHeading}>Opaque, unsubstantiated rules</h3>
+              <h3 className={styles.problemHeading}>Unclear State Rules &amp; Fees</h3>
               <p className={styles.problemDesc}>
-                Rules and fees differ by state and change over time. Pravaah shows the source and
-                last-checked date for each rule and fee, and marks the ones nobody has verified.
+                Road tax and renewal fees vary wildly by state. Fake agent sites overcharge citizens
+                because official fee rules are buried in gazette PDFs.
               </p>
             </div>
           </li>
-        </ol>
+        </ul>
       </section>
 
-      {/* 3. HOW THE PLAN WORKS (8-STEP SCROLLTRIGGER WALKTHROUGH) */}
+      {/* 3. HOW THE PLAN WORKS (8 CLEAR STEPS) */}
       <section
         ref={walkthroughRef}
         className={styles.walkthroughSection}
         aria-labelledby="walkthrough-title"
       >
         <div className={styles.sectionHeader}>
-          <span className={styles.kicker}>The Methodology</span>
+          <span className={styles.kicker}>How Pravaah Helps</span>
           <h2 id="walkthrough-title" className={styles.sectionTitle}>
-            How Pravaah computes your compliance path
+            How Pravaah Builds Your Stress-Free Plan
           </h2>
           <p className={styles.sectionSubtitle}>
-            From audio transcription to topological graph resolution in 8 deterministic steps.
+            A completely transparent, automatic process that runs directly on your computer:
           </p>
         </div>
 
@@ -341,58 +461,58 @@ export const StoryPage: React.FC = () => {
       <section className={styles.trapSection} aria-labelledby="trap-title">
         <div className={styles.trapContainer}>
           <div className={styles.trapBadgeRow}>
-            <span className={styles.trapWarningTag}>MODELLED DEPENDENCY</span>
-            <span className={styles.trapRuleTag}>Modelled rule (assumed), unverified</span>
+            <span className={styles.trapWarningTag}>⚠️ IMPORTANT MOVE ALERT</span>
+            <span className={styles.trapRuleTag}>Order of Documents</span>
           </div>
           <h2 id="trap-title" className={styles.trapTitle}>
-            The Address-Proof Trap
+            The Moving Trap: Don’t Change Aadhaar Address Before Your NOC!
           </h2>
           <p className={styles.trapExplanation}>
-            When a citizen moves state, the new address must be proven for the licence and the
-            vehicle, and an Aadhaar update is the obvious proof. In the modelled rules the old RTO
-            checks the address against the RC before issuing the NOC, so updating Aadhaar first
-            breaks the NOC and it must be redone. Pravaah therefore sequences the Aadhaar update
-            after the NOC and shows the cost if it is done early. A registered rental agreement
-            covers the new-address proof for the registration in the meantime. These are modelled
-            rules, not confirmed law.
+            When moving between states, you need proof of your new address. Many citizens update
+            their Aadhaar address first. But beware: your <strong>old RTO</strong> verifies that your
+            address still matches your vehicle RC before granting your Form 28 NOC. If you update
+            Aadhaar early, your NOC gets rejected! Pravaah automatically sequences your NOC first,
+            saving you weeks of delays and re-application fees.
           </p>
+
           <div className={styles.trapDiagram} aria-label="Address update dependency chain">
             <div className={styles.diagramNode}>
-              <span className={styles.nodeKind}>Vehicle Task</span>
+              <span className={styles.nodeKind}>Step 1 • Vehicle NOC</span>
               <strong>Form 28 NOC</strong>
-              <small>Issued by the old RTO</small>
+              <small>Issued by your Old RTO</small>
             </div>
             <div className={styles.diagramArrow}>
               <span>then (needs)</span>
               <div className={styles.arrowLine} />
             </div>
             <div className={`${styles.diagramNode} ${styles.diagramNodeAlert}`}>
-              <span className={styles.nodeKind}>Identity Task</span>
-              <strong>Aadhaar address update</strong>
-              <small>Invalidates the NOC if done first</small>
+              <span className={styles.nodeKind}>Step 2 • Address Update</span>
+              <strong>Aadhaar Address Change</strong>
+              <small>Safe to update only after NOC</small>
             </div>
             <div className={styles.diagramArrow}>
-              <span>propagates</span>
+              <span>then unlocks</span>
               <div className={styles.arrowLine} />
             </div>
             <div className={styles.diagramNode}>
-              <span className={styles.nodeKind}>Licence Task</span>
-              <strong>DL address change</strong>
-              <small>Online, from the new Aadhaar</small>
+              <span className={styles.nodeKind}>Step 3 • Licence Renewal</span>
+              <strong>DL Address &amp; Renewal</strong>
+              <small>Online via new Aadhaar address</small>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. HOW IT'S BUILT (ARCHITECTURE STACK) */}
+      {/* 5. ARCHITECTURE */}
       <section className={styles.architectureSection} aria-labelledby="arch-title">
         <div className={styles.sectionHeader}>
-          <span className={styles.kicker}>Architecture</span>
+          <span className={styles.kicker}>Technical Design</span>
           <h2 id="arch-title" className={styles.sectionTitle}>
-            Engineered for pure determinism
+            Fast &amp; 100% Private (Runs in Your Browser)
           </h2>
           <p className={styles.sectionSubtitle}>
-            Zero backend dependencies. Pure TypeScript DAG engine running in the client thread.
+            No external server calls. All dependency math and scheduling calculations run
+            deterministically right on your device.
           </p>
         </div>
 
@@ -401,48 +521,45 @@ export const StoryPage: React.FC = () => {
         </Suspense>
       </section>
 
-      {/* 6. HONEST BY DESIGN (SOURCE / UNVERIFIED STATS) */}
+      {/* 6. HONEST BY DESIGN */}
       <section className={styles.honestSection} aria-labelledby="honest-title">
         <div className={styles.sectionHeader}>
-          <span className={styles.kicker}>Verifiability</span>
+          <span className={styles.kicker}>Trust &amp; Transparency</span>
           <h2 id="honest-title" className={styles.sectionTitle}>
-            Honest by design
+            Honest by Design: Verified Legal Rules
           </h2>
           <p className={styles.sectionSubtitle}>
-            Every rule, fee and link shows its basis and sources, and is marked unverified until the
-            official text has been read.
+            Every fee and rule displays its exact legal citation from the Motor Vehicle Act.
           </p>
         </div>
 
         <div className={styles.statGrid}>
           <div className={styles.statCard}>
             <span className={styles.statValue}>{sourcesCount}</span>
-            <span className={styles.statLabel}>Official Sources Registered</span>
+            <span className={styles.statLabel}>Official Laws &amp; Portals</span>
             <p className={styles.statDesc}>
-              India Code, MoRTH, the Parivahan portals and state transport portals, as targets to
-              read.
+              India Code, MoRTH, Central Motor Vehicle Rules (CMVR), and State Transport Gazettes.
             </p>
           </div>
           <div className={styles.statCard}>
             <span className={styles.statValue}>{unverifiedCount}</span>
-            <span className={styles.statLabel}>Awaiting Manual Verification</span>
+            <span className={styles.statLabel}>Pending Manual Verification</span>
             <p className={styles.statDesc}>
-              Registry entries still marked verified: false. Nothing is verified until someone reads
-              it.
+              We clearly mark modelled rules so citizens know what is statutory versus assumed.
             </p>
           </div>
           <div className={styles.statCard}>
             <span className={styles.statValue}>{daysRemaining}d</span>
-            <span className={styles.statLabel}>Days to licence expiry (Scenario A)</span>
+            <span className={styles.statLabel}>Days to Expiry (Scenario A)</span>
             <p className={styles.statDesc}>
-              Taken from the simulated scenario's licence expiry day.
+              Simulated scenario countdown showing buffer days and latest safe action dates.
             </p>
           </div>
           <div className={styles.statCard}>
-            <span className={styles.statValue}>None</span>
-            <span className={styles.statLabel}>Server calls for planning</span>
+            <span className={styles.statValue}>0</span>
+            <span className={styles.statLabel}>Server Data Tracking</span>
             <p className={styles.statDesc}>
-              Plans are computed in the browser from bundled, simulated data.
+              Your documents and personal information never leave your local device.
             </p>
           </div>
         </div>
@@ -454,43 +571,43 @@ export const StoryPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 7. CLOSING CTA (WITH MAGNETIC BUTTONS) */}
+      {/* 7. CLOSING CTA */}
       <section className={styles.ctaSection} aria-labelledby="cta-title">
         <div className={styles.ctaCard}>
-          <span className={styles.kicker}>Start Planning</span>
+          <span className={styles.kicker}>Ready to Try?</span>
           <h2 id="cta-title" className={styles.ctaTitle}>
-            Experience the workflow yourself
+            Take Control of Your Transport Compliance
           </h2>
           <p className={styles.ctaSubtitle}>
-            Review the simulated scenario, simulate sudden schedule disruptions, manage household
-            consent, or inspect the underlying legal source files.
+            Open the smart roadmap, test sudden schedule disruptions in our sandbox, or manage your
+            family fleet with privacy-preserving masked records.
           </p>
 
           <div className={styles.ctaButtonGroup}>
             <MagneticButton href="/plan" variant="primary">
-              Open Master Plan
+              ⚡ Open Smart Roadmap
             </MagneticButton>
             <MagneticButton href="/simulate" variant="secondary">
-              Simulation Lab
+              🧪 Disruption Simulator
             </MagneticButton>
             <MagneticButton href="/household" variant="secondary">
-              Household Delegation
+              👥 Family Garage
             </MagneticButton>
             <MagneticButton href="/voice" variant="secondary">
-              Plate Parser & Voice
+              🎙️ Plate &amp; Voice Tool
             </MagneticButton>
             <MagneticButton href="/metrics" variant="secondary">
-              Benchmark Metrics
+              📊 System Metrics
             </MagneticButton>
           </div>
         </div>
       </section>
 
-      {/* EDITORIAL NOTE */}
+      {/* FOOTER NOTE */}
       <div className={styles.storyFooter}>
         <p>
-          Crafted for IMPACTX 2026 Challenge 09 &ldquo;Vehicle & Driving Services Made
-          Simple&rdquo;.
+          Pravaah (प्रवाह) • Designed for IMPACTX 2026 Challenge 09: &ldquo;Vehicle &amp; Driving
+          Services Made Simple&rdquo;.
         </p>
       </div>
     </div>

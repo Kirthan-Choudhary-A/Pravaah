@@ -4,13 +4,14 @@
   gap: var(--space-3);
   padding: var(--space-4);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--stone);
+  border: var(--border-neo);
   background-color: var(--offwhite);
+  box-shadow: var(--shadow-md);
   line-height: 1.5;
 }
 
 .iconCol {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   line-height: 1.2;
 }
 
@@ -23,14 +24,16 @@
 
 .title {
   font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .description {
   font-size: var(--font-size-xs);
-  color: var(--charcoal);
+  color: #121212;
+  font-weight: 500;
 }
 
 .actionCol {
@@ -39,48 +42,40 @@
 
 /* Variants */
 .info {
-  background-color: var(--offwhite);
-  border-color: var(--stone);
-  color: var(--charcoal);
+  background-color: #e0f2fe;
+  border-color: #000000;
+  color: #000000;
 }
 
-.info .iconCol {
-  color: var(--charcoal);
+.info .title {
+  color: #000000;
 }
 
 .warning {
-  background-color: var(--status-risk-bg);
-  border-color: var(--status-risk);
-  color: var(--status-risk);
+  background-color: var(--accent-yellow);
+  border-color: #000000;
+  color: #000000;
 }
 
 .warning .title {
-  color: var(--status-risk);
-}
-
-.warning .description {
-  color: var(--charcoal);
+  color: #000000;
 }
 
 .error {
   background-color: var(--status-missed-bg);
-  border-color: var(--status-missed);
-  color: var(--status-missed);
+  border-color: #000000;
+  color: #000000;
 }
 
 .error .title {
-  color: var(--status-missed);
-}
-
-.error .description {
-  color: var(--charcoal);
+  color: #991b1b;
 }
 
 .degraded {
-  background-color: var(--status-risk-bg);
-  border: 2px dashed var(--status-risk);
+  background-color: #fef08a;
+  border: 2.5px dashed #000000;
 }
 
 .degraded .title {
-  color: var(--status-risk);
+  color: #854d0e;
 }

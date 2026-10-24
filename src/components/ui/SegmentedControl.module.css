@@ -1,15 +1,15 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   min-width: 0;
   max-width: 100%;
 }
 
 .groupLabel {
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--charcoal);
+  font-weight: 800;
+  color: #000000;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -17,10 +17,11 @@
 .container {
   display: flex;
   background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  border: var(--border-neo);
+  box-shadow: var(--shadow-sm);
   border-radius: var(--radius-sm);
-  padding: 2px;
-  gap: 2px;
+  padding: 4px;
+  gap: 6px;
   min-width: 0;
   max-width: 100%;
   overflow-x: auto;
@@ -32,45 +33,47 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  border: none;
+  border: 2px solid transparent;
   background: transparent;
-  color: var(--charcoal);
+  color: #121212;
   font-family: var(--font-sans);
-  border-radius: calc(var(--radius-sm) - 2px);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) var(--ease-standard);
   white-space: nowrap;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .sm .option {
   font-size: var(--font-size-xs);
-  padding: var(--space-1) var(--space-2);
-  min-height: 26px;
+  padding: 4px 8px;
+  min-height: 30px;
 }
 
 .md .option {
   font-size: var(--font-size-sm);
-  padding: var(--space-1) var(--space-3);
-  min-height: 32px;
+  padding: 6px 14px;
+  min-height: 36px;
 }
 
 .option:hover:not(:disabled):not(.selected) {
-  color: var(--ink);
-  background-color: rgba(250, 249, 245, 0.6);
+  color: #000000;
+  background-color: var(--paper-warm);
 }
 
 .option:focus-visible {
-  outline: 2px solid var(--graphite);
+  outline: 2px solid #000000;
   outline-offset: 1px;
   z-index: 1;
 }
 
 .selected {
-  background-color: var(--paper);
-  color: var(--graphite);
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  background-color: var(--accent-yellow) !important;
+  color: #000000 !important;
+  font-weight: 800;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+  transform: translate(-1px, -1px);
 }
 
 .option:disabled {
@@ -85,8 +88,10 @@
 .badge {
   font-size: 0.6875rem;
   font-family: var(--font-mono);
-  background-color: var(--offwhite);
-  padding: 1px 4px;
+  background-color: #ffffff;
+  padding: 2px 6px;
   border-radius: 2px;
-  border: 1px solid var(--stone);
+  border: 1.5px solid #000000;
+  font-weight: 800;
+  color: #000000;
 }

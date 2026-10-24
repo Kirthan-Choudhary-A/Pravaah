@@ -8,14 +8,19 @@
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   text-transform: uppercase;
-  color: var(--iron);
-  font-weight: 600;
+  color: #000000;
+  font-weight: 800;
+  background-color: var(--accent-yellow);
+  padding: 2px 6px;
+  border: 1px solid #000000;
+  border-radius: 2px;
+  width: fit-content;
 }
 
 .taskTitle {
   font-size: var(--font-size-base);
-  font-weight: 700;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
   margin: 0;
   line-height: 1.3;
 }
@@ -32,24 +37,26 @@
   justify-content: space-between;
   gap: var(--space-3);
   padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--stone);
+  border-bottom: 2px solid #000000;
 }
 
 .taskId {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  color: var(--iron);
+  color: #000000;
+  font-weight: 700;
 }
 
 .metricsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
 .metricCard {
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  background-color: var(--paper-warm);
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
   border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-3);
   display: flex;
@@ -59,29 +66,33 @@
 .metricLabel {
   font-size: 0.6875rem;
   font-family: var(--font-mono);
-  color: var(--iron);
+  color: var(--olive);
   text-transform: uppercase;
+  font-weight: 800;
 }
 
 .metricValue {
   font-size: var(--font-size-sm);
-  font-weight: 700;
+  font-weight: 800;
   font-family: var(--font-mono);
-  color: var(--ink);
+  color: #000000;
   margin-top: 2px;
 }
 
 .metricSub {
   font-size: 0.6875rem;
-  color: var(--iron);
+  color: #121212;
+  font-weight: 600;
 }
 
 .slackPos {
-  color: var(--status-safe);
+  color: #047857;
+  font-weight: 800;
 }
 
 .slackNeg {
-  color: var(--status-missed);
+  color: #b91c1c;
+  font-weight: 800;
 }
 
 .section {
@@ -92,22 +103,23 @@
 
 .sectionHeading {
   font-size: var(--font-size-xs);
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--charcoal);
+  color: #000000;
   margin: 0;
 }
 
 .warningHeading {
-  color: var(--status-missed);
+  color: #b91c1c;
 }
 
 .whyText {
   font-size: var(--font-size-sm);
-  color: var(--graphite);
+  color: #121212;
   line-height: 1.5;
   margin: 0;
+  font-weight: 500;
 }
 
 .basisGroup {
@@ -120,23 +132,25 @@
 
 .basisGroupLabel {
   font-size: var(--font-size-xs);
-  color: var(--iron);
+  color: #121212;
+  font-weight: 700;
 }
 
 .assumedTimingTag {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  background-color: var(--status-risk-bg);
-  color: var(--status-risk);
-  border: 1px dashed rgba(122, 75, 0, 0.4);
-  padding: 1px 6px;
+  font-weight: 800;
+  background-color: var(--accent-yellow);
+  color: #000000;
+  border: 1.5px dashed #000000;
+  padding: 2px 6px;
   border-radius: var(--radius-sm);
-  font-style: italic;
 }
 
 .feesBox {
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  background-color: var(--paper-warm);
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
   border-radius: var(--radius-sm);
   padding: var(--space-3);
   display: flex;
@@ -152,13 +166,13 @@
 }
 
 .feeLinePenalty {
-  color: var(--status-missed);
-  font-weight: 600;
+  color: #b91c1c;
+  font-weight: 800;
 }
 
 .feeAmount {
   font-family: var(--font-mono);
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .relationsList {
@@ -172,110 +186,39 @@
 
 .relationItem {
   background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
   border-radius: var(--radius-sm);
   padding: var(--space-3);
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-}
-
-.itemInvalidates {
-  border-color: var(--status-missed);
-  background-color: var(--status-missed-bg);
-}
-
-.invalidatesBadge {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: var(--status-missed);
-}
-
-.relationTypeLabel {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: var(--iron);
-}
-
-.relationTargetBtn {
-  background: var(--paper);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-sm);
-  padding: var(--space-1) var(--space-2);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--graphite);
   cursor: pointer;
-  align-self: flex-start;
-  text-align: left;
+  transition: all var(--duration-fast) var(--ease-standard);
 }
 
-.relationTargetBtn:hover {
-  background-color: var(--offwhite);
-  border-color: var(--graphite);
+.relationItem:hover {
+  background-color: var(--paper-warm);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000000;
+}
+
+.relationKind {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.relationTarget {
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  color: #000000;
 }
 
 .relationReason {
   font-size: var(--font-size-xs);
-  color: var(--charcoal);
+  color: #121212;
   margin: 0;
-  line-height: 1.4;
-}
-
-.sourcesList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.sourceItem {
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-sm);
-  padding: var(--space-3);
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.sourceHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-}
-
-.sourcePublisher {
-  font-size: 0.6875rem;
-  font-family: var(--font-mono);
-  font-weight: 600;
-  color: var(--iron);
-  text-transform: uppercase;
-}
-
-.sourceTitle {
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--graphite);
-}
-
-.sourceLink {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  color: var(--graphite);
-  text-decoration: underline;
-  word-break: break-all;
-}
-
-.relationWarning {
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--status-missed);
-  margin: 0;
-  line-height: 1.4;
 }

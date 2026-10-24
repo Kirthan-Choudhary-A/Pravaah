@@ -9,7 +9,12 @@
 .headerSection {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
+  background-color: var(--offwhite);
+  border: var(--border-neo-thick);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
 }
 
 .titleRow {
@@ -24,48 +29,59 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-1) var(--space-2);
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  padding: 2px 8px;
+  background-color: var(--accent-purple);
+  border: 1.5px solid #000000;
+  box-shadow: 1.5px 1.5px 0px #000000;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--charcoal);
+  font-weight: 800;
+  color: #000000;
   letter-spacing: 0.05em;
 }
 
 .roleToggleContainer {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--paper-warm);
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
   border-radius: var(--radius-sm);
 }
 
 .roleToggleLabel {
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
+  text-transform: uppercase;
 }
 
 .vehiclesGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: var(--space-4);
+  gap: var(--space-5);
   width: 100%;
 }
 
 .vehicleCard {
-  background-color: var(--paper);
-  border: 1px solid var(--stone);
+  background-color: #ffffff;
+  border: var(--border-neo);
+  box-shadow: var(--shadow-md);
   border-radius: var(--radius-sm);
-  padding: var(--space-4);
+  padding: var(--space-5);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.vehicleCard:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lg);
+  border-color: #000000;
 }
 
 .cardHeader {
@@ -77,23 +93,25 @@
 
 .plateNumber {
   font-family: var(--font-mono);
-  font-size: var(--font-size-lg);
-  font-weight: 700;
-  color: var(--graphite);
-  background-color: var(--offwhite);
-  padding: var(--space-1) var(--space-2);
-  border: 1px solid var(--stone);
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  color: #000000;
+  background-color: var(--accent-yellow);
+  padding: 4px 10px;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
   border-radius: var(--radius-sm);
 }
 
 .roleTag {
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  padding: 2px 6px;
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  font-weight: 800;
+  padding: 2px 8px;
+  background-color: var(--accent-blue);
+  border: 1.5px solid #000000;
+  box-shadow: 1px 1px 0px #000000;
   border-radius: var(--radius-sm);
-  color: var(--charcoal);
+  color: #000000;
 }
 
 .fieldGrid {
@@ -109,12 +127,14 @@
   justify-content: space-between;
   gap: var(--space-2);
   padding: var(--space-1) 0;
-  border-bottom: 1px solid var(--offwhite);
+  border-bottom: 1.5px solid #f1f5f9;
 }
 
 .fieldLabel {
-  color: var(--iron);
-  font-weight: 500;
+  color: var(--olive);
+  font-weight: 700;
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
 }
 
 .fieldValueGroup {
@@ -125,33 +145,36 @@
 
 .fieldValue {
   font-family: var(--font-mono);
-  color: var(--graphite);
-  font-weight: 600;
+  color: #000000;
+  font-weight: 800;
 }
 
 .lockedNotice {
   font-size: 0.6875rem;
-  color: var(--olive);
-  background-color: var(--offwhite);
+  color: #000000;
+  background-color: #f1f5f9;
   padding: 2px 6px;
   border-radius: var(--radius-sm);
-  border: 1px dashed var(--stone);
+  border: 1px dashed #000000;
+  font-weight: 700;
 }
 
 .revealBtn {
   font-size: var(--font-size-xs);
-  padding: 2px 8px;
-  border: 1px solid var(--stone);
-  background-color: var(--paper);
+  padding: 3px 10px;
+  border: 1.5px solid #000000;
+  box-shadow: 1.5px 1.5px 0px #000000;
+  background-color: var(--accent-yellow);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  color: var(--charcoal);
-  font-weight: 500;
+  color: #000000;
+  font-weight: 800;
+  transition: all var(--duration-fast) var(--ease-standard);
 }
 
 .revealBtn:hover {
-  background-color: var(--offwhite);
-  border-color: var(--graphite);
+  transform: translate(-1px, -1px);
+  box-shadow: 2.5px 2.5px 0px #000000;
 }
 
 .activeRevealNotice {
@@ -159,18 +182,25 @@
   align-items: center;
   gap: var(--space-2);
   font-size: var(--font-size-xs);
-  color: var(--status-risk);
+  color: #000000;
   font-family: var(--font-mono);
+  background-color: var(--accent-coral);
+  padding: 2px 8px;
+  border: 1.5px solid #000000;
+  box-shadow: 1.5px 1.5px 0px #000000;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
 }
 
 .hideNowBtn {
   font-size: 0.6875rem;
-  background: transparent;
-  border: 1px solid var(--status-risk);
-  color: var(--status-risk);
-  padding: 1px 4px;
-  border-radius: var(--radius-sm);
+  background: #ffffff;
+  border: 1px solid #000000;
+  color: #000000;
+  padding: 1px 6px;
+  border-radius: 2px;
   cursor: pointer;
+  font-weight: 800;
 }
 
 .renewalsList {
@@ -179,14 +209,14 @@
   gap: var(--space-2);
   margin-top: var(--space-2);
   padding-top: var(--space-2);
-  border-top: 1px solid var(--stone);
+  border-top: 2px solid #000000;
 }
 
 .renewalHeader {
   font-size: var(--font-size-xs);
-  font-weight: 600;
+  font-weight: 800;
   text-transform: uppercase;
-  color: var(--iron);
+  color: #000000;
   letter-spacing: 0.05em;
 }
 
@@ -196,13 +226,14 @@
   justify-content: space-between;
   gap: var(--space-2);
   font-size: var(--font-size-sm);
+  font-weight: 600;
 }
 
 /* Modal styles */
 .modalBackdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(36, 37, 34, 0.6);
+  background-color: rgba(0, 0, 0, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -211,8 +242,8 @@
 }
 
 .modalContent {
-  background-color: var(--paper);
-  border: 1px solid var(--stone);
+  background-color: #ffffff;
+  border: var(--border-neo-thick);
   border-radius: var(--radius-md);
   padding: var(--space-6);
   max-width: 480px;
@@ -220,13 +251,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-xl);
 }
 
 .modalTitle {
   font-size: var(--font-size-lg);
-  font-weight: 700;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
 }
 
 .modalForm {
@@ -243,8 +274,8 @@
 
 .formLabel {
   font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--charcoal);
+  font-weight: 800;
+  color: #000000;
 }
 
 .selectInput,
@@ -253,10 +284,11 @@
   font-family: var(--font-sans);
   font-size: var(--font-size-sm);
   padding: var(--space-2);
-  border: 1px solid var(--stone);
+  border: 2px solid #000000;
   border-radius: var(--radius-sm);
-  background-color: var(--paper);
-  color: var(--graphite);
+  background-color: #ffffff;
+  color: #000000;
+  font-weight: 600;
 }
 
 .textareaInput {
@@ -276,7 +308,7 @@
 .auditSection {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
   margin-top: var(--space-6);
 }
 

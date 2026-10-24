@@ -277,14 +277,14 @@ export const HouseholdPage: React.FC = () => {
         {/* Header Section */}
         <div className={styles.headerSection}>
           <div className={styles.titleRow}>
-            <h1>Household & Privacy</h1>
+            <h1>Household &amp; Privacy — Family Garage</h1>
             <div className={styles.simulatedBadge}>
               <span aria-hidden="true">🔒</span> SIMULATED DATA ONLY
             </div>
           </div>
           <p className="page-description">
-            Manage your vehicles and delegated family vehicles with granular consent boundaries,
-            statutory data masking, and an immutable access audit trail.
+            Manage your personal cars, bikes, and family vehicles in one place. Sensitive Aadhaar,
+            chassis, and driving licence numbers stay masked to protect your family’s privacy.
           </p>
 
           {/* Role Switcher */}

@@ -129,10 +129,10 @@ export const SimulatorPage: React.FC = () => {
                 <span className={styles.simulatedPill}>SIMULATED</span>
                 <span className={styles.interactiveBadge}>Interactive Sandbox</span>
               </div>
-              <h1 className={styles.pageTitle}>Plan Simulator & Curveball Engine</h1>
+              <h1 className={styles.pageTitle}>Plan Simulator &amp; Curveball Engine — Disruption Sandbox</h1>
               <p className={styles.pageSubtitle}>
-                Adjust operational constraints, test real-life curveball delays, toggle legal
-                decisions, and observe instant ripple effects across the entire dependency graph.
+                Simulate sudden RTO slot delays, extended vacations, or form rejections. Watch your
+                smart roadmap automatically adapt and recalculate your latest safe dates in real time.
               </p>
             </div>
 

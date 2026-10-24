@@ -3,47 +3,46 @@
   align-items: center;
   gap: var(--space-1);
   font-family: var(--font-mono);
-  font-weight: 600;
+  font-weight: 800;
   border-radius: var(--radius-sm);
   white-space: nowrap;
   line-height: 1.2;
+  border: 1.5px solid #000000;
+  box-shadow: 1.5px 1.5px 0px #000000;
+  color: #000000;
 }
 
 .sm {
   font-size: 0.6875rem;
-  padding: 1px var(--space-1);
+  padding: 2px 6px;
 }
 
 .md {
   font-size: var(--font-size-xs);
-  padding: 2px var(--space-2);
+  padding: 4px 8px;
 }
 
 .symbol {
-  font-size: 0.75em;
+  font-size: 0.85em;
   line-height: 1;
 }
 
 .safe {
-  color: var(--status-safe);
+  color: #000000;
   background-color: var(--status-safe-bg);
-  border: 1px solid rgba(46, 83, 40, 0.25);
 }
 
 .risk {
-  color: var(--status-risk);
+  color: #000000;
   background-color: var(--status-risk-bg);
-  border: 1px solid rgba(122, 75, 0, 0.25);
 }
 
 .missed {
-  color: var(--status-missed);
+  color: #000000;
   background-color: var(--status-missed-bg);
-  border: 1px solid rgba(150, 40, 40, 0.25);
 }
 
 .unknown {
-  color: var(--status-unknown);
+  color: #000000;
   background-color: var(--status-unknown-bg);
-  border: 1px solid rgba(82, 84, 78, 0.25);
 }

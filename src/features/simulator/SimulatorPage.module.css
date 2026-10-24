@@ -8,12 +8,17 @@
   align-items: flex-start;
   gap: var(--space-4);
   flex-wrap: wrap;
+  background-color: var(--offwhite);
+  border: var(--border-neo-thick);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
 }
 
 .headerTitleGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
 }
 
 .badgeRow {
@@ -25,46 +30,50 @@
 .simulatedPill {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  background-color: var(--status-unknown-bg);
-  color: var(--status-unknown);
-  border: 1px solid var(--stone);
-  padding: 1px var(--space-2);
+  background-color: var(--accent-purple);
+  color: #000000;
+  border: 1.5px solid #000000;
+  box-shadow: 1.5px 1.5px 0px #000000;
+  padding: 2px 8px;
   border-radius: var(--radius-sm);
 }
 
 .interactiveBadge {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 600;
-  background-color: var(--status-safe-bg);
-  color: var(--status-safe);
-  border: 1px solid var(--status-safe);
-  padding: 1px var(--space-2);
+  font-weight: 800;
+  background-color: var(--accent-green);
+  color: #000000;
+  border: 1.5px solid #000000;
+  box-shadow: 1.5px 1.5px 0px #000000;
+  padding: 2px 8px;
   border-radius: var(--radius-sm);
 }
 
 .pageTitle {
-  font-size: var(--font-size-xl);
-  font-weight: 700;
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
   letter-spacing: -0.02em;
-  color: var(--graphite);
+  color: #000000;
   margin: 0;
 }
 
 .pageSubtitle {
   font-size: var(--font-size-sm);
-  color: var(--charcoal);
+  color: #121212;
   margin: 0;
   max-width: 680px;
   line-height: 1.5;
+  font-weight: 500;
 }
 
 .controlBox {
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  background-color: #ffffff;
+  border: var(--border-neo-thick);
+  box-shadow: var(--shadow-md);
   border-radius: var(--radius-sm);
   padding: var(--space-4);
   min-width: 0;
@@ -76,6 +85,7 @@
   flex-direction: column;
   gap: 4px;
   font-size: var(--font-size-xs);
+  font-weight: 600;
 }
 
 .diffSummary p {
@@ -97,8 +107,9 @@
 }
 
 .controlColumn {
-  background-color: var(--paper);
-  border: 1px solid var(--stone);
+  background-color: var(--offwhite);
+  border: var(--border-neo);
+  box-shadow: var(--shadow-md);
   border-radius: var(--radius-sm);
   padding: var(--space-5);
   display: flex;
@@ -110,13 +121,13 @@
 
 .columnHeading {
   font-size: var(--font-size-sm);
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--graphite);
+  color: #000000;
   margin: 0;
   padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--stone);
+  border-bottom: 2px solid #000000;
 }
 
 .controlsList {
@@ -130,36 +141,37 @@
 .decisionGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   min-width: 0;
   max-width: 100%;
 }
 
 .controlLabel {
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--charcoal);
+  font-weight: 800;
+  color: #000000;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .decisionHint {
   font-size: var(--font-size-xs);
-  color: var(--iron);
+  color: #121212;
   margin: var(--space-1) 0 0 0;
   line-height: 1.4;
+  font-weight: 500;
 }
 
 .curveballsSection {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
 .eventButtonsGrid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
 .eventButton {
@@ -167,44 +179,49 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  padding: var(--space-2) var(--space-3);
-  background-color: var(--offwhite);
-  border: 1px solid var(--stone);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--paper-warm);
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
   border-radius: var(--radius-sm);
   cursor: pointer;
   text-align: left;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) var(--ease-standard);
 }
 
 .eventButton:hover {
-  background-color: var(--paper);
-  border-color: var(--graphite);
+  background-color: #ffffff;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000000;
 }
 
 .eventButton:focus-visible {
-  outline: 2px solid var(--graphite);
+  outline: 3px solid #000000;
   outline-offset: 1px;
 }
 
 .eventButtonActive {
-  background-color: var(--status-risk-bg);
-  border: 1.5px solid var(--status-risk);
+  background-color: var(--accent-yellow) !important;
+  border: 2.5px solid #000000 !important;
+  box-shadow: 3px 3px 0px #000000 !important;
+  transform: translate(-1px, -1px);
 }
 
 .eventButtonActive .eventBtnLabel {
-  color: var(--status-risk);
-  font-weight: 700;
+  color: #000000;
+  font-weight: 800;
 }
 
 .eventBtnLabel {
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--graphite);
+  font-weight: 800;
+  color: #000000;
 }
 
 .eventBtnDesc {
-  font-size: 0.6875rem;
-  color: var(--iron);
+  font-size: 0.75rem;
+  color: #121212;
+  font-weight: 500;
 }
 
 .sectionContainer {
@@ -221,13 +238,14 @@
 
 .sectionTitle {
   font-size: var(--font-size-base);
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.01em;
-  color: var(--graphite);
+  color: #000000;
   margin: 0;
 }
 
 .sectionMeta {
   font-size: var(--font-size-xs);
-  color: var(--iron);
+  color: #121212;
+  font-weight: 500;
 }
