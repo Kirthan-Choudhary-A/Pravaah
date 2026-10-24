@@ -72,8 +72,18 @@ const REGISTER_NEW_FIELDS = new Set([
   'register_new',
 ]);
 
-export function canAccess(field: string, consent: Consent | null, now: number): boolean {
+/**
+ * `now` and `consent.until` share one unit (the app uses epoch seconds).
+ * When `vehicleKeys` is given (e.g. the vehicle id and plate), the consent must cover one of them.
+ */
+export function canAccess(
+  field: string,
+  consent: Consent | null,
+  now: number,
+  vehicleKeys?: readonly string[]
+): boolean {
   if (!consent) return false;
+  if (vehicleKeys && !vehicleKeys.some((k) => consent.vehicleIds.includes(k))) return false;
 
   const normalizedField = field.trim().toLowerCase();
 

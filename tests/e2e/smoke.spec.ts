@@ -95,7 +95,7 @@ test('voice and plate parsing: sample selection and multilingual read-back', asy
   await page.goto('/voice');
 
   // Verify SIMULATED notice and privacy notice
-  await expect(page.getByText(/LOCAL SPEECH RECOGNITION/i)).toBeVisible();
+  await expect(page.getByText(/BROWSER SPEECH SERVICE/i)).toBeVisible();
   await expect(page.getByRole('note')).toBeVisible();
 
   // Click Sample 1

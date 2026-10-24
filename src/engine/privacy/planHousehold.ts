@@ -15,12 +15,16 @@ import type {
   TaskStatus,
 } from '../model/types';
 import { canAccess } from './fieldAccess';
+import { evaluateConsentStatus } from './consent';
 import { maskPlate } from './masking';
 
 export interface PlanHouseholdParams {
   readonly householdVehicles: readonly HouseholdVehicle[];
   readonly consents: readonly Consent[];
+  /** Plan day used to schedule tasks. */
   readonly now: number;
+  /** Clock for consent checks, same unit as `consent.until`. Defaults to `now`. */
+  readonly consentNow?: number;
   readonly currentDay?: number;
   readonly pack?: RulePack;
 }
@@ -29,10 +33,11 @@ function planHouseholdSingle(
   vehicle: HouseholdVehicle,
   _pack: RulePack | undefined,
   consent: Consent | null,
-  now: number
+  now: number,
+  accessNow: number = now
 ): ScheduledTask[] {
-  // Check if grantee has active view permission
-  if (!canAccess('vehicle.tasks', consent, now)) {
+  // Check if grantee has active view permission for this vehicle
+  if (!canAccess('vehicle.tasks', consent, accessNow, [vehicle.id, vehicle.plate])) {
     return [];
   }
 
@@ -89,14 +94,17 @@ export function planHousehold(
   nowArg?: number
 ): ScheduledTask[] {
   if ('householdVehicles' in vehicleOrParams) {
-    const { householdVehicles, consents, now, pack } = vehicleOrParams;
+    const { householdVehicles, consents, now, consentNow = now, pack } = vehicleOrParams;
     const allTasks: ScheduledTask[] = [];
     for (const v of householdVehicles) {
+      // Only a consent that is granted and unexpired right now counts; older ones are ignored.
       const activeConsent =
         consents.find(
-          (c) => c.vehicleIds.includes(v.id) || c.vehicleIds.includes(v.plate)
+          (c) =>
+            (c.vehicleIds.includes(v.id) || c.vehicleIds.includes(v.plate)) &&
+            evaluateConsentStatus(c, consentNow) === 'granted'
         ) || null;
-      allTasks.push(...planHouseholdSingle(v, pack, activeConsent, now));
+      allTasks.push(...planHouseholdSingle(v, pack, activeConsent, now, consentNow));
     }
     return allTasks;
   }

@@ -113,7 +113,10 @@ export const VoicePage: React.FC = () => {
     return parsePlate(transcriptInput, dict);
   }, [transcriptInput, dict]);
 
-  const candidate: ParsedPlate | null = parseResult?.candidates?.[0] ?? null;
+  const candidates = useMemo(() => parseResult?.candidates ?? [], [parseResult]);
+  const [pickedPlate, setPickedPlate] = useState<string | null>(null);
+  const candidate: ParsedPlate | null =
+    candidates.find((c) => c.formatted === pickedPlate) ?? candidates[0] ?? null;
 
   // Class check (e.g. DL Car vs Two-Wheeler)
   const classCheck: ClassCheckResult | null = useMemo(() => {
@@ -130,6 +133,7 @@ export const VoicePage: React.FC = () => {
   // Demo samples
   const handleSelectSample = (transcript: string, vType: 'Car' | 'Two-Wheeler') => {
     setTranscriptInput(transcript);
+    setPickedPlate(null);
     setSelectedVehicleType(vType);
     setSavedSuccess(null);
   };
@@ -209,25 +213,35 @@ export const VoicePage: React.FC = () => {
   };
 
   // Confirm and Save
+  const mismatch = classCheck?.status === 'mismatch';
+
+  // Choosing what the plate says settles it; choosing the other means the plate is wrong.
+  const resolveMismatch = (choice: 'Car' | 'Two-Wheeler') => {
+    if (classCheck?.detectedClass === choice) {
+      setSelectedVehicleType(choice);
+    } else {
+      setTranscriptInput('');
+      setPickedPlate(null);
+    }
+  };
+  const saveBlockedReason = !candidate
+    ? 'Enter a plate first.'
+    : !candidate.isValid
+      ? (candidate.error ?? 'This plate is not valid.')
+      : mismatch
+        ? 'Resolve the vehicle category mismatch above first.'
+        : null;
+
   const handleConfirmSave = () => {
-    if (!candidate) return;
+    if (!candidate || saveBlockedReason) return;
 
     const newVehicle: HouseholdVehicle = {
       id: `veh-${Date.now()}`,
       plate: candidate.formatted,
       vehicleType: selectedVehicleType,
       ownerRole: activeRole,
-      renewalItems: [
-        {
-          id: `item-${Date.now()}-puc`,
-          name: 'PUC Renewal',
-          dueDate: 60,
-          duration: 1,
-          basis: 'statute',
-          verified: false,
-          why: 'Periodic pollution clearance test',
-        },
-      ],
+      // No deadline is invented: renewal dates come from the owner or a verified source.
+      renewalItems: [],
     };
 
     addVehicleAction(newVehicle);
@@ -251,19 +265,19 @@ export const VoicePage: React.FC = () => {
           <div className={styles.titleRow}>
             <h1>Voice &amp; Typed Plate Entry — Plate Assistant</h1>
             <div className={styles.simulatedBadge}>
-              <span aria-hidden="true">🎙️</span> LOCAL SPEECH RECOGNITION
+              <span aria-hidden="true">🎙️</span> BROWSER SPEECH SERVICE
             </div>
           </div>
           <p className="page-description">
             Type or speak your vehicle number in English, Hindi, Telugu, or Kannada. We auto-correct
-            voice typos (like &ldquo;oh&rdquo; for &ldquo;zero&rdquo;), verify the state registration series, and read it back
-            to you.
+            voice typos (like &ldquo;oh&rdquo; for &ldquo;zero&rdquo;), check Delhi class letters against
+            your vehicle type, and read it back to you.
           </p>
 
           <div className={styles.privacyNotice} role="note">
             <span>🛡️</span>
             <span>
-              <strong>Audio Privacy Notice:</strong> Speech input is transcribed locally inside your browser via Web Speech API. No audio recordings or personal identity numbers are streamed to external cloud servers.
+              <strong>Audio Privacy Notice:</strong> Typed input and the demo samples stay in your browser. The microphone button uses your browser&apos;s speech service (in Chrome, a Google service), which receives the audio. Do not speak a real registration number. Live speech accuracy is not yet tested.
             </span>
           </div>
         </div>
@@ -418,6 +432,27 @@ export const VoicePage: React.FC = () => {
               {candidate.formatted}
             </div>
 
+            {candidates.length > 1 && (
+              <div className={styles.fixesBox} role="group" aria-label="Other possible readings">
+                <div className={styles.fixesTitle}>
+                  <span>Other possible readings ({candidates.length - 1}) &mdash; tap the one you meant</span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+                  {candidates.map((c) => (
+                    <Button
+                      key={c.formatted}
+                      variant={c.formatted === candidate.formatted ? 'primary' : 'secondary'}
+                      size="sm"
+                      aria-pressed={c.formatted === candidate.formatted}
+                      onClick={() => setPickedPlate(c.formatted)}
+                    >
+                      {c.formatted}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Positional Fixes */}
             {candidate.fixes.length > 0 && (
               <div className={styles.fixesBox} role="alert">
@@ -446,14 +481,14 @@ export const VoicePage: React.FC = () => {
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => setSelectedVehicleType('Car')}
+                    onClick={() => resolveMismatch('Car')}
                   >
                     Keep Car
                   </Button>
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => setSelectedVehicleType('Two-Wheeler')}
+                    onClick={() => resolveMismatch('Two-Wheeler')}
                   >
                     Keep Two-Wheeler
                   </Button>
@@ -556,9 +591,19 @@ export const VoicePage: React.FC = () => {
                 >
                   No, Fix It
                 </Button>
-                <Button variant="primary" size="md" onClick={handleConfirmSave}>
+                <Button
+                  variant="primary"
+                  size="md"
+                  onClick={handleConfirmSave}
+                  disabled={saveBlockedReason !== null}
+                >
                   Yes, Confirm &amp; Save
                 </Button>
+                {saveBlockedReason && (
+                  <span role="note" style={{ fontSize: 'var(--font-size-sm)', color: 'var(--status-missed)' }}>
+                    {saveBlockedReason}
+                  </span>
+                )}
               </div>
             )}
           </section>

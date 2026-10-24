@@ -38,7 +38,9 @@ import {
   reveal,
   appendAudit,
   planHousehold,
+  evaluateConsentStatus,
 } from '@engine';
+import { nowSeconds } from '../utils/clock';
 import { loadScenario, loadMergedRulePack, loadSources } from '@data/index';
 import type { ScenarioId, SimulatorParameters, EventTypeKey, PlanContextValue } from './types';
 
@@ -75,18 +77,18 @@ const INITIAL_HOUSEHOLD_VEHICLES: readonly HouseholdVehicle[] = [
         name: 'PUC Certificate Renewal',
         dueDate: 30,
         duration: 1,
-        basis: 'statute',
+        basis: 'modelled',
         verified: false,
-        why: 'PUC valid for 6 months under CMVR Rule 115',
+        why: 'Simulated demo due date, not a real deadline.',
       },
       {
         id: 'item-ins-1',
         name: 'Motor Third-Party Insurance',
         dueDate: 90,
         duration: 1,
-        basis: 'statute',
+        basis: 'modelled',
         verified: false,
-        why: 'Mandatory motor third party insurance under Section 146 MV Act',
+        why: 'Simulated demo due date, not a real deadline.',
       },
     ],
     aadhaarDemo: 'DEMO-0000-1234',
@@ -104,7 +106,7 @@ const INITIAL_CONSENTS: readonly Consent[] = [
     granteeRole: 'You',
     vehicleIds: ['veh-family-1', 'KA-03-MJ-4578'],
     scopes: ['view'],
-    until: 1800000000000,
+    until: nowSeconds() + 90 * 86400,
     status: 'granted',
   },
 ];
@@ -227,11 +229,11 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 
   const [consents, setConsents] = useState<readonly Consent[]>(() =>
-    loadFromStorage('pravaah_consents', INITIAL_CONSENTS)
+    loadFromStorage('pravaah_consents_v2', INITIAL_CONSENTS)
   );
 
   const [auditLog, setAuditLog] = useState<readonly AuditEntry[]>(() =>
-    loadFromStorage('pravaah_audit_log', INITIAL_AUDIT_LOG)
+    loadFromStorage('pravaah_audit_log_v2', INITIAL_AUDIT_LOG)
   );
 
   const [activeRole, setActiveRole] = useState<'You' | 'Family member'>('You');
@@ -243,7 +245,7 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Auto-expire revealed fields
   useEffect(() => {
     const interval = setInterval(() => {
-      const now = Date.now();
+      const now = nowSeconds();
       setRevealedFields((prev) => {
         let changed = false;
         const next: Record<string, { readonly value: string; readonly expiresAt: number }> = {};
@@ -325,8 +327,9 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const plan = planScenario(input);
 
     // If active consent has 'view' scope for family member's vehicle, add household tasks
+    const consentNow = nowSeconds();
     const activeViewConsent = consents.find(
-      (c) => c.status === 'granted' && c.scopes.includes('view')
+      (c) => evaluateConsentStatus(c, consentNow) === 'granted' && c.scopes.includes('view')
     );
 
     let combinedTasks = plan.tasks;
@@ -336,6 +339,7 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
         householdVehicles: familyVehicles,
         consents,
         now: 0,
+        consentNow,
         pack: rulePack,
       });
 
@@ -445,8 +449,8 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
       scopes: ConsentScope[];
       days?: number;
     }) => {
-      const now = Date.now();
-      const until = now + (params.days ?? 30) * 86400000;
+      const now = nowSeconds();
+      const until = now + (params.days ?? 30) * 86400;
       const res = createConsentRequest({
         id: `consent-${Date.now()}`,
         grantorRole: params.grantorRole,
@@ -463,14 +467,14 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setConsents((prev) => {
         const next = [...prev, res.consent];
-        saveToStorage('pravaah_consents', next);
+        saveToStorage('pravaah_consents_v2', next);
         return next;
       });
 
       if (res.auditEntry) {
         setAuditLog((prev) => {
           const next = appendAudit(prev, res.auditEntry);
-          saveToStorage('pravaah_audit_log', next);
+          saveToStorage('pravaah_audit_log_v2', next);
           return next;
         });
       }
@@ -485,20 +489,20 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const target = consents.find((c) => c.id === consentId);
       if (!target) return { ok: false, error: 'Consent request not found.' };
 
-      const now = Date.now();
+      const now = nowSeconds();
       const res = grantConsent(target, now, updatedScopes);
       if (!res.ok) return { ok: false, error: res.error };
 
       setConsents((prev) => {
         const next = prev.map((c) => (c.id === consentId ? res.consent : c));
-        saveToStorage('pravaah_consents', next);
+        saveToStorage('pravaah_consents_v2', next);
         return next;
       });
 
       if (res.auditEntry) {
         setAuditLog((prev) => {
           const next = appendAudit(prev, res.auditEntry);
-          saveToStorage('pravaah_audit_log', next);
+          saveToStorage('pravaah_audit_log_v2', next);
           return next;
         });
       }
@@ -513,20 +517,20 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const target = consents.find((c) => c.id === consentId);
       if (!target) return { ok: false, error: 'Consent request not found.' };
 
-      const now = Date.now();
+      const now = nowSeconds();
       const res = declineConsent(target, now);
       if (!res.ok) return { ok: false, error: res.error };
 
       setConsents((prev) => {
         const next = prev.map((c) => (c.id === consentId ? res.consent : c));
-        saveToStorage('pravaah_consents', next);
+        saveToStorage('pravaah_consents_v2', next);
         return next;
       });
 
       if (res.auditEntry) {
         setAuditLog((prev) => {
           const next = appendAudit(prev, res.auditEntry);
-          saveToStorage('pravaah_audit_log', next);
+          saveToStorage('pravaah_audit_log_v2', next);
           return next;
         });
       }
@@ -541,20 +545,20 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const target = consents.find((c) => c.id === consentId);
       if (!target) return { ok: false, error: 'Consent request not found.' };
 
-      const now = Date.now();
+      const now = nowSeconds();
       const res = revokeConsent(target, now);
       if (!res.ok) return { ok: false, error: res.error };
 
       setConsents((prev) => {
         const next = prev.map((c) => (c.id === consentId ? res.consent : c));
-        saveToStorage('pravaah_consents', next);
+        saveToStorage('pravaah_consents_v2', next);
         return next;
       });
 
       if (res.auditEntry) {
         setAuditLog((prev) => {
           const next = appendAudit(prev, res.auditEntry);
-          saveToStorage('pravaah_audit_log', next);
+          saveToStorage('pravaah_audit_log_v2', next);
           return next;
         });
       }
@@ -570,13 +574,17 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
       rawValue: string;
       purpose: string;
       consentId?: string;
+      vehicleKeys?: readonly string[];
     }): RevealResult => {
+      const now = nowSeconds();
       const activeConsent =
-        (params.consentId ? consents.find((c) => c.id === params.consentId) : null) ||
-        consents.find((c) => c.status === 'granted') ||
-        null;
+        consents.find(
+          (c) =>
+            (params.consentId ? c.id === params.consentId : true) &&
+            evaluateConsentStatus(c, now) === 'granted' &&
+            (params.vehicleKeys ? params.vehicleKeys.some((k) => c.vehicleIds.includes(k)) : true)
+        ) || null;
 
-      const now = Date.now();
       const res = reveal({
         field: params.field,
         purpose: params.purpose,
@@ -585,6 +593,7 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
         rawValue: params.rawValue,
         now,
         durationSeconds: 60,
+        ...(params.vehicleKeys ? { vehicleKeys: params.vehicleKeys } : {}),
       });
 
       if (res.ok) {
@@ -596,7 +605,7 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setAuditLog((prev) => {
           const next = appendAudit(prev, res.auditEntry);
-          saveToStorage('pravaah_audit_log', next);
+          saveToStorage('pravaah_audit_log_v2', next);
           return next;
         });
       }
@@ -628,14 +637,14 @@ export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const handleClearAuditLogAction = useCallback(() => {
     setAuditLog([]);
-    saveToStorage('pravaah_audit_log', []);
+    saveToStorage('pravaah_audit_log_v2', []);
   }, []);
 
   const handleResetDemoAction = useCallback(() => {
     try {
       localStorage.removeItem('pravaah_household_vehicles');
-      localStorage.removeItem('pravaah_consents');
-      localStorage.removeItem('pravaah_audit_log');
+      localStorage.removeItem('pravaah_consents_v2');
+      localStorage.removeItem('pravaah_audit_log_v2');
     } catch {
       // ignore
     }

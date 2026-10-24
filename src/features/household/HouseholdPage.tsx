@@ -8,7 +8,10 @@ import {
   maskEngine,
   validatePurpose,
   VALID_PURPOSES,
+  canAccess,
+  evaluateConsentStatus,
 } from '@engine';
+import { nowSeconds } from '../../utils/clock';
 import type { HouseholdVehicle, AuditEntry } from '@engine/model/types';
 import { Banner } from '@components/ui/Banner';
 import { Button } from '@components/ui/Button';
@@ -23,6 +26,7 @@ interface RevealModalState {
   readonly fieldLabel: string;
   readonly rawValue: string;
   readonly vehiclePlate: string;
+  readonly vehicleKeys: readonly string[];
 }
 
 export const HouseholdPage: React.FC = () => {
@@ -50,6 +54,7 @@ export const HouseholdPage: React.FC = () => {
     fieldLabel: '',
     rawValue: '',
     vehiclePlate: '',
+    vehicleKeys: [],
   });
 
   const [selectedPurpose, setSelectedPurpose] = useState<string>(VALID_PURPOSES[0]);
@@ -74,7 +79,7 @@ export const HouseholdPage: React.FC = () => {
         (c) =>
           c.grantorRole === 'Family member' &&
           c.granteeRole === 'You' &&
-          c.status === 'granted'
+          evaluateConsentStatus(c, nowSeconds()) === 'granted'
       ) ?? null
     );
   }, [consents]);
@@ -86,13 +91,20 @@ export const HouseholdPage: React.FC = () => {
   }, [consents]);
 
   // Open reveal modal
-  const openReveal = (field: string, fieldLabel: string, rawValue: string, vehiclePlate: string) => {
+  const openReveal = (
+    field: string,
+    fieldLabel: string,
+    rawValue: string,
+    vehiclePlate: string,
+    vehicleKeys: readonly string[]
+  ) => {
     setRevealModal({
       isOpen: true,
       field,
       fieldLabel,
       rawValue,
       vehiclePlate,
+      vehicleKeys,
     });
     setSelectedPurpose(VALID_PURPOSES[0]);
     setCustomJustification('');
@@ -106,6 +118,7 @@ export const HouseholdPage: React.FC = () => {
       fieldLabel: '',
       rawValue: '',
       vehiclePlate: '',
+      vehicleKeys: [],
     });
     setRevealError(null);
   };
@@ -127,6 +140,7 @@ export const HouseholdPage: React.FC = () => {
       field: revealModal.field,
       rawValue: revealModal.rawValue,
       purpose,
+      vehicleKeys: revealModal.vehicleKeys,
     });
 
     if (!res.ok) {
@@ -152,17 +166,8 @@ export const HouseholdPage: React.FC = () => {
         plate: trimmed,
         vehicleType: newVehicleType,
         ownerRole: activeRole,
-        renewalItems: [
-          {
-            id: `item-${Date.now()}-1`,
-            name: 'PUC Renewal',
-            dueDate: 45,
-            duration: 1,
-            basis: 'statute',
-            verified: false,
-            why: 'Periodic pollution clearance test',
-          },
-        ],
+        // No deadline is invented: renewal dates come from the owner or a verified source.
+        renewalItems: [],
       };
 
       addVehicleAction(newVehicle);
@@ -173,20 +178,11 @@ export const HouseholdPage: React.FC = () => {
       // New vehicle registration under register_new scope
       const newVehicle: HouseholdVehicle = {
         id: `veh-${Date.now()}`,
-        plate: `NEW-${Math.floor(1000 + Math.random() * 9000)}`,
+        // Placeholder until the real number is assigned; not a registration mark.
+        plate: 'NEW-PENDING',
         vehicleType: newVehicleType,
         ownerRole: activeRole,
-        renewalItems: [
-          {
-            id: `item-${Date.now()}-form20`,
-            name: 'Form 20 Registration Application',
-            dueDate: 14,
-            duration: 2,
-            basis: 'statute',
-            verified: false,
-            why: 'New vehicle registration mark assignment',
-          },
-        ],
+        renewalItems: [],
       };
 
       addVehicleAction(newVehicle);
@@ -364,6 +360,17 @@ export const HouseholdPage: React.FC = () => {
               {householdVehicles.map((v) => {
                 const isFamily = v.ownerRole === 'Family member';
                 const maskedPlateText = isFamily ? maskPlate(v.plate) : v.plate;
+                // A family member's Aadhaar, licence and challans are never shown to a delegate.
+                const canSee = (field: string) =>
+                  !isFamily || canAccess(field, activeConsent, nowSeconds(), [v.id, v.plate]);
+                const lockedRow = (label: string) => (
+                  <div className={styles.fieldRow}>
+                    <span className={styles.fieldLabel}>{label}</span>
+                    <div className={styles.fieldValueGroup}>
+                      <span className={styles.lockedNotice}>🔒 Not shared with delegates</span>
+                    </div>
+                  </div>
+                );
 
                 // Check active reveal states
                 const chassisKey = `vehicle.chassis-${v.chassisDemo || ''}`;
@@ -394,7 +401,7 @@ export const HouseholdPage: React.FC = () => {
                             <div className={styles.activeRevealNotice}>
                               <span className={styles.fieldValue}>{revealedChassis.value}</span>
                               <span style={{ fontSize: '0.6875rem' }}>
-                                ({Math.max(0, Math.ceil((revealedChassis.expiresAt - Date.now()) / 1000))}s)
+                                ({Math.max(0, Math.ceil(revealedChassis.expiresAt - nowSeconds()))}s)
                               </span>
                               <button
                                 type="button"
@@ -414,7 +421,7 @@ export const HouseholdPage: React.FC = () => {
                                   type="button"
                                   className={styles.revealBtn}
                                   onClick={() =>
-                                    openReveal('vehicle.chassis', 'Chassis Number', v.chassisDemo || '', v.plate)
+                                    openReveal('vehicle.chassis', 'Chassis Number', v.chassisDemo || '', v.plate, [v.id, v.plate])
                                   }
                                 >
                                   Reveal
@@ -433,7 +440,7 @@ export const HouseholdPage: React.FC = () => {
                             <div className={styles.activeRevealNotice}>
                               <span className={styles.fieldValue}>{revealedEngine.value}</span>
                               <span style={{ fontSize: '0.6875rem' }}>
-                                ({Math.max(0, Math.ceil((revealedEngine.expiresAt - Date.now()) / 1000))}s)
+                                ({Math.max(0, Math.ceil(revealedEngine.expiresAt - nowSeconds()))}s)
                               </span>
                               <button
                                 type="button"
@@ -453,7 +460,7 @@ export const HouseholdPage: React.FC = () => {
                                   type="button"
                                   className={styles.revealBtn}
                                   onClick={() =>
-                                    openReveal('vehicle.engine', 'Engine Number', v.engineDemo || '', v.plate)
+                                    openReveal('vehicle.engine', 'Engine Number', v.engineDemo || '', v.plate, [v.id, v.plate])
                                   }
                                 >
                                   Reveal
@@ -464,52 +471,48 @@ export const HouseholdPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Aadhaar (ALWAYS HIDDEN / LOCKED for family member) */}
-                      {v.aadhaarDemo && (
-                        <div className={styles.fieldRow}>
-                          <span className={styles.fieldLabel}>Owner Aadhaar</span>
-                          <div className={styles.fieldValueGroup}>
-                            <span className={styles.fieldValue}>{maskAadhaar(v.aadhaarDemo)}</span>
-                            {isFamily && (
-                              <span className={styles.lockedNotice} title="Aadhaar is permanently locked from delegated viewing under Section 29 Aadhaar Act">
-                                🔒 Locked
-                              </span>
-                            )}
+                      {/* Aadhaar, licence and challans follow canAccess: never shared with delegates */}
+                      {v.aadhaarDemo &&
+                        (canSee('aadhaar') ? (
+                          <div className={styles.fieldRow}>
+                            <span className={styles.fieldLabel}>Owner Aadhaar</span>
+                            <div className={styles.fieldValueGroup}>
+                              <span className={styles.fieldValue}>{maskAadhaar(v.aadhaarDemo)}</span>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        ) : (
+                          lockedRow('Owner Aadhaar')
+                        ))}
 
-                      {/* DL (ALWAYS HIDDEN / LOCKED for family member) */}
-                      {v.dlDemo && (
-                        <div className={styles.fieldRow}>
-                          <span className={styles.fieldLabel}>Driving Licence</span>
-                          <div className={styles.fieldValueGroup}>
-                            <span className={styles.fieldValue}>{maskDL(v.dlDemo)}</span>
-                            {isFamily && (
-                              <span className={styles.lockedNotice} title="Family DL number is permanently restricted by privacy policy">
-                                🔒 Locked
-                              </span>
-                            )}
+                      {v.dlDemo &&
+                        (canSee('dl') ? (
+                          <div className={styles.fieldRow}>
+                            <span className={styles.fieldLabel}>Driving Licence</span>
+                            <div className={styles.fieldValueGroup}>
+                              <span className={styles.fieldValue}>{maskDL(v.dlDemo)}</span>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        ) : (
+                          lockedRow('Driving Licence')
+                        ))}
 
-                      {/* Challans (Location ALWAYS HIDDEN) */}
-                      {v.challansDemo && v.challansDemo.length > 0 && (
-                        <div className={styles.fieldRow}>
-                          <span className={styles.fieldLabel}>e-Challans</span>
-                          <div className={styles.fieldValueGroup}>
-                            <span className={styles.fieldValue} style={{ color: 'var(--status-missed)' }}>
-                              {v.challansDemo.length} pending
-                            </span>
-                            {isFamily && (
-                              <span className={styles.lockedNotice} title="Challan location records are hidden for personal privacy">
-                                📍 Location hidden
+                      {v.challansDemo &&
+                        v.challansDemo.length > 0 &&
+                        (canSee('challans') ? (
+                          <div className={styles.fieldRow}>
+                            <span className={styles.fieldLabel}>e-Challans</span>
+                            <div className={styles.fieldValueGroup}>
+                              <span
+                                className={styles.fieldValue}
+                                style={{ color: 'var(--status-missed)' }}
+                              >
+                                {v.challansDemo.length} pending
                               </span>
-                            )}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        ) : (
+                          lockedRow('e-Challans')
+                        ))}
                     </div>
 
                     {/* Renewal items / tasks */}
@@ -730,7 +733,7 @@ export const HouseholdPage: React.FC = () => {
               <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--charcoal)', margin: 0 }}>
                 You are requesting to reveal <strong>{revealModal.fieldLabel}</strong> for vehicle{' '}
                 <strong>{revealModal.vehiclePlate}</strong>. To comply with privacy-by-design standards,
-                select an approved statutory purpose.
+                state a purpose. Every reveal is logged.
               </p>
 
               {revealError && (

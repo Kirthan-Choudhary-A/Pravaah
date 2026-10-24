@@ -36,9 +36,13 @@ describe('Household & Privacy UI Integration Tests', () => {
     expect(screen.queryByText('KA-03-2018-0004578')).not.toBeInTheDocument();
     expect(screen.queryByText('MG Road, Bengaluru')).not.toBeInTheDocument();
 
-    // Locked tags present
-    expect(screen.getAllByText(/locked/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/location hidden/i)).toBeInTheDocument();
+    // Not even the masked form of the family member's Aadhaar, licence or challans is shown
+    expect(screen.queryByText('XXXX-XXXX-1234')).not.toBeInTheDocument();
+    expect(screen.queryByText(/KA••••4578/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/1 pending/i)).not.toBeInTheDocument();
+
+    // Each of the three rows says it is not shared
+    expect(screen.getAllByText(/not shared with delegates/i)).toHaveLength(3);
   });
 
   it('allows revealing authorized fields with valid purpose and logs audit entry', async () => {

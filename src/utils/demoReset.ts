@@ -8,8 +8,8 @@ export function resetDemoStorage(): void {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       window.localStorage.removeItem('pravaah_household_vehicles');
-      window.localStorage.removeItem('pravaah_consents');
-      window.localStorage.removeItem('pravaah_audit_log');
+      window.localStorage.removeItem('pravaah_consents_v2');
+      window.localStorage.removeItem('pravaah_audit_log_v2');
     }
   } catch {
     // ignore

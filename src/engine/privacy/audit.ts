@@ -12,7 +12,8 @@ export function appendAudit(
   log: readonly AuditEntry[],
   entry: AuditEntry
 ): readonly AuditEntry[] {
-  return [...log, entry];
+  const id = log.some((e) => e.id === entry.id) ? `${entry.id}#${log.length}` : entry.id;
+  return [...log, { ...entry, id }];
 }
 
 export function filterAuditLog(

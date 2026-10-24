@@ -3,7 +3,8 @@
  *
  * Rules:
  * - Purpose must be from a fixed list:
- *   "Submit NOC application", "Pay e-challan", "Verify with RTO", or "Other" + at least 10 characters.
+ *   "Submit NOC application", "Pay e-challan", "Verify with RTO", or "Other: <at least 10 characters>".
+ *   Bare free text is rejected.
  * - Allowed only when actor may access that field.
  * - Returns a time-limited reveal (60 seconds default) plus an immutable audit entry.
  */
@@ -48,15 +49,10 @@ export function validatePurpose(purpose: string): { readonly valid: boolean; rea
     };
   }
 
-  // Free text purpose directly provided without "Other" prefix: must be >= 10 characters
-  if (trimmed.length >= 10) {
-    return { valid: true };
-  }
-
   return {
     valid: false,
     reason:
-      "Purpose must be one of: 'Submit NOC application', 'Pay e-challan', 'Verify with RTO', or 'Other' with at least 10 characters of justification.",
+      "Purpose must be one of: 'Submit NOC application', 'Pay e-challan', 'Verify with RTO', or 'Other: ' followed by at least 10 characters of justification.",
   };
 }
 
@@ -67,8 +63,11 @@ export function reveal(params: {
   readonly subject?: string;
   readonly consent: Consent | null;
   readonly rawValue: string;
+  /** Epoch seconds, the same unit as `consent.until` and `durationSeconds`. */
   readonly now: number;
   readonly durationSeconds?: number;
+  /** Vehicle id and plate the field belongs to; the consent must cover one of them. */
+  readonly vehicleKeys?: readonly string[];
 }): RevealResult {
   const {
     field,
@@ -79,6 +78,7 @@ export function reveal(params: {
     rawValue,
     now,
     durationSeconds = 60,
+    vehicleKeys,
   } = params;
 
   // 1. Validate Purpose
@@ -91,7 +91,7 @@ export function reveal(params: {
   }
 
   // 2. Validate Access Permissions
-  if (!canAccess(field, consent, now)) {
+  if (!canAccess(field, consent, now, vehicleKeys)) {
     return {
       ok: false,
       error: `Access denied: Actor '${actor}' does not have active granted permission to reveal field '${field}'.`,

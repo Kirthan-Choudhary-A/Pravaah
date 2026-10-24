@@ -18,8 +18,11 @@ describe('Voice & Typed Plate Entry UI Tests', () => {
   it('renders Voice page with speech notices and input controls', () => {
     renderVoice();
     expect(screen.getByRole('heading', { level: 1, name: /voice & typed plate entry/i })).toBeInTheDocument();
-    expect(screen.getByText(/local speech recognition/i)).toBeInTheDocument();
-    expect(screen.getByRole('note')).toHaveTextContent(/audio privacy notice/i);
+    expect(screen.getByText(/browser speech service/i)).toBeInTheDocument();
+    // The microphone uses a cloud speech service; the page must say so and never claim "local".
+    expect(screen.getByRole('note')).toHaveTextContent(/receives the audio/i);
+    expect(screen.queryByText(/transcribed locally/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/local speech recognition/i)).not.toBeInTheDocument();
   });
 
   it('parses Sample 1 with look-alike O->0 fix and displays segments and read-back', () => {
@@ -61,6 +64,32 @@ describe('Voice & Typed Plate Entry UI Tests', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(/state plate \/ vehicle category mismatch/i);
     expect(screen.getByRole('button', { name: /keep car/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /keep two-wheeler/i })).toBeInTheDocument();
+
+    // Saving stays blocked until the mismatch is resolved
+    expect(screen.getByRole('button', { name: /yes, confirm & save/i })).toBeDisabled();
+    // The plate says Car, so keeping Car settles it...
+    fireEvent.click(screen.getByRole('button', { name: /keep car/i }));
+    expect(screen.getByRole('button', { name: /yes, confirm & save/i })).toBeEnabled();
+  });
+
+  it('clears the plate when the user says the vehicle type is right and the plate is wrong', () => {
+    renderVoice();
+    fireEvent.click(screen.getByRole('button', { name: /sample 4: dl class mismatch/i }));
+    fireEvent.click(screen.getByRole('button', { name: /keep two-wheeler/i }));
+    expect(screen.queryByLabelText(/parsed plate number/i)).not.toBeInTheDocument();
+  });
+
+  it('offers other readings and blocks saving an invalid plate', () => {
+    renderVoice();
+
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'KA01AB123' } });
+    expect(screen.getByLabelText(/parsed plate number: ka-01-ab-0123/i)).toBeInTheDocument();
+    const other = screen.getByRole('button', { name: 'KA-01-A-8123' });
+    fireEvent.click(other);
+    expect(screen.getByLabelText(/parsed plate number: ka-01-a-8123/i)).toBeInTheDocument();
+
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'ZZ01AB1234' } });
+    expect(screen.getByRole('button', { name: /yes, confirm & save/i })).toBeDisabled();
   });
 
   it('confirms and saves vehicle to household on clicking Confirm', () => {

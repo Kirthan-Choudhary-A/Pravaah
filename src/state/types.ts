@@ -81,6 +81,7 @@ export interface PlanContextValue {
     rawValue: string;
     purpose: string;
     consentId?: string;
+    vehicleKeys?: readonly string[];
   }) => RevealResult;
   readonly hideFieldAction: (field: string) => void;
   readonly addVehicleAction: (vehicle: HouseholdVehicle) => void;

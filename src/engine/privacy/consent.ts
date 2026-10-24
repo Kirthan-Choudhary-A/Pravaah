@@ -113,7 +113,7 @@ export function grantConsent(
     subject: consent.granteeRole,
     field: 'consent',
     action: 'grant',
-    purpose: `Granted scopes [${scopes.join(', ')}] until Day ${until}`,
+    purpose: `Granted scopes [${scopes.join(', ')}] until ${until}`,
     result: 'allowed',
   };
 
