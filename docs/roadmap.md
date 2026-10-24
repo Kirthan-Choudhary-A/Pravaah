@@ -24,11 +24,17 @@ Phased implementation roadmap for Pravaah (IMPACTX 2026, Challenge 09). Build on
   - Simplified for citizens: plain official-style look, short copy, one primary action per page, detail behind "more" sections, reviewer pages (Metrics, About) under "For reviewers", route cards show the top three plans with plain wording and select both choices, source links point to the official site.
   - Sidebar and top bar replace the slide-style header and footer; every page uses one content width and `PageHeader`; home is a dashboard (summary, licence runway, needs attention, next up, recommended route, household) and the long introduction moved to `/overview`; nested `<main>` landmarks removed; mobile uses a drawer.
 
+- [x] **Premium classic redesign, assistant, welcome page**
+  - Ivory, navy and brass design system; CAD-style 3D two-wheeler (lit PBR parts with edge lines, dimension labels, drag to turn) on the Dashboard and About pages; the old plate, architecture and plan-landscape scenes were removed.
+  - Welcome page: real preloading with progress, the public-domain Armed Forces Orchestra rendition of the anthem on Enter, lyrics, Skip at every stage.
+  - Assistant: Groq chat with live plan tools, key rotation and model fallback on the server, Sarvam translation, speech to text and text to speech in seven languages.
+  - Fixed along the way: canvases that never redrew, dependency-graph links that never drew (global svg width cap), graph blank inside collapsed sections, about 40 CSS classes that components used but no stylesheet defined.
+
 ## Open items
 
 1. **Rules verification pass (needs a person).** Read each official source in `docs/verification.md`, then flip `verified` per entry with the checker and date. Replace secondary sources with official ones. Then settle the NOC fee (currently unknown, `Estimate`) and the loan-termination fee (the state mirror shows "No Fee").
 2. **Palette: decided.** Plain official-style (white, grey lines, one navy). See `docs/conventions.md`.
-3. **Live speech.** Microphone capture is untested. Plate accuracy is measured on 87 typed transcripts only; test with real speakers before quoting a voice figure.
+3. **Live speech and assistant keys.** Microphone capture and the Groq/Sarvam calls are tested only against mocks and with deliberately invalid keys (which confirm the real endpoints answer and the error paths read well). Test with real keys and real speakers. The anthem recording is an instrumental; swap in the official recording if you hold the rights. Plate accuracy is measured on 87 typed transcripts only; test with real speakers before quoting a voice figure.
 4. **Fee total.** The engine counts two smart-card fees (renewal plus address change), so the official total is ₹1,100; the project document says ₹900. Decide and record which is right.
 5. **Gold plans.** Orderings still come from the engine's own links, and GS-05's finish day is not hand-derived. Have someone other than the author re-derive them from the sources.
 6. **Plate checks.** RTO codes are not checked for existence (`KA-99-9999` reads as valid); only Delhi has class letters, and those are an unverified assumption.

@@ -306,3 +306,34 @@
   align-items: center;
   gap: var(--space-2);
 }
+
+/* "At risk" normalises to at-risk, so name that key too. */
+.nodeStatus_at-risk {
+  background-color: var(--status-risk-bg);
+  border: 1px solid var(--status-risk);
+}
+
+/* React Flow draws a white box around every node and visible connection dots; our cards replace them. */
+.graphContainer :global(.react-flow__node-default) {
+  width: 15rem;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.graphContainer :global(.react-flow__handle) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.graphContainer :global(.react-flow__edge-path) {
+  stroke-width: 1.6;
+}
+
+/* The global reset caps svg width at its parent's; React Flow's edge layer is 0 wide, so edges vanished. */
+.graphContainer :global(.react-flow__edges svg),
+.graphContainer :global(.react-flow__marker) {
+  max-width: none;
+  max-height: none;
+}

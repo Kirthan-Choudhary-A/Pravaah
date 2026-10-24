@@ -45,7 +45,7 @@ Rules every change follows. Items marked "(lint)" are enforced by `eslint.config
 ## Design and accessibility
 
 - CSS tokens only; no colour literals in `components/`, `features/` or `state/` (lint). `three/` may use literal colours for WebGL.
-- Look and feel: plain and official-style. White pages, thin grey borders, no shadows, one navy action colour (`--primary`), soft tints with dark text, status shown as colour plus a word. This replaces the warm palette in `docs/adr/0001-foundation.md` and the neo-brutalist restyle. No tricolour or other symbols that suggest an official site.
+- Look and feel: premium classic. Ivory pages, midnight-navy sidebar and hero, brass accents, Cormorant Garamond for headings and Inter for text, soft clay depth on cards and buttons, glass only on the top bar and assistant. One action colour (`--primary`), status as colour plus a word. This replaces the warm palette in `docs/adr/0001-foundation.md`, the neo-brutalist restyle and the interim plain look. The welcome page carries a restrained tricolour edge and the Ashoka chakra; the app itself does not imitate an official site.
 - Say less. A page shows what a citizen needs to act; reviewer and detail material goes behind a disclosure or under "For reviewers". Plain words, sentence case, no jargon or internal ids in the UI.
 - Status is always shown in words, never by colour alone.
 - Critical planning and legal information never exists only inside a 3D canvas.
@@ -56,3 +56,10 @@ Rules every change follows. Items marked "(lint)" are enforced by `eslint.config
 - Before reporting a step done, run `npm run check`, `npm run build` and the e2e suite (`npx playwright test`; after a Playwright update run `npx playwright install chromium` first).
 - The e2e suite reuses whatever server is on port 5173. Make sure that is this app.
 - Gold plans are hand-derived from the assumed timings, with the arithmetic written in `derivation`; never copy engine output into a gold plan.
+
+## Assistant, keys and the API
+
+- API keys exist only in server environment variables (`GROQ_API_KEYS`, `SARVAM_API_KEYS`, comma separated; see `.env.example`). Never prefix them with `VITE_` and never commit `.env.local`.
+- `server/` is plain TypeScript shared by the Vercel function (`api/[...route].ts`) and the Vite dev server. Keys rotate round robin; a 429 rests that key for that model only; the second model is the fallback; invalid keys are benched and reported plainly.
+- The assistant runs its tools in the browser against the same engine the pages use, so it can only quote numbers the app shows. It must say that data is simulated and rules unverified.
+- The welcome page requires a tap before sound (browsers block autoplay), has Skip at every stage, and never traps the visitor if audio fails.

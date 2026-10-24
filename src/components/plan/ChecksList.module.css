@@ -142,3 +142,12 @@
   font-weight: 600;
   margin: 0;
 }
+
+.sourceTag {
+  padding: 1px var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--iron);
+  background: var(--paper-warm);
+  border: var(--border-neo);
+  border-radius: var(--radius-full);
+}

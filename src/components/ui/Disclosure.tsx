@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Disclosure.module.css';
 
 export interface DisclosureProps {
@@ -16,8 +16,15 @@ export const Disclosure: React.FC<DisclosureProps> = ({
   children,
   className = '',
 }) => {
+  // Content mounts only while open: charts that measure their container (the dependency graph)
+  // render blank when created inside a collapsed section.
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <details className={`${styles.details} ${className}`.trim()} open={defaultOpen}>
+    <details
+      className={`${styles.details} ${className}`.trim()}
+      open={defaultOpen}
+      onToggle={(e) => setOpen(e.currentTarget.open)}
+    >
       <summary className={styles.summary}>
         <span className={styles.summaryTitle}>{title}</span>
         <div className={styles.metaGroup}>
@@ -27,7 +34,7 @@ export const Disclosure: React.FC<DisclosureProps> = ({
           </span>
         </div>
       </summary>
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content}>{open ? children : null}</div>
     </details>
   );
 };

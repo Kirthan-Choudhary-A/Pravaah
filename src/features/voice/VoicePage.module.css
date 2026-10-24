@@ -279,3 +279,124 @@
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
 }
+
+/* ---------- read-back ---------- */
+.readBackSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--paper-warm);
+  border: var(--border-neo);
+  border-radius: var(--radius-lg);
+}
+
+.readBackHeaderRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.reviewBadge {
+  padding: 1px var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--status-risk);
+  background: var(--status-risk-bg);
+  border-radius: var(--radius-full);
+}
+
+.readBackLangTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.langTabBtn {
+  padding: var(--space-1) var(--space-3);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--graphite);
+  background: var(--offwhite);
+  border: var(--border-neo);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.langTabBtn:hover {
+  background: var(--surface-hover);
+}
+
+.langTabBtn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.langTabBtnActive,
+.langTabBtnActive:hover {
+  color: var(--on-primary);
+  background: var(--primary-gradient);
+  border-color: rgba(226, 194, 125, 0.55);
+}
+
+.readBackContentBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--offwhite);
+  border: var(--border-neo);
+  border-radius: var(--radius-md);
+}
+
+.fontHindi {
+  font-family: 'Noto Sans Devanagari', var(--font-sans);
+}
+
+.fontTelugu {
+  font-family: 'Noto Sans Telugu', var(--font-sans);
+}
+
+.fontKannada {
+  font-family: 'Noto Sans Kannada', var(--font-sans);
+}
+
+.spokenSegmentsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--space-2);
+}
+
+.spokenSegmentItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--paper-warm);
+  border-radius: var(--radius-md);
+}
+
+.segmentKind {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--olive);
+}
+
+.segmentText {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.actionFooterRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: var(--border-neo);
+}

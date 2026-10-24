@@ -46,3 +46,7 @@
   color: var(--graphite);
   background-color: var(--status-unknown-bg);
 }
+
+.label {
+  font-weight: 600;
+}

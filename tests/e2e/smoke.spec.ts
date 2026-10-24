@@ -144,7 +144,13 @@ test('privacy and voice fixes hold in the browser', async ({ page }) => {
 
 test.describe('welcome page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.addInitScript(() => sessionStorage.removeItem('pravaah_intro_seen'));
+    // Clear the flag once per test, not on every navigation, so a reload can prove it is remembered.
+    await page.addInitScript(() => {
+      if (!sessionStorage.getItem('test_cleared')) {
+        sessionStorage.removeItem('pravaah_intro_seen');
+        sessionStorage.setItem('test_cleared', '1');
+      }
+    });
   });
 
   test('preloads, plays the anthem on Enter, and can be skipped', async ({ page }) => {
@@ -173,4 +179,47 @@ test.describe('welcome page', () => {
     await page.reload();
     await expect(page.getByRole('dialog', { name: /welcome to pravaah/i })).toHaveCount(0);
   });
+});
+
+test('dependency graph draws its nodes and its links when opened', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/plan');
+  await page.getByText('Why each step comes before another').click();
+  await expect(page.locator('.react-flow__node').first()).toBeVisible();
+  // Links must have a drawable size (they collapsed to nothing once, under the global svg reset).
+  const box = await page.locator('.react-flow__edge-path').first().boundingBox();
+  expect(box?.width ?? 0).toBeGreaterThan(5);
+  await expect(page.locator('.react-flow__edge-path')).not.toHaveCount(0);
+});
+
+test('assistant opens, offers starters, and says plainly when it is not set up', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.route('**/api/health', (r) => r.fulfill({ json: { ok: true, assistant: false, language: false } }));
+  await page.goto('/');
+  await page.getByRole('button', { name: /ask pravaah/i }).click();
+  await expect(page.getByRole('dialog', { name: /pravaah assistant/i })).toBeVisible();
+  await expect(page.getByText(/not set up yet/i)).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog', { name: /pravaah assistant/i })).toHaveCount(0);
+});
+
+test('the assistant answers through the API using a plan tool', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  let chats = 0;
+  await page.route('**/api/health', (r) => r.fulfill({ json: { ok: true, assistant: true, language: true } }));
+  await page.route('**/api/chat', (r) => {
+    chats++;
+    return r.fulfill({
+      json:
+        chats === 1
+          ? { data: { choices: [{ message: { content: null, tool_calls: [{ id: 't1', type: 'function', function: { name: 'get_plan_summary', arguments: '{}' } }] } }] } }
+          : { data: { choices: [{ message: { content: 'Your licence expires on day 21.' } }] } },
+    });
+  });
+  await page.goto('/');
+  await page.getByRole('button', { name: /ask pravaah/i }).click();
+  await page.getByLabel('Your question').fill('When does my licence expire?');
+  await page.getByRole('button', { name: 'Send' }).click();
+  await expect(page.getByText('Your licence expires on day 21.')).toBeVisible();
+  expect(chats).toBe(2);
 });

@@ -43,6 +43,19 @@ npm run test:e2e
 
 ---
 
+## Assistant and API keys
+
+The assistant, translation and speech need server-side keys. Copy `.env.example` to `.env.local` and fill:
+
+```
+GROQ_API_KEYS=key1,key2,key3
+SARVAM_API_KEYS=key1
+```
+
+`npm run dev` serves `/api/*` itself. On Vercel, set the same variables in the project settings; the `api/` folder deploys as a function. Keys are read only on the server. Groq limits apply per organisation, so keys from different accounts add capacity.
+
+---
+
 ## Directory Overview
 
 See [docs/architecture.md](docs/architecture.md) for full architectural specifications and ESLint boundary rules.

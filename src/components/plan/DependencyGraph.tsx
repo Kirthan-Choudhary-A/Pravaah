@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ReactFlow, Controls, Background, MarkerType, type Node, type Edge } from '@xyflow/react';
+import { ReactFlow, Controls, Background, MarkerType, Position, type Node, type Edge } from '@xyflow/react';
 import type { ScheduledTask, Link, LinkType } from '@engine/model/types';
 import { StatusTag } from '@components/ui/StatusTag';
 import { BasisTag } from '@components/ui/BasisTag';
@@ -161,6 +161,9 @@ export const DependencyGraph: React.FC<DependencyGraphProps> = ({
             ),
           },
           selectable: true,
+          // The layout runs left to right, so links leave on the right and arrive on the left.
+          sourcePosition: Position.Right,
+          targetPosition: Position.Left,
         });
       });
     }

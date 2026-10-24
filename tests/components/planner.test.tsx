@@ -50,7 +50,7 @@ describe('Planner and Simulator Integration', () => {
     expect(slotDelayBtn).toHaveAttribute('aria-pressed', 'true');
   });
 
-  it('renders Sources page with rule packs and official citations', () => {
+  it('renders Sources page with rule packs and official citations', async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ['/sources'],
     });
@@ -61,8 +61,10 @@ describe('Planner and Simulator Integration', () => {
       screen.getByRole('heading', { name: /official sources/i })
     ).toBeInTheDocument();
 
+    // Rule packs sit in a section that opens on demand
+    fireEvent.click(screen.getByText(/rules by state/i));
     // Rule packs table
-    expect(screen.getByText('Union of India (Central MV Act & CMVR)')).toBeInTheDocument();
+    expect(await screen.findByText('Union of India (Central MV Act & CMVR)')).toBeInTheDocument();
     expect(screen.getByText('Karnataka Transport Department')).toBeInTheDocument();
   });
 });
