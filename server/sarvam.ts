@@ -125,7 +125,7 @@ export function textToSpeech(
       headers: { 'content-type': 'application/json', 'api-subscription-key': key },
       body: JSON.stringify({
         text: text.slice(0, 2400),
-        language_code: language,
+        target_language_code: language,
         model: 'bulbul:v3',
         speaker: VOICES[voice],
         pace: 0.95,
