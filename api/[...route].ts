@@ -1,4 +1,4 @@
-import { handleApi } from '../server/handlers';
+import { handleApi } from '../server/handlers.js';
 
 // Vercel function: GET /api/health and POST /api/{chat,translate,tts,stt}.
 // Keys come from the project's environment variables, never from the browser.

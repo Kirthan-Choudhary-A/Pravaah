@@ -2,10 +2,10 @@
  * Request handlers shared by the Vercel function (api/[...route].ts) and the Vite dev server.
  * Web-standard Request/Response only, so the same code runs in both.
  */
-import { readConfig, type ServerConfig } from './config';
-import { KeyPool } from './keyPool';
-import { groqChat, defaultDeps, type UpstreamDeps } from './groq';
-import { isLanguageCode, isVoiceChoice, speechToText, textToSpeech, translate, LANGUAGES } from './sarvam';
+import { readConfig, type ServerConfig } from './config.js';
+import { KeyPool } from './keyPool.js';
+import { groqChat, defaultDeps, type UpstreamDeps } from './groq.js';
+import { isLanguageCode, isVoiceChoice, speechToText, textToSpeech, translate, LANGUAGES } from './sarvam.js';
 
 type Env = Readonly<Record<string, string | undefined>>;
 

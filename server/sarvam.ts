@@ -1,5 +1,5 @@
-import { KeyPool } from './keyPool';
-import { defaultDeps, type UpstreamDeps } from './groq';
+import { KeyPool } from './keyPool.js';
+import { defaultDeps, type UpstreamDeps } from './groq.js';
 
 const BASE = 'https://api.sarvam.ai';
 

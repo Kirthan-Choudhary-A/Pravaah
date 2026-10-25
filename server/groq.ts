@@ -1,4 +1,4 @@
-import { KeyPool } from './keyPool';
+import { KeyPool } from './keyPool.js';
 
 export interface GroqChatPayload {
   readonly messages: readonly unknown[];
